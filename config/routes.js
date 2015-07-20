@@ -32,9 +32,9 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
+  'GET /': {
     view: 'homepage'
-  }
+  },
 
   /***************************************************************************
   *                                                                          *
@@ -45,5 +45,18 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
+
+  'POST /user': {
+    controller: 'UserController',
+    action: 'signup'
+  },
+  'PUT /user/login': {
+    controller: 'UserController',
+    action: 'login'
+  },
+  'PUT /user/logout': {
+    controller: 'UserController',
+    action: 'logout'
+  }
 
 };

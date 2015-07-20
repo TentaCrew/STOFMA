@@ -1,3 +1,5 @@
+var bcrypt = require('bcrypt');
+
 /**
 * User.js
 *
@@ -36,6 +38,21 @@ module.exports = {
       type: 'STRING',
       size: '12'
     }
-    
+
+  },
+
+  beforeCreate: function (values, cb) {
+    // Encrypting password
+    bcrypt.hash(values.password, 10, function(err, hash) {
+      if(err) {
+        return cb(err);
+      }
+      else {
+        values.password = hash;
+        // Removing white spaces from the phone number
+        values.phoneNumber = values.phoneNumber.replace(/ /g,'')
+        cb();
+      }
+    });
   }
 };
