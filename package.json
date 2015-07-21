@@ -35,5 +35,9 @@
     "url": "git://github.com/fwoelffel/sails.git"
   },
   "author": "fwoelffel",
-  "license": ""
+  "license": "",
+  "devDependencies": {
+    "mocha": "^2.2.5",
+    "supertest": "^1.0.1"
+  }
 }
