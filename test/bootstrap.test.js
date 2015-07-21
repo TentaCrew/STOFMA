@@ -4,6 +4,10 @@ before(function(done) {
   Sails.lift({
     log: {
       level: 'error'
+    },
+    models: {
+      connection: 'localDiskDb',
+      migrate: 'drop'
     }
   },
   done);
