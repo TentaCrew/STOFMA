@@ -1,4 +1,4 @@
-var bcrypt = require('bcrypt');
+var sha1 = require('sha1');
 
 /**
  * UserController
@@ -21,7 +21,7 @@ module.exports = {
       }
       else {
         sails.log.debug("Found user " + foundUser.email + ".");
-        if(bcrypt.compareSync(req.param('password'), foundUser.password)) {
+        if(sha1(req.param('password')) == foundUser.password) {
           req.session.userId = foundUser.id;
           req.session.authenticated = true;
           sails.log.debug(foundUser.email + " credentials are valid.");

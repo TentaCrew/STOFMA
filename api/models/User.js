@@ -1,4 +1,4 @@
-var bcrypt = require('bcrypt');
+var sha1 = require('sha1');
 
 /**
 * User.js
@@ -43,16 +43,10 @@ module.exports = {
 
   beforeCreate: function (values, cb) {
     // Encrypting password
-    bcrypt.hash(values.password, 10, function(err, hash) {
-      if(err) {
-        return cb(err);
-      }
-      else {
-        values.password = hash;
-        // Removing white spaces from the phone number
-        values.phoneNumber = values.phoneNumber.replace(/ /g,'')
-        cb();
-      }
-    });
+    values.password = sha1(values.password);
+
+    // Removing white spaces from the phone number
+    values.phoneNumber = values.phoneNumber.replace(/ /g,'')
+    cb();
   }
 };
