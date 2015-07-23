@@ -50,6 +50,14 @@ module.exports.routes = {
     controller: 'UserController',
     action: 'signup'
   },
+  'POST /user/update': {
+    controller: 'UserController',
+    action: 'update'
+  },
+  'POST /user/update/:id': {
+    controller: 'UserController',
+    action: 'update'
+  },
   'PUT /user/login': {
     controller: 'UserController',
     action: 'login'
@@ -57,6 +65,10 @@ module.exports.routes = {
   'PUT /user/logout': {
     controller: 'UserController',
     action: 'logout'
+  },
+  'DELETE /user/:id' :{
+    controller: 'UserController',
+    action: 'delete'
   },
   'GET /user': {
     controller: 'UserController',

@@ -46,7 +46,22 @@ module.exports = {
     values.password = sha1(values.password);
 
     // Removing white spaces from the phone number
-    values.phoneNumber = values.phoneNumber.replace(/ /g,'')
+    if(values.phoneNumber) {
+      values.phoneNumber = values.phoneNumber.replace(/ /g,'')
+    }
+    cb();
+  },
+
+  beforeUpdate: function (values, cb) {
+    // Encrypting password
+    if(values.password) {
+      values.password = sha1(values.password);
+    }
+
+    // Removing white spaces from the phone number
+    if(values.phoneNumber) {
+      values.phoneNumber = values.phoneNumber.replace(/ /g,'')
+    }
     cb();
   }
 };

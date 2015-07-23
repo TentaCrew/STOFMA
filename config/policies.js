@@ -33,6 +33,8 @@ module.exports.policies = {
     'signup': 'unauthenticated',
     'login': 'unauthenticated',
     'logout': 'authenticated',
+    'update': 'authenticated',
+    'delete': 'authenticated',
     'getAll': 'authenticated',
     'get': 'authenticated'
   }

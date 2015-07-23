@@ -75,8 +75,33 @@ module.exports = {
     });
   },
 
+  update: function (req, res) {
+    // Updating a user
+    var id_ = req.param('id') ? req.param('id') : req.session.userId;
+    User.update({id: id_}, req.allParams(), function(err, user) {
+        if (err) {
+          return res.negotiate(err);
+        }
+        else {
+          return res.send(user);
+        }
+    });
+  },
+
+  delete: function (req, res) {
+    // Deleting a user
+    User.destroy({id: req.param('id')}, function(err, user) {
+        if (err) {
+          return res.negotiate(err);
+        }
+        else {
+          return res.send(200);
+        }
+    });
+  },
+
   getAll: function (req, res) {
-    // Get all users
+    // Getting all users
     User.find(function(err, users) {
         if (err) {
           return res.negotiate(err);
@@ -88,7 +113,7 @@ module.exports = {
   },
 
   get: function (req, res) {
-    // Get user from some parameters
+    // Getting users from some parameters
     User.find(req.allParams(), function(err, user) {
         if (err) {
           return res.negotiate(err);
