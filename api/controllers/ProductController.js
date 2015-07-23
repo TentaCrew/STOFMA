@@ -14,13 +14,14 @@ module.exports = {
       price:     req.param('price'),
       quantity:  req.param('quantity'),
       urlImage:  req.param('urlImage'),
-      minimum:   req.param('minimum')
+      minimum:   req.param('minimum'),
+      category:  req.param('category')
     }, function (err, newProduct) {
       if (err) {
         return res.negotiate(err);
       }
       else {
-        sails.log.debug("Product " + req.param('name') + " added.");
+        sails.log.debug("Product " + req.param('name') + " added in category " + req.param('category'));
         return res.send(200);
       }
     });

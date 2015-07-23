@@ -30,6 +30,11 @@ module.exports = {
     },
     minimum: {  // Minimum threshold before restocking
       type: 'INTEGER'
+    },
+    category: {
+      type: 'STRING',
+      in: ['DRINK','FOOD','OTHER'],
+      required: true
     }
   }
 };

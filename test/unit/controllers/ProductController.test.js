@@ -37,9 +37,29 @@ describe('ProductController', function() {
         price:      0.50,
         quantity:  50,
         urlImage:  '',
-        minimum:   10
+        minimum:   10,
+        category:  'DRINK'
       })
       .expect(200, done)
+    });
+  });
+
+  describe('#add() as manager but with a wrong category', function() {
+
+    //test
+    it('should respond with a 400 status because the category doesn\'t exist', function (done) {
+      agent
+      .post('/product')
+      .send({
+        name:      'black cat',
+        shortName: 'meiko',
+        price:      6000,
+        quantity:  1,
+        urlImage:  '',
+        minimum:   1,
+        category:  'ANIMAL'
+      })
+      .expect(400, done)
     });
   });
 
@@ -63,7 +83,8 @@ describe('ProductController', function() {
         price:      0.50,
         quantity:  25,
         urlImage:  '',
-        minimum:   5
+        minimum:   5,
+        category:  'DRINK'
       })
       .expect(400, done)
     });
@@ -102,12 +123,13 @@ describe('ProductController', function() {
       agent
       .post('/product')
       .send({
-        name:      'coca cola light',
-        shortName: 'coca',
-        price:      0.50,
-        quantity:  50,
+        name:      'kinder bueno',
+        shortName: 'bueno',
+        price:      0.80,
+        quantity:  30,
         urlImage:  '',
-        minimum:   10
+        minimum:   15,
+        category:  'FOOD'
       })
       .expect(401, done)
     });
