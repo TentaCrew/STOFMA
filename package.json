@@ -1,9 +1,8 @@
 {
-  "name": "sails",
-  "private": true,
-  "version": "0.0.0",
-  "description": "a Sails application",
-  "keywords": [],
+  "name": "stofma",
+  "version": "0.1.0",
+  "description": "Student Office Manager",
+  "keywords": ["student", "manager"],
   "dependencies": {
     "ejs": "~0.8.4",
     "grunt": "0.4.2",
@@ -32,10 +31,12 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/fwoelffel/sails.git"
+    "url": "git://github.com/ciaa-cnam/STOFMA"
   },
-  "author": "fwoelffel",
-  "license": "",
+  "bugs": "https://github.com/ciaa-cnam/STOFMA/issues",
+  "author": "Frédéric Woelffel <woelffel.f@gmail.com>",
+  "contributors": ["Michel Edighoffer", "Corentin Desfarges"],
+  "license": "MIT",
   "devDependencies": {
     "mocha": "^2.2.5",
     "supertest": "^1.0.1"
