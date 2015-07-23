@@ -37,6 +37,11 @@ module.exports = {
     phoneNumber: {
       type: 'STRING',
       size: '12'
+    },
+    role: {
+      type: 'STRING',
+      in: ['USER','SELLER','ADMINISTRATOR'],
+      defaultsTo: "USER"
     }
 
   },

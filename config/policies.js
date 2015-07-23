@@ -29,14 +29,14 @@ module.exports.policies = {
   '*': false,
 
   'UserController': {
-    '*': false,
+    '*':      false,
     'signup': 'unauthenticated',
-    'login': 'unauthenticated',
+    'login':  'unauthenticated',
     'logout': 'authenticated',
     'update': 'authenticated',
-    'delete': 'authenticated',
+    'delete': 'isAdmin',
     'getAll': 'authenticated',
-    'get': 'authenticated'
+    'get':    'authenticated'
   }
 
 };

@@ -24,6 +24,8 @@ module.exports = {
         if(sha1(req.param('password')) == foundUser.password) {
           req.session.userId = foundUser.id;
           req.session.authenticated = true;
+          req.session.role = foundUser.role;
+          req.session.isAdmin = (foundUser.role === "ADMINISTRATOR");
           sails.log.debug(foundUser.email + " credentials are valid.");
           return res.send(200);
         }
@@ -76,8 +78,17 @@ module.exports = {
   },
 
   update: function (req, res) {
-    // Updating a user
+    // only admin can update other users
+    if(!req.session.isAdmin && req.session.userId != req.param('id')) {
+      return res.send(401, 'You do not have sufficient privileges.');
+    }
+
+    // only admin can update his own role
+    if(!req.session.isAdmin && req.param('role')) {
+      return res.send(401, 'You do not have sufficient privileges.');
+    }
     var id_ = req.param('id') ? req.param('id') : req.session.userId;
+    // Updating a user
     User.update({id: id_}, req.allParams(), function(err, user) {
         if (err) {
           return res.negotiate(err);
