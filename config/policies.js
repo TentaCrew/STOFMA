@@ -37,6 +37,14 @@ module.exports.policies = {
     'delete': 'isAdmin',
     'getAll': 'authenticated',
     'get':    'authenticated'
+  },
+
+  'ProductController': {
+    '*':      false,
+    'add':    'isManager',
+    'update': 'isManager',
+    'delete': 'isManager',
+    'get':    'authenticated'
   }
 
 };

@@ -26,6 +26,7 @@ module.exports = {
           req.session.authenticated = true;
           req.session.role = foundUser.role;
           req.session.isAdmin = (foundUser.role === "ADMINISTRATOR");
+          req.session.isManager = (foundUser.role === "MANAGER");
           sails.log.debug(foundUser.email + " credentials are valid.");
           return res.send(200);
         }
@@ -57,14 +58,14 @@ module.exports = {
   signup: function (req, res) {
     // Creating new User
     User.create({
-      firstname: req.param('firstname'),
-      name: req.param('name'),
-      birthdate: req.param('birthdate'),
-      sex: req.param('sex'),
-      password: req.param('password'),
-      email: req.param('email'),
+      firstname:   req.param('firstname'),
+      name:        req.param('name'),
+      birthdate:   req.param('birthdate'),
+      sex:         req.param('sex'),
+      password:    req.param('password'),
+      email:       req.param('email'),
       phoneNumber: req.param('phoneNumber'),
-      role: req.param('role')
+      role:        req.param('role')
     }, function (err, newUser) {
       if (err) {
         return res.negotiate(err);
@@ -74,7 +75,8 @@ module.exports = {
         req.session.authenticated = true;
         req.session.role = newUser.role;
         req.session.isAdmin = (newUser.role === "ADMINISTRATOR");
-        sails.log.debug("User " + req.param('email') + " signed up and logged in.");
+        req.session.isManager = (newUser.role === "MANAGER");
+        sails.log.debug("User " + req.param('email') + " signed up and logged in as " + newUser.role);
         return res.send(200);
       }
     });

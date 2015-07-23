@@ -46,41 +46,83 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+/**
+ * Routes about users
+ */
+
+  // Create user
   'POST /user': {
     controller: 'UserController',
     action: 'signup'
   },
+  // Update current user
   'POST /user/update': {
     controller: 'UserController',
     action: 'update'
   },
+  // Update user
   'POST /user/update/:id': {
     controller: 'UserController',
     action: 'update'
   },
+  // Log in user
   'PUT /user/login': {
     controller: 'UserController',
     action: 'login'
   },
+  // Log out user
   'PUT /user/logout': {
     controller: 'UserController',
     action: 'logout'
   },
+  // Delete user
   'DELETE /user/:id' :{
     controller: 'UserController',
     action: 'delete'
   },
+  // Get all users
   'GET /user': {
     controller: 'UserController',
     action: 'getAll'
   },
+  // Get one user
   'GET /user/:id': {
     controller: 'UserController',
     action: 'get'
   },
+  // Get some users
   'POST /user/search': {
     controller: 'UserController',
     action: 'get'
-  }
+  },
 
+  /**
+   * Routes about products
+   */
+
+   // Add product
+   'POST /product': {
+     controller: 'ProductController',
+     action: 'add'
+   },
+   // Update product
+   'POST /product/update/:id': {
+     controller: 'ProductController',
+     action: 'update'
+   },
+   // Remove product
+   'DELETE /product/:id' :{
+     controller: 'ProductController',
+     action: 'delete'
+   },
+   // Get one product
+   'GET /product/:id': {
+     controller: 'ProductController',
+     action: 'get'
+   },
+   // Get some product
+   'POST /product/search': {
+     controller: 'ProductController',
+     action: 'get'
+   }
 };

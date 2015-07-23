@@ -40,7 +40,7 @@ module.exports = {
     },
     role: {
       type: 'STRING',
-      in: ['USER','SELLER','ADMINISTRATOR'],
+      in: ['USER','MANAGER','ADMINISTRATOR'],
       defaultsTo: 'USER'
     }
 
