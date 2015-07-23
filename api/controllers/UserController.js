@@ -63,7 +63,8 @@ module.exports = {
       sex: req.param('sex'),
       password: req.param('password'),
       email: req.param('email'),
-      phoneNumber: req.param('phoneNumber')
+      phoneNumber: req.param('phoneNumber'),
+      role: req.param('role')
     }, function (err, newUser) {
       if (err) {
         return res.negotiate(err);
@@ -88,7 +89,7 @@ module.exports = {
       return res.send(401, 'You do not have sufficient privileges.');
     }
     var id_ = req.param('id') ? req.param('id') : req.session.userId;
-    // Updating a user
+    // Updating an User
     User.update({id: id_}, req.allParams(), function(err, user) {
         if (err) {
           return res.negotiate(err);
@@ -100,7 +101,7 @@ module.exports = {
   },
 
   delete: function (req, res) {
-    // Deleting a user
+    // Deleting an User
     User.destroy({id: req.param('id')}, function(err, user) {
         if (err) {
           return res.negotiate(err);

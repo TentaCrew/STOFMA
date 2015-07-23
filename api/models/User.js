@@ -41,7 +41,7 @@ module.exports = {
     role: {
       type: 'STRING',
       in: ['USER','SELLER','ADMINISTRATOR'],
-      defaultsTo: "USER"
+      defaultsTo: 'USER'
     }
 
   },
