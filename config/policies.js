@@ -32,7 +32,9 @@ module.exports.policies = {
     '*': false,
     'signup': 'unauthenticated',
     'login': 'unauthenticated',
-    'logout': 'authenticated'
+    'logout': 'authenticated',
+    'getAll': 'authenticated',
+    'get': 'authenticated'
   }
 
 };

@@ -57,6 +57,18 @@ module.exports.routes = {
   'PUT /user/logout': {
     controller: 'UserController',
     action: 'logout'
+  },
+  'GET /user': {
+    controller: 'UserController',
+    action: 'getAll'
+  },
+  'GET /user/:id': {
+    controller: 'UserController',
+    action: 'get'
+  },
+  'POST /user/search': {
+    controller: 'UserController',
+    action: 'get'
   }
 
 };

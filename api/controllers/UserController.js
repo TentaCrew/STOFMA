@@ -73,5 +73,29 @@ module.exports = {
         return res.send(200);
       }
     });
+  },
+
+  getAll: function (req, res) {
+    // Get all users
+    User.find(function(err, users) {
+        if (err) {
+          return res.negotiate(err);
+        }
+        else {
+          return res.send(users);
+        }
+    });
+  },
+
+  get: function (req, res) {
+    // Get user from some parameters
+    User.find(req.allParams(), function(err, user) {
+        if (err) {
+          return res.negotiate(err);
+        }
+        else {
+          return res.send(user);
+        }
+    });
   }
 };
