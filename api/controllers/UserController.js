@@ -72,6 +72,8 @@ module.exports = {
       else {
         req.session.userId = newUser.id;
         req.session.authenticated = true;
+        req.session.role = newUser.role;
+        req.session.isAdmin = (newUser.role === "ADMINISTRATOR");
         sails.log.debug("User " + req.param('email') + " signed up and logged in.");
         return res.send(200);
       }
