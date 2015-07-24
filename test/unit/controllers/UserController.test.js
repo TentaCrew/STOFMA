@@ -66,6 +66,15 @@ describe('UsersController', function() {
   });
 
   describe('#login()', function() {
+    //log out after the test
+    after(function(done) {
+       agent
+        .put('/user/logout')
+        .end(function(err, res) {
+          done(err);
+        });
+    });
+    //test
     it('should respond with a 401 status because user is already logged in', function (done) {
       agent
       .put('/user/login')
@@ -76,4 +85,225 @@ describe('UsersController', function() {
       .expect(401, done);
     });
   });
+
+  describe('#delete() as manager', function() {
+    //sign up as manager before test
+    var idToDelete;
+    before(function(done) {
+      agent
+       .post('/user')
+       .send({
+         firstname:  'the',
+         name:       'manager',
+         email:      'the@manager.com',
+         sex:        true,
+         role:       'MANAGER',
+         password:   'pwd'
+       })
+       .end(function(err, res) {
+         agent
+          .post('/user/search')
+          .send({
+            email: 'foo@bar.com'
+          })
+          .end(function(err2, res2) {
+            idToDelete = res2.body[0].id;
+          });
+         done(err);
+       });
+    });
+    //test
+    it('should respond with a 401 status because only administrators can delete an user', function (done) {
+      agent
+      .delete('/user/'+idToDelete)
+      .send()
+      .expect(401, done);
+    });
+  });
+
+  describe('#update() as manager', function() {
+    //is signed as manager since the last test
+    var idToUpdate;
+    before(function(done) {
+      agent
+       .post('/user/search')
+       .send({
+         email: 'foo@bar.com'
+       })
+       .end(function(err2, res2) {
+         idToUpdate = res2.body[0].id;
+       });
+      done();
+    });
+    //log out after the test
+    after(function(done) {
+       agent
+        .put('/user/logout')
+        .end(function(err, res) {
+          done(err);
+        });
+    });
+    //test
+    it('should respond with a 401 status because only administrators can update other users', function (done) {
+      agent
+      .post('/user/update/'+idToUpdate)
+      .send({
+        name:     'newfoo',
+        password: 'pass'
+      })
+      .expect(401, done);
+    });
+  });
+
+  describe('#update() as user', function() {
+    //sign up as user before test
+    var idToUpdate;
+    before(function(done) {
+      agent
+      .put('/user/login')
+      .send({
+        email: 'foo@bar.com',
+        password: 'foobar'
+      })
+      .end(function(err,res){
+        agent
+         .post('/user/search')
+         .send({
+           email: 'the@manager.com'
+         })
+         .end(function(err2, res2) {
+           idToUpdate = res2.body[0].id;
+         });
+        done();
+      });
+    });
+    //test
+    it('should respond with a 401 status because only administrators can delete an user', function (done) {
+      agent
+      .post('/user/update/'+idToUpdate)
+      .send({
+        name:     'managerupdated',
+        password: 'passup'
+      })
+      .expect(401, done);
+    });
+  });
+
+  describe('#update() as user (update himself) - first way', function() {
+    //is signed as user since the last test
+    var idToUpdate;
+    before(function(done) {
+      agent
+       .post('/user/search')
+       .send({
+         email: 'foo@bar.com'
+       })
+       .end(function(err2, res2) {
+         idToUpdate = res2.body[0].id;
+         done();
+       });
+    });
+    //test
+    it('should update the account of the current user (1)', function (done) {
+      agent
+      .post('/user/update/'+idToUpdate)
+      .send({
+        name:     'mynewname',
+        password: 'passup'
+      })
+      .expect(200, done);
+    });
+  });
+
+  describe('#update() as user (update himself) - second way', function() {
+    //is signed as user since the last test
+    //log out after the test
+    after(function(done) {
+       agent
+        .put('/user/logout')
+        .end(function(err, res) {
+          done(err);
+        });
+    });
+    //test
+    it('should update the account of the current user (2)', function (done) {
+      agent
+      .post('/user/update')
+      .send({
+        name:     'mynewnameagain',
+        password: 'passup2'
+      })
+      .expect(200, done);
+    });
+  });
+
+  describe('#update() as admin', function() {
+    //sign up as administrator before test
+    var idToUpdate;
+    before(function(done) {
+      agent
+       .post('/user')
+       .send({
+         firstname:  'the',
+         name:       'admin',
+         email:      'the@admin.com',
+         sex:        true,
+         role:       'ADMINISTRATOR',
+         password:   'pwd'
+       })
+       .end(function(err, res) {
+         agent
+          .post('/user/search')
+          .send({
+            email: 'the@manager.com'
+          })
+          .end(function(err2, res2) {
+            idToUpdate = res2.body[0].id;
+          });
+         done(err);
+       });
+    });
+    //test
+    it('should update the manager', function (done) {
+      agent
+      .post('/user/update/'+idToUpdate)
+      .send({
+        name:     'newName',
+        password: 'helloworld'
+      })
+      .expect(200, done);
+    });
+  });
+
+  describe('#delete() as admin', function() {
+    //is signed as administrator since the last test
+    var idToDelete;
+    before(function(done) {
+      agent
+       .post('/user/search')
+       .send({
+         email: 'the@manager.com'
+       })
+       .end(function(err2, res2) {
+         idToDelete = res2.body[0].id;
+       });
+      done();
+    });
+    //log out after the test
+    after(function(done) {
+       agent
+        .put('/user/logout')
+        .end(function(err, res) {
+          done(err);
+        });
+    });
+    //test
+    it('should delete the manager', function (done) {
+      agent
+      .delete('/user/'+idToDelete)
+      .send()
+      .expect(200, done);
+    });
+  });
+
 });

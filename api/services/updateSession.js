@@ -4,11 +4,13 @@ module.exports = function(session, user) {
   }
   else {
     session.user = {
-      id: user.id,
-      name: user.name,
-      firstnam: user.firstname,
-      email: user.email,
-      role: user.role
+      id:        user.id,
+      name:      user.name,
+      firstnam:  user.firstname,
+      email:     user.email,
+      role:      user.role,
+      isAdmin:   "ADMINISTRATOR" === user.role,
+      isManager: "MANAGER" === user.role
     }
   }
 }

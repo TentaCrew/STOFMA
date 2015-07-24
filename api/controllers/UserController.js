@@ -74,15 +74,17 @@ module.exports = {
   },
 
   update: function (req, res) {
+
     // only admin can update other users
-    if(!req.session.isAdmin && req.session.userId != req.param('id')) {
+    if(!req.session.user.isAdmin && req.param('id') && req.session.user.id != req.param('id')) {
       return res.send(401, 'You do not have sufficient privileges.');
     }
 
     // only admin can update his own role
-    if(!req.session.isAdmin && req.param('role')) {
+    if(!req.session.user.isAdmin && req.param('role')) {
       return res.send(401, 'You do not have sufficient privileges.');
     }
+
     var id_ = req.param('id') ? req.param('id') : req.session.userId;
     // Updating an User
     User.update({id: id_}, req.allParams(), function(err, user) {
