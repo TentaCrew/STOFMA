@@ -110,7 +110,7 @@ module.exports.routes = {
      controller: 'ProductController',
      action: 'update'
    },
-   // Remove product
+   // Delete product
    'DELETE /product/:id' :{
      controller: 'ProductController',
      action: 'delete'
@@ -120,9 +120,50 @@ module.exports.routes = {
      controller: 'ProductController',
      action: 'get'
    },
-   // Get some product
+   // Get some products
    'POST /product/search': {
      controller: 'ProductController',
      action: 'get'
-   }
+   },
+
+   /**
+    * Routes about products
+    */
+
+    // Add pair
+    'POST /pair': {
+      controller: 'PairController',
+      action: 'add'
+    },
+    // Update pair
+    'POST /pair/update/:id': {
+      controller: 'PairController',
+      action: 'update'
+    },
+
+    /**
+     * Routes about sales
+     */
+
+     // Add sale
+     'POST /sale': {
+       controller: 'SaleController',
+       action: 'add'
+     },
+     // Update sale
+     'POST /sale/update/:id': {
+       controller: 'SaleController',
+       action: 'update'
+     },
+     // Delete sale
+     'DELETE /sale/:id': {
+       controller: 'SaleController',
+       action: 'delete'
+     },
+     // Get some sales
+     'POST /sale/search': {
+       controller: 'SaleController',
+       action: 'get'
+     }
+
 };

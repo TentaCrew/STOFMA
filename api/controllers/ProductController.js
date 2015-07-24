@@ -22,7 +22,7 @@ module.exports = {
       }
       else {
         sails.log.debug("Product " + req.param('name') + " added in category " + req.param('category'));
-        return res.send(200);
+        return res.send(200, newProduct);
       }
     });
   },

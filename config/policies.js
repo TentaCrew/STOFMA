@@ -45,6 +45,26 @@ module.exports.policies = {
     'update': 'isManager',
     'delete': 'isManager',
     'get':    'authenticated'
+  },
+
+  'PairController': {
+    '*':      false,
+    'add':    'isManager',
+    'update': 'isManager'
+  },
+
+  'PurchaseController': {
+    '*':      false,
+    'add':    'isManager',
+    'get':    'isManager'
+  },
+
+  'SaleController': {
+    '*':      false,
+    'add':    'isManager',
+    'update': 'isManager',
+    'delete': 'isManager',
+    'get':    'authenticated'
   }
 
 };

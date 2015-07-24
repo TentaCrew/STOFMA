@@ -24,7 +24,7 @@ module.exports = {
         if(sha1(req.param('password')) == foundUser.password) {
           updateSession(req.session, foundUser);
           sails.log.debug(foundUser.email + " credentials are valid.");
-          return res.send(200);
+          return res.send(200, foundUser);
         }
         else {
           sails.log.debug(foundUser.email + " credentials are invalid.");
@@ -68,7 +68,7 @@ module.exports = {
       else {
         updateSession(req.session, newUser);
         sails.log.debug("User " + req.param('email') + " signed up and logged in as " + newUser.role);
-        return res.send(200);
+        return res.send(200, newUser);
       }
     });
   },
@@ -116,7 +116,7 @@ module.exports = {
           return res.negotiate(err);
         }
         else {
-          return res.send(users);
+          return res.send(200, users);
         }
     });
   },
@@ -128,7 +128,7 @@ module.exports = {
           return res.negotiate(err);
         }
         else {
-          return res.send(user);
+          return res.send(200, user);
         }
     });
   }
