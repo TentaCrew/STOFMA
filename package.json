@@ -29,13 +29,29 @@
     "test": "mocha test/bootstrap.test.js test/unit/**/*.test.js"
   },
   "main": "app.js",
+  "homepage": "https://github.com/ciaa-cnam/STOFMA",
   "repository": {
     "type": "git",
     "url": "git://github.com/ciaa-cnam/STOFMA"
   },
   "bugs": "https://github.com/ciaa-cnam/STOFMA/issues",
-  "author": "Frédéric Woelffel <woelffel.f@gmail.com>",
-  "contributors": ["Michel Edighoffer", "Corentin Desfarges"],
+  "author": {
+    "name":  "Frédéric Woelffel",
+    "url":   "http://fredericwoelffel.com",
+    "email": "woelffel.f@gmail.com"
+  },
+  "contributors": [
+    {
+      "name":  "Corentin Desfarges",
+      "url":   "http://corentindesfarges.fr",
+      "email": "corentin.desfarges.dev@gmail.com"
+    },
+    {
+      "name":  "Michel Edighoffer",
+      "url":   "http://book.micheledighoffer.fr",
+      "email": "edimitchel@gmail.com "
+    }
+  ],
   "license": "MIT",
   "devDependencies": {
     "mocha": "^2.2.5",
