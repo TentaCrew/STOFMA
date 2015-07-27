@@ -146,7 +146,7 @@ describe('UsersController', function() {
     //test
     it('should respond with a 401 status because only administrators can update other users', function (done) {
       agent
-      .post('/user/update/'+idToUpdate)
+      .patch('/user/'+idToUpdate)
       .send({
         name:     'newfoo',
         password: 'pass'
@@ -180,7 +180,7 @@ describe('UsersController', function() {
     //test
     it('should respond with a 401 status because only administrators can delete an user', function (done) {
       agent
-      .post('/user/update/'+idToUpdate)
+      .patch('/user/'+idToUpdate)
       .send({
         name:     'managerupdated',
         password: 'passup'
@@ -206,7 +206,7 @@ describe('UsersController', function() {
     //test
     it('should update the account of the current user (1)', function (done) {
       agent
-      .post('/user/update/'+idToUpdate)
+      .patch('/user/'+idToUpdate)
       .send({
         name:     'mynewname',
         password: 'passup'
@@ -228,7 +228,7 @@ describe('UsersController', function() {
     //test
     it('should update the account of the current user (2)', function (done) {
       agent
-      .post('/user/update')
+      .patch('/user')
       .send({
         name:     'mynewnameagain',
         password: 'passup2'
@@ -266,7 +266,7 @@ describe('UsersController', function() {
     //test
     it('should update the manager', function (done) {
       agent
-      .post('/user/update/'+idToUpdate)
+      .patch('/user/'+idToUpdate)
       .send({
         name:     'newName',
         password: 'helloworld'

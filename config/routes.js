@@ -56,12 +56,12 @@ module.exports.routes = {
     action: 'signup'
   },
   // Update current user
-  'POST /user/update': {
+  'PATCH /user': {
     controller: 'UserController',
     action: 'update'
   },
   // Update user
-  'POST /user/update/:id': {
+  'PATCH /user/:id': {
     controller: 'UserController',
     action: 'update'
   },
@@ -106,7 +106,7 @@ module.exports.routes = {
      action: 'add'
    },
    // Update product
-   'POST /product/update/:id': {
+   'PATCH /product/:id': {
      controller: 'ProductController',
      action: 'update'
    },
@@ -136,7 +136,7 @@ module.exports.routes = {
       action: 'add'
     },
     // Update pair
-    'POST /pair/update/:id': {
+    'PATCH /pair/:id': {
       controller: 'PairController',
       action: 'update'
     },
@@ -151,7 +151,7 @@ module.exports.routes = {
        action: 'add'
      },
      // Update sale
-     'POST /sale/update/:id': {
+     'PATCH /sale/:id': {
        controller: 'SaleController',
        action: 'update'
      },

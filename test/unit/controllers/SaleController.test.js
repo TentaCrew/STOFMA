@@ -193,7 +193,7 @@ describe('SaleController', function() {
     it('should update the sale', function (done) {
       console.log(createdSale);
       agent
-       .post('/pair/update/' + createdSale.products)
+       .patch('/pair/' + createdSale.products)
        .send({
          pairs: [
            {
@@ -212,7 +212,7 @@ describe('SaleController', function() {
        })
        .end(function(err, pairs) {
          agent
-          .post('/sale/update/' + createdSale)
+          .patch('/sale/' + createdSale)
           .send({
             saleDate: '11/08/2015',
             customer: {
