@@ -1,0 +1,23 @@
+<md-tabs flex md-dynamic-height="false" md-selected="0" md-swipe-content="true">
+  <md-tab ng-repeat="category in categories">
+    <md-tab-label>{{category.name}}</md-tab-label>
+    <md-tab-body>
+      <md-list>
+        <product-line ng-repeat="product in products[category.id] track by product.id" product="product"></product-line>
+      </md-list>
+    </md-tab-body>
+  </md-tab>
+</md-tabs>
+
+<md-toolbar ng-if="isSellingMode">
+  <div class="md-toolbar-tools md-toolbar-tools-bottom">
+    <span class="md-flex">Total à payer : {{sum|currency:''}} €</span>
+    <md-button ng-show="isSellable" class="md-button md-accent" ng-click="cancel()">Annuler
+      <md-icon class="material-icons">clear</md-icon>
+    </md-button>
+    <span flex></span>
+    <md-button ng-show="isSellable" class="md-button md-raised md-accent" ng-click="check()">Valider
+      <md-icon class="material-icons">done</md-icon>
+    </md-button>
+  </div>
+</md-toolbar>

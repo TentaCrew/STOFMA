@@ -1,0 +1,18 @@
+<md-list-item class="md-2-line">
+  <div class="md-list-item-text">
+    <h3>{{product.name}}<span ng-if="product.subname != ''">&nbsp;–&nbsp;<em>{{product.subname}}</em></span></h3>
+    <h4><strong>{{product.price | currency:''}} €</strong></h4>
+  </div>
+  <div ng-if="$parent.usage = 'selling'" ng-class="{'stock-out' : product.left == 0}">
+    <md-button class="md-fab" ng-click="remove(product.id)">
+      <md-icon class="material-icons">remove</md-icon>
+    </md-button>
+    <md-button class="md-fab sum" ng-class="{'selected': product.selected}" ng-click="clear(product.id)">
+      {{product.selected}}
+    </md-button>
+    <md-button class="md-fab" ng-click="add(product.id)">
+      <md-icon class="material-icons">add</md-icon>
+    </md-button>
+  </div>
+</md-list-item>
+<md-divider ng-if="!$parent.$last"></md-divider>
