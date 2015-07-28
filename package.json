@@ -30,7 +30,9 @@
   "scripts": {
     "start": "node app.js",
     "debug": "node debug app.js",
-    "test": "mocha test/bootstrap.test.js test/unit/**/*.test.js"
+    "test": "mocha test/bootstrap.test.js test/unit/**/*.test.js",
+    "preinstall": "npm install bower -g",
+    "install": "bower install"
   },
   "main": "app.js",
   "homepage": "https://github.com/ciaa-cnam/STOFMA",
