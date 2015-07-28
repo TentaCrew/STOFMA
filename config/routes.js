@@ -164,6 +164,21 @@ module.exports.routes = {
      'POST /sale/search': {
        controller: 'SaleController',
        action: 'get'
+     },
+     // Get all sales
+     'GET /sale/': {
+       controller: 'SaleController',
+       action: 'get'
+     },
+     // Get one sale by id
+     'GET /sale/:id': {
+       controller: 'SaleController',
+       action: 'get'
+     },
+     // Get one sale's pairs
+     'GET /sale/:id/pairs': {
+       controller: 'SaleController',
+       action: 'getPairs'
      }
 
 };

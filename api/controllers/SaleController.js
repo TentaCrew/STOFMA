@@ -56,5 +56,14 @@ module.exports = {
           return res.send(sales);
         }
     });
+  },
+
+  getPairs: function (req, res) {
+    Sale.find(req.allParams()).populate('products').exec(function(err, res) {
+      if (err) {
+        return res.negociate(err);
+      }
+      return res.json(res.products);
+    });
   }
 };
