@@ -35,6 +35,10 @@ module.exports = {
       type: 'STRING',
       in: ['DRINK','FOOD','OTHER'],
       required: true
+    },
+    isActive: { // No longer follow for restocking
+      type: 'BOOLEAN',
+      defaultsTo: true
     }
   }
 };
