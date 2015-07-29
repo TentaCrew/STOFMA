@@ -60,3 +60,4 @@ angular.module('stofmaApp.directive.productList', ['stofmaApp.directive.productL
       templateUrl: '/js/components/product-list/product-list.html'
     };
   }]);
+

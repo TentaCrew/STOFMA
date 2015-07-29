@@ -57,3 +57,4 @@ angular.module('stofmaApp.sell', [
       });
     }
   }]);
+

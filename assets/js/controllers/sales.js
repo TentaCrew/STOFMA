@@ -63,3 +63,4 @@ angular.module('stofmaApp.sales', [
       });
     };
   }]);
+

@@ -8,3 +8,4 @@ angular.module('stofmaApp.bottomsheetconfirm', [])
       $mdBottomSheet.hide(false);
     };
   }]);
+

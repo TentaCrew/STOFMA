@@ -19,3 +19,4 @@ angular.module('stofmaApp.home', [])
 
   .controller('HomeCtrl', ['$scope', function ($scope) {
   }]);
+

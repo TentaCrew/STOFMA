@@ -19,3 +19,4 @@ angular.module('stofmaApp.main', [
       });
     };
   }]);
+

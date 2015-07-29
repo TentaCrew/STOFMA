@@ -20,3 +20,4 @@ angular.module('stofmaApp.factory.product', [])
 
     return factory;
   }]);
+

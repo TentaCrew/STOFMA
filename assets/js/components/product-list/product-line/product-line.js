@@ -24,3 +24,4 @@ angular.module('stofmaApp.directive.productLine', [])
       templateUrl: '/js/components/product-list/product-line/product-line.html'
     };
   });
+
