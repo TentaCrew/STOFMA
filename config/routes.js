@@ -135,10 +135,20 @@ module.exports.routes = {
       controller: 'PairController',
       action: 'add'
     },
+    // Delete pair
+    'DELETE /pair/:id': {
+      controller: 'PairController',
+      action: 'delete'
+    },
     // Update pair
     'PATCH /pair/:id': {
       controller: 'PairController',
       action: 'update'
+    },
+    // Get pair's product
+    'GET /pair/:id/product': {
+      controller: 'PairController',
+      action: 'getProduct'
     },
 
     /**
@@ -175,7 +185,7 @@ module.exports.routes = {
        controller: 'SaleController',
        action: 'get'
      },
-     // Get one sale's pairs
+     // Get sale's pairs
      'GET /sale/:id/pairs': {
        controller: 'SaleController',
        action: 'getPairs'

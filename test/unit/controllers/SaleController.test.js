@@ -68,8 +68,8 @@ describe('SaleController', function() {
            }
         ]
        })
-       .end(function(err, pairs) {
-         var res = agent
+       .end(function(err, pairsToAdd) {
+         agent
           .post('/sale')
           .send({
             saleDate: '11/08/1993',
@@ -84,13 +84,20 @@ describe('SaleController', function() {
             manager:  manager.id,
             amount:   119.99,
             products: [
-              pairs.body[0],
-              pairs.body[1]
+              pairsToAdd.body[0],
+              pairsToAdd.body[1]
             ] //  pairs.body
           })
-          .expect(200, function(errSale, sale){
-            createdSale = sale.body;
-            done();
+          .end(function(err2,sale) {
+            agent
+             .get('/sale/'+sale.body.id+'/pairs')
+             .end(function(err3, pairs) {
+               agent
+                .get('/pair/'+pairs.body[0].id+'/product')
+                .expect(200, function(errPairs, product0){
+                  done();
+                });
+             });
           });
        });
      });

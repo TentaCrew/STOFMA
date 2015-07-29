@@ -48,9 +48,11 @@ module.exports.policies = {
   },
 
   'PairController': {
-    '*':      false,
-    'add':    'isManager',
-    'update': 'isManager'
+    '*':          false,
+    'add':        'isManager',
+    'delete':     'isManager',
+    'update':     'isManager',
+    'getProduct': 'authenticated'
   },
 
   'PurchaseController': {
@@ -60,11 +62,12 @@ module.exports.policies = {
   },
 
   'SaleController': {
-    '*':      false,
-    'add':    'isManager',
-    'update': 'isManager',
-    'delete': 'isManager',
-    'get':    'authenticated'
+    '*':        false,
+    'add':      'isManager',
+    'update':   'isManager',
+    'delete':   'isManager',
+    'get':      'authenticated',
+    'getPairs': 'authenticated'
   }
 
 };

@@ -16,19 +16,27 @@ module.exports = {
         return res.send(200, pairs);
       }
     });
-  }
+  },
 
-  // TODO: Need to fix SaleController:update
-  /*update: function (req, res) {
-    // Updating a Sale
-    Pair.update({id: req.param('id')}, req.allParams(), function(err, pair) {
-        if (err) {
-          return res.negotiate(err);
-        }
-        else {
-          console.log(pair);
-          return res.send(200, pair);
-        }
-    });
-  }*/
+  getProduct: function (req, res) {
+    Pair.findOne(req.allParams()).populate('product').exec(function(err, pair) {
+     if (err) {
+       return res.negociate(err);
+     }
+     return res.send(pair.product);
+   });
+ },
+
+ delete: function (req, res) {
+   // Deleting a Pair
+   Pair.destroy({id: req.param('id')}, function(err, pair) {
+       if (err) {
+         return res.negotiate(err);
+       }
+       else {
+         return res.send(200);
+       }
+   });
+ }
+
 };
