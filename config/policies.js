@@ -61,6 +61,10 @@ module.exports.policies = {
     'get':    'isManager'
   },
 
+  'SessionController': {
+    'get': true
+  },
+
   'SaleController': {
     '*':        false,
     'add':      'isManager',
