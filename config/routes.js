@@ -47,6 +47,16 @@ module.exports.routes = {
   ***************************************************************************/
 
 /**
+ * Routes about sessions
+ */
+
+  // Get current session
+  'GET /session': {
+   controller: 'SessionController',
+   action: 'get'
+  },
+
+/**
  * Routes about users
  */
 
