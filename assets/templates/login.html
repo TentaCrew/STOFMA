@@ -1,0 +1,24 @@
+<div class="">
+    <h1>Connexion</h1>
+
+    <form name="loginUser">
+        <md-input-container>
+            <label>Adresse e-mail</label>
+            <input type="email" name="userMail" ng-model="userMail" required>
+            <div ng-messages="loginUser.userMail.$error" ng-show="loginUser.userMail.$dirty">
+                <div ng-message="email">L'adresse e-mail n'est pas correct</div>
+                <div ng-message="required">Ce champ est obligatoire</div>
+            </div>
+        </md-input-container>
+        <md-input-container>
+            <label>Mot de passe</label>
+            <input type="password" name="userPassword" ng-model="userPassword" required>
+            <div ng-messages="loginUser.userPassword.$error" ng-show="loginUser.userPassword.$dirty">
+                <div ng-message="required">Ce champ est obligatoire</div>
+            </div>
+        </md-input-container>
+
+        <md-button ng-click="login($event)" class="md-primary">Se connecter</md-button>
+    </form>
+</div>
+

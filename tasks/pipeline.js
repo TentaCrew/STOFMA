@@ -26,16 +26,21 @@ var jsFilesToInject = [
   // Load sails.io before everything else
   'js/dependencies/sails.io.js',
 
-  // Dependencies like jQuery, or Angular are brought in here
+  // Angular dependency
   'js/lib/**/angular.js',
 
-  // Dependencies like jQuery, or Angular are brought in here
+  // Other dependencies
   'js/lib/**/*.js',
+
+  // Adds app.js and routes.js.
+  'js/*.js',
+
+  // Initialize angular's modules.
+  'js/init.js',
 
   // All of the rest of your client-side js files
   // will be injected here in no particular order.
-  'js/**/*.js'
-
+  'js/*/**/*.js'
 ];
 
 

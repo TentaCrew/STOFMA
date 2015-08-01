@@ -7,9 +7,10 @@
     "angular": "~1.4.0",
     "angular-ui-router": "~0.2.15",
     "angular-material": "~0.10.0",
-    "angular-sweetalert": "~1.1.0"
+    "angular-sweetalert": "~1.1.0",
+    "angular-messages": "~1.3.13"
   },
   "resolutions": {
-    "angular": "~1.4.0"
+    "angular": "1.4.3"
   }
 }

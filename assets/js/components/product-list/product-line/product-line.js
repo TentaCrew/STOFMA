@@ -1,4 +1,4 @@
-angular.module('stofmaApp.directive.productLine', [])
+angular.module('stofmaApp.components')
   .directive('productLine', function () {
     return {
       restrict: 'E',
