@@ -1,7 +1,7 @@
 <md-list-item class="md-2-line">
   <div class="md-list-item-text">
-    <h3 class="hide-sm">{{product.name}}</h3>
-    <h3 class="show-gt-sm">{{product.shortName}}</h3>
+    <h3 hide-sm>{{product.name}}</h3>
+    <h3 hide-gt-sm show-sm>{{product.shortName}}</h3>
     <h4><strong>{{product.price | currency:''}} €</strong></h4>
   </div>
   <div ng-if="$parent.usage = 'selling'" ng-class="{'stock-out' : product.quantity == 0}">

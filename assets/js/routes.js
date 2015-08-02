@@ -34,12 +34,8 @@ angular.module('stofmaApp')
           })
           .state('auth.home', {
             url: '/home',
-            views: {
-              'main-content': {
-                controller: 'HomeCtrl',
-                templateUrl: 'assets/templates/home.html'
-              }
-            },
+            controller: 'HomeCtrl',
+            templateUrl: 'assets/templates/home.html',
             data: {
               name: 'Accueil'
             }

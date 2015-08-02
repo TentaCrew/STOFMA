@@ -1,9 +1,9 @@
 <md-tabs flex md-dynamic-height="false" md-selected="0" md-swipe-content="true">
-  <md-tab ng-repeat="category in categories">
-    <md-tab-label>{{category.name}}</md-tab-label>
+  <md-tab ng-repeat="cat in categories">
+    <md-tab-label>{{cat.name}}</md-tab-label>
     <md-tab-body>
       <md-list>
-        <product-line ng-repeat="product in products[category.id] track by product.id" product="product"></product-line>
+        <product-line ng-repeat="product in products | filter : cat.id track by product.id" product="product"></product-line>
       </md-list>
     </md-tab-body>
   </md-tab>
@@ -21,4 +21,3 @@
     </md-button>
   </div>
 </md-toolbar>
-

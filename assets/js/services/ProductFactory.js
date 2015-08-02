@@ -12,7 +12,15 @@ angular.module('stofmaApp.services')
         var defer = $q.defer();
 
         $http.post('/product/search').success(function (data) {
-          defer.resolve(data);
+          var r = data;
+
+          // Fix the number of selected product to 0
+          r = r.map(function(o){
+            o.selected = 0;
+            return o;
+          });
+
+          defer.resolve(r);
         }).error(function (err) {
           defer.reject();
         });

@@ -18,11 +18,11 @@ angular.module('stofmaApp.controllers')
         }
       ];
 
-      $scope.products = productsData.products;
+      $scope.products = productsData;
 
       $scope.refreshProduct = function () {
         ProductFactory.getProducts().then(function (data) {
-          $scope.products = data.products;
+          $scope.products = data;
         });
       };
 
