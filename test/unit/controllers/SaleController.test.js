@@ -48,11 +48,12 @@ describe('SaleController', function() {
                name:      'prod_sale_2',
                shortName: 'ps2',
                price:     0.50,
-               quantity:  20,
+               quantity:  5,
                urlImage:  '',
                minimum:   5,
                category:  'FOOD'
-             }
+             },
+             amount: 0.50*5 // product.price * product.quantity
            },
            {
              quantity: 1,
@@ -60,11 +61,12 @@ describe('SaleController', function() {
                name:      'prod_sale_1',
                shortName: 'ps1',
                price:     0.50,
-               quantity:  25,
+               quantity:  2,
                urlImage:  '',
                minimum:   5,
                category:  'DRINK'
-             }
+             },
+             amount: 0.50*2 // product.price * product.quantity
            }
         ]
        })

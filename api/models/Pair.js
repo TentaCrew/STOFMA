@@ -20,6 +20,10 @@ module.exports = {
     },
     associatedPurchase: {
       model: 'Purchase'
+    },
+    amount: {   //necessary because the price of a product can change
+      type: 'FLOAT',
+      required: true
     }
   }
 
