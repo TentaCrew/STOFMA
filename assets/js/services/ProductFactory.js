@@ -4,18 +4,18 @@ angular.module('stofmaApp.services');
 
 angular.module('stofmaApp.services')
     .factory('ProductFactory', ['$q', '$http', function ($q, $http) {
-      var factory = {
-        getProducts: getProductsFn
+      return {
+        getProducts: getProducts
       };
 
-      function getProductsFn() {
+      function getProducts() {
         var defer = $q.defer();
 
         $http.post('/product/search').success(function (data) {
           var r = data;
 
           // Fix the number of selected product to 0
-          r = r.map(function(o){
+          r = r.map(function (o) {
             o.selected = 0;
             return o;
           });
@@ -27,7 +27,5 @@ angular.module('stofmaApp.services')
 
         return defer.promise;
       }
-
-      return factory;
     }]);
 

@@ -1,5 +1,5 @@
 angular.module('stofmaApp.auth')
-    .factory('Auth', function ($http, LocalStorage, AccessLevels) {
+    .factory('Auth', ['$http', 'LocalStorage', 'AccessLevels', function ($http, LocalStorage, AccessLevels) {
       return {
         authorize: function (access) {
           if (access !== AccessLevels.anon) {
@@ -35,15 +35,15 @@ angular.module('stofmaApp.auth')
           return register;
         }
       }
-    })
+    }])
     .factory('AuthInterceptor', function ($q, $injector) {
-      var LocalService = $injector.get('LocalStorage');
+      var LocalStorage = $injector.get('LocalStorage');
 
       return {
         request: function (config) {
           var token;
-          if (LocalService.get('auth_token')) {
-            token = angular.fromJson(LocalService.get('auth_token')).token;
+          if (LocalStorage.get('auth_token')) {
+            token = angular.fromJson(LocalStorage.get('auth_token')).token;
           }
           if (token) {
             config.headers.Authorization = 'Bearer ' + token;
@@ -52,7 +52,7 @@ angular.module('stofmaApp.auth')
         },
         responseError: function (response) {
           if (response.status === 401 || response.status === 403) {
-            LocalService.unset('auth_token');
+            LocalStorage.unset('auth_token');
             $injector.get('$state').go('anon.login');
           }
           return $q.reject(response);

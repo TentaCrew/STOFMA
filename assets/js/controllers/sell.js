@@ -27,14 +27,28 @@ angular.module('stofmaApp.controllers')
       };
 
       $scope.confirmSelling = function ($event) {
+        var products = $scope.products.filter(function(o){
+          return o.selected > 0;
+        });
+
         $mdBottomSheet.show({
           templateUrl: '/js/components/bottom-sheet/bottom-sheet-confirm-selling.html',
-          controller: 'BottomSheetConfirmCtrl',
-          targetEvent: $event
-        }).then(function (done) {
-          if (done) {
+          controller: 'BottomSheetConfirmSellCtrl',
+          targetEvent: $event,
+          locals : {
+            productsToSell : products
+          },
+          resolve : {
+            userProvider : 'UserFactory',
+            usersData : function(UserFactory){
+              return UserFactory.getAll();
+            }
+          }
+        }).then(function (r) {
+          // TODO Save sale into database
+          if (r.ok) {
             SweetAlert.swal({
-              title: 'Vente terminée !',
+              title: 'Vente terminée pour '+ r.user +'!',
               type: 'success'
             }, function (ok) {
               if (ok) {

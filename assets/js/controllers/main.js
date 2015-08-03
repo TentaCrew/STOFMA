@@ -2,10 +2,13 @@
 
 angular.module('stofmaApp.controllers')
     .controller('MainCtrl', ['$scope', '$rootScope', '$state', '$q', '$mdBottomSheet', '$mdSidenav', 'UserFactory', function ($scope, $rootScope, $state, $q, $mdBottomSheet, $mdSidenav, UserFactory) {
+      var that = this;
       $scope.pageTitle = "";
 
       $rootScope.$on("$stateChangeSuccess", function () {
         $scope.pageTitle = $state.current.data.name;
+        if($mdSidenav('left').isOpen())
+          that.toggleMenu();
       });
 
 

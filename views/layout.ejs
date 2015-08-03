@@ -7,150 +7,156 @@
 <html lang="en" ng-app="stofmaApp" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
 <html lang="en" ng-app="stofmaApp" class="no-js"> <!--<![endif]-->
-    <head>
-        <base href="/">
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Student Office Manager</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-        <style>
-            [ng-cloak] {
-                display: none;
-            }
-        </style>
+  <head>
+    <base href="/">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Student Office Manager</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <style>
+      [ng-cloak] {
+        display: none;
+      }
+    </style>
 
-        <!--
-          TODO Change before production
-        -->
-        <meta name="mobile-web-app-capable" content="yes">
-        <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">
+    <!--
+      TODO Change before production
+    -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">
 
-        <!-- Add to homescreen for Safari on iOS -->
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black">
-        <meta name="apple-mobile-web-app-title" content="Material Design Lite">
-        <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png">
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Material Design Lite">
+    <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png">
 
-        <!-- Tile icon for Win8 (144x144 + tile color) -->
-        <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
-        <meta name="msapplication-TileColor" content="#3372DF">
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+    <meta name="msapplication-TileColor" content="#3372DF">
 
-        <!--
-            Stylesheets and Preprocessors
-            ==============================
+    <!--
+        Stylesheets and Preprocessors
+        ==============================
 
-            You can always bring in CSS files manually with `<link>` tags, or asynchronously
-            using a solution like AMD (RequireJS).  Or, if you like, you can take advantage
-            of Sails' conventional asset pipeline (boilerplate Gruntfile).
+        You can always bring in CSS files manually with `<link>` tags, or asynchronously
+        using a solution like AMD (RequireJS).  Or, if you like, you can take advantage
+        of Sails' conventional asset pipeline (boilerplate Gruntfile).
 
-            By default, stylesheets from your `assets/styles` folder are included
-            here automatically (between STYLES and STYLES END). Both CSS (.css) and LESS (.less)
-            are supported. In production, your styles will be minified and concatenated into
-            a single file.
+        By default, stylesheets from your `assets/styles` folder are included
+        here automatically (between STYLES and STYLES END). Both CSS (.css) and LESS (.less)
+        are supported. In production, your styles will be minified and concatenated into
+        a single file.
 
-            To customize any part of the built-in behavior, just edit `tasks/pipeline.js`.
-            For example, here are a few things you could do:
+        To customize any part of the built-in behavior, just edit `tasks/pipeline.js`.
+        For example, here are a few things you could do:
 
-                + Change the order of your CSS files
-                + Import stylesheets from other directories
-                + Use a different or additional preprocessor, like SASS, SCSS or Stylus
-        -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"
-              rel="stylesheet">
+            + Change the order of your CSS files
+            + Import stylesheets from other directories
+            + Use a different or additional preprocessor, like SASS, SCSS or Stylus
+    -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"
+      rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
 
-        <!--STYLES-->
-        <link rel="stylesheet" href="/styles/importer.css">
-        <link rel="stylesheet" href="/styles/lib/angular-material.css">
-        <link rel="stylesheet" href="/styles/lib/dist/sweetalert.css">
-        <!--STYLES END-->
-    </head>
+    <!--STYLES-->
+    <link rel="stylesheet" href="/styles/importer.css">
+    <link rel="stylesheet" href="/styles/lib/angular-material.css">
+    <link rel="stylesheet" href="/styles/lib/dist/sweetalert.css">
+    <!--STYLES END-->
+  </head>
 
-    <body layout="row" ng-cloak ng-controller="MainCtrl as main">
-        <%- body %>
+  <body layout="row" ng-cloak ng-controller="MainCtrl as main">
+    <%- body %>
 
-        <!--
-            Client-side Templates
-            ========================
+    <!--
+        Client-side Templates
+        ========================
 
-            HTML templates are important prerequisites of modern, rich client applications.
-            To work their magic, frameworks like Backbone, Angular, Ember, and Knockout require
-            that you load these templates client-side.
+        HTML templates are important prerequisites of modern, rich client applications.
+        To work their magic, frameworks like Backbone, Angular, Ember, and Knockout require
+        that you load these templates client-side.
 
-            By default, your Gruntfile is configured to automatically load and precompile
-            client-side JST templates in your `assets/templates` folder, then
-            include them here automatically (between TEMPLATES and TEMPLATES END).
+        By default, your Gruntfile is configured to automatically load and precompile
+        client-side JST templates in your `assets/templates` folder, then
+        include them here automatically (between TEMPLATES and TEMPLATES END).
 
-            To customize this behavior to fit your needs, just edit `tasks/pipeline.js`.
-            For example, here are a few things you could do:
+        To customize this behavior to fit your needs, just edit `tasks/pipeline.js`.
+        For example, here are a few things you could do:
 
-                + Import templates from other directories
-                + Use a different template engine (handlebars, jade, dust, etc.)
-                + Internationalize your client-side templates using a server-side
-                  stringfile before they're served.
-        -->
+            + Import templates from other directories
+            + Use a different template engine (handlebars, jade, dust, etc.)
+            + Internationalize your client-side templates using a server-side
+              stringfile before they're served.
+    -->
 
-        <script> /* To prevent error on underscore */ var _ = {escape : null}; </script>
-        <!--TEMPLATES-->
-        <script type="text/javascript" src="/jst.js"></script>
-        <!--TEMPLATES END-->
-
-
-        <!--
-
-          Client-side Javascript
-          ========================
-
-          You can always bring in JS files manually with `script` tags, or asynchronously
-          on the client using a solution like AMD (RequireJS).  Or, if you like, you can
-          take advantage of Sails' conventional asset pipeline (boilerplate Gruntfile).
-
-          By default, files in your `assets/js` folder are included here
-          automatically (between SCRIPTS and SCRIPTS END).  Both JavaScript (.js) and
-          CoffeeScript (.coffee) are supported. In production, your scripts will be minified
-          and concatenated into a single file.
-
-          To customize any part of the built-in behavior, just edit `tasks/pipeline.js`.
-          For example, here are a few things you could do:
-
-              + Change the order of your scripts
-              + Import scripts from other directories
-              + Use a different preprocessor, like TypeScript
-
-        -->
+    <script> /* To prevent error on underscore */
+      var _ = {escape: null}; </script>
+    <!--TEMPLATES-->
+    <script type="text/javascript" src="/jst.js"></script>
+    <!--TEMPLATES END-->
 
 
-        <!--SCRIPTS-->
-        <script src="/js/lib/angular.js"></script>
-        <script src="/js/lib/SweetAlert.js"></script>
-        <script src="/js/lib/angular-animate.js"></script>
-        <script src="/js/lib/angular-aria.js"></script>
-        <script src="/js/lib/angular-material.js"></script>
-        <script src="/js/lib/angular-messages.js"></script>
-        <script src="/js/lib/dist/sweetalert.min.js"></script>
-        <script src="/js/lib/release/angular-ui-router.js"></script>
-        <script src="/js/app.js"></script>
-        <script src="/js/init.js"></script>
-        <script src="/js/routes.js"></script>
-        <script src="/js/components/bottom-sheet/bottom-sheet-confirm.js"></script>
-        <script src="/js/components/product-list/product-line/product-line.js"></script>
-        <script src="/js/components/product-list/product-list.js"></script>
-        <script src="/js/controllers/home.js"></script>
-        <script src="/js/controllers/login.js"></script>
-        <script src="/js/controllers/main.js"></script>
-        <script src="/js/controllers/nav.js"></script>
-        <script src="/js/controllers/register.js"></script>
-        <script src="/js/controllers/sales.js"></script>
-        <script src="/js/controllers/sell.js"></script>
-        <script src="/js/services/AccessLevels.js"></script>
-        <script src="/js/services/Auth.js"></script>
-        <script src="/js/services/CurrentUser.js"></script>
-        <script src="/js/services/LocalStorage.js"></script>
-        <script src="/js/services/ProductFactory.js"></script>
-        <script src="/js/services/SaleFactory.js"></script>
-        <script src="/js/services/UserFactory.js"></script>
-        <!--SCRIPTS END-->
-    </body>
+    <!--
+
+      Client-side Javascript
+      ========================
+
+      You can always bring in JS files manually with `script` tags, or asynchronously
+      on the client using a solution like AMD (RequireJS).  Or, if you like, you can
+      take advantage of Sails' conventional asset pipeline (boilerplate Gruntfile).
+
+      By default, files in your `assets/js` folder are included here
+      automatically (between SCRIPTS and SCRIPTS END).  Both JavaScript (.js) and
+      CoffeeScript (.coffee) are supported. In production, your scripts will be minified
+      and concatenated into a single file.
+
+      To customize any part of the built-in behavior, just edit `tasks/pipeline.js`.
+      For example, here are a few things you could do:
+
+          + Change the order of your scripts
+          + Import scripts from other directories
+          + Use a different preprocessor, like TypeScript
+
+    -->
+
+
+    <!--SCRIPTS-->
+    <script src="/js/lib/angular.js"></script>
+    <script src="/js/lib/SweetAlert.js"></script>
+    <script src="/js/lib/angular-animate.js"></script>
+    <script src="/js/lib/angular-aria.js"></script>
+    <script src="/js/lib/angular-material.js"></script>
+    <script src="/js/lib/angular-messages.js"></script>
+    <script src="/js/lib/dist/sweetalert.min.js"></script>
+    <script src="/js/lib/release/angular-ui-router.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/init.js"></script>
+    <script src="/js/routes.js"></script>
+    <script src="/js/components/bottom-sheet/bottom-sheet-confirm-sell.js"></script>
+    <script src="/js/components/bottom-sheet/bottom-sheet-confirm.js"></script>
+    <script src="/js/components/product-list/product-line/product-line.js"></script>
+    <script src="/js/components/product-list/product-list.js"></script>
+    <script src="/js/controllers/home.js"></script>
+    <script src="/js/controllers/login.js"></script>
+    <script src="/js/controllers/main.js"></script>
+    <script src="/js/controllers/nav.js"></script>
+    <script src="/js/controllers/purchases.js"></script>
+    <script src="/js/controllers/register.js"></script>
+    <script src="/js/controllers/sales.js"></script>
+    <script src="/js/controllers/sell.js"></script>
+    <script src="/js/services/AccessLevels.js"></script>
+    <script src="/js/services/Auth.js"></script>
+    <script src="/js/services/CurrentUser.js"></script>
+    <script src="/js/services/LocalStorage.js"></script>
+    <script src="/js/services/ProductFactory.js"></script>
+    <script src="/js/services/PurchaseFactory.js"></script>
+    <script src="/js/services/SaleFactory.js"></script>
+    <script src="/js/services/UserFactory.js"></script>
+    <!--SCRIPTS END-->
+  </body>
 </html>
 

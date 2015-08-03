@@ -2,12 +2,12 @@
 
 angular.module('stofmaApp.services')
     .factory('SaleFactory', ['$q', '$http', function ($q, $http) {
-      var factory = {
-        getSales: getSalesFn,
-        deleteSale: deleteSaleFn
+      return {
+        getSales: getSales,
+        deleteSale: deleteSale
       };
 
-      function getSalesFn() {
+      function getSales() {
         var defer = $q.defer();
 
         $http.post('/sale/search').success(function (data) {
@@ -19,7 +19,7 @@ angular.module('stofmaApp.services')
         return defer.promise;
       }
 
-      function deleteSaleFn(id) {
+      function deleteSale(id) {
         var defer = $q.defer();
         $http.delete('/sale/' + id).success(function (data) {
           defer.resolve(true);
@@ -28,7 +28,5 @@ angular.module('stofmaApp.services')
         });
         return defer.promise;
       }
-
-      return factory;
     }]);
 

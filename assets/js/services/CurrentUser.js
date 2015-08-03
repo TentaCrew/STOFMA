@@ -3,7 +3,6 @@ angular.module('stofmaApp.auth')
       return {
         user: function () {
           if (LocalStorage.get('auth_token')) {
-            console.log(angular.fromJson(LocalStorage.get('auth_token')));
             return angular.fromJson(LocalStorage.get('auth_token'));
           } else {
             return {};

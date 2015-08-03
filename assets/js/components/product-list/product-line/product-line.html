@@ -1,18 +1,19 @@
 <md-list-item class="md-2-line">
+  <img src="http://placehold.it/50x50" alt="" class="md-avatar"/>
   <div class="md-list-item-text">
     <h3 hide-sm>{{product.name}}</h3>
     <h3 hide-gt-sm show-sm>{{product.shortName}}</h3>
     <h4><strong>{{product.price | currency:''}} €</strong></h4>
   </div>
-  <div ng-if="$parent.usage = 'selling'" ng-class="{'stock-out' : product.quantity == 0}">
-    <md-button class="md-fab" ng-click="remove(product.id)">
-      <md-icon class="material-icons">remove</md-icon>
+  <div ng-if="$parent.usage = 'selling'" ng-hide="product.quantity == 0" layout="row" layout-align="end center" class="btn-product-action">
+    <md-button class="md-icon-button md-accent" ng-click="remove(product.id)">
+      <md-icon class="material-icons">remove_circle</md-icon>
     </md-button>
-    <md-button class="md-fab sum" ng-class="{'selected': product.selected}" ng-click="clear(product.id)">
+    <md-button class="md-icon-button sum" ng-class="{'selected': product.selected}" ng-click="clear(product.id)">
       {{product.selected}}
     </md-button>
-    <md-button class="md-fab" ng-click="add(product.id)">
-      <md-icon class="material-icons">add</md-icon>
+    <md-button class="md-icon-button md-accent" ng-click="add(product.id)">
+      <md-icon class="material-icons">add_circle</md-icon>
     </md-button>
   </div>
 </md-list-item>

@@ -1,29 +1,38 @@
 <div class="">
-  <h1>Inscription</h1>
+  <p class="md-body-2">Inscrivez-vous en renseignant vos informations personnelles.</p>
 
   <form name="registerUser">
-    <md-select name="userSex" ng-model="userSex" placeholder="Sexe">
-      <md-option ng-value="0">Homme</md-option>
-      <md-option ng-value="1">Femme</md-option>
-    </md-select>
     <md-input-container>
+      <md-radio-group name="userSex" ng-model="userSex" required>
+        <label>Sexe</label>
+        <md-radio-button value="0" checked>Homme</md-radio-button>
+        <md-radio-button value="1">Femme</md-radio-button>
+      </md-radio-group>
+      <div ng-messages="registerUser.userSex.$error" ng-show="registerUser.$dirty">
+        <div ng-message="required">Ce champ est obligatoire</div>
+      </div>
+    </md-input-container>
+    <md-input-container class="md-icon-float">
       <label>Prénom</label>
+      <md-icon class="material-icons">person</md-icon>
       <input type="text" name="userFirstName" ng-model="userFirstName" required>
 
       <div ng-messages="registerUser.userFirstName.$error" ng-show="registerUser.userFirstName.$dirty">
         <div ng-message="required">Ce champ est obligatoire</div>
       </div>
     </md-input-container>
-    <md-input-container>
+    <md-input-container class="md-icon-float">
       <label>Nom</label>
+      <md-icon class="material-icons">person</md-icon>
       <input type="text" name="userName" ng-model="userName" required>
 
       <div ng-messages="registerUser.userName.$error" ng-show="registerUser.userName.$dirty">
         <div ng-message="required">Ce champ est obligatoire</div>
       </div>
     </md-input-container>
-    <md-input-container>
+    <md-input-container class="md-icon-float">
       <label>Adresse e-mail</label>
+      <md-icon class="material-icons">email</md-icon>
       <input type="email" name="userMail" ng-model="userMail" required>
 
       <div ng-messages="registerUser.userMail.$error" ng-show="registerUser.userMail.$dirty">
@@ -31,8 +40,9 @@
         <div ng-message="email">L'adresse e-mail n'est pas correct</div>
       </div>
     </md-input-container>
-    <md-input-container>
+    <md-input-container class="md-icon-float">
       <label>Numéro de téléphone</label>
+      <md-icon class="material-icons">phone</md-icon>
       <input type="text" name="userPhoneNumber" ng-model="userPhoneNumber" required pattern="[0-9\s]+">
 
       <div ng-messages="registerUser.userPhoneNumber.$error" ng-show="registerUser.userPhoneNumber.$dirty">
@@ -40,24 +50,27 @@
         <div ng-message="pattern">Le numéro n'est pas correct</div>
       </div>
     </md-input-container>
-    <md-input-container>
+    <md-input-container class="md-icon-float">
       <label>Date de naissance</label>
+      <md-icon class="material-icons">today</md-icon>
       <input type="date" name="userBirthday" ng-model="userBirthday" required>
 
       <div ng-messages="registerUser.userBirthday.$error" ng-show="registerUser.userBirthday.$dirty">
         <div ng-message="required">Ce champ est obligatoire</div>
       </div>
     </md-input-container>
-    <md-input-container>
+    <md-input-container class="md-icon-float">
       <label>Mot de passe</label>
+      <md-icon class="material-icons">code</md-icon>
       <input type="password" name="userPassword" ng-model="userPassword" required>
 
       <div ng-messages="registerUser.userPassword.$error" ng-show="registerUser.userPassword.$dirty">
         <div ng-message="required">Ce champ est obligatoire</div>
       </div>
     </md-input-container>
-    <md-input-container>
+    <md-input-container class="md-icon-float">
       <label>Vérification du mot de passe</label>
+      <md-icon class="material-icons">done_all</md-icon>
       <input type="password" name="userPasswordVerif" ng-model="userPasswordVerif" required>
 
       <div ng-messages="registerUser.userPasswordVerif.$error" ng-show="registerUser.userPasswordVerif.$dirty">

@@ -4,7 +4,7 @@ angular.module('stofmaApp')
       $stateProvider
           .state('anon', {
             abstract: true,
-            template: '<ui-view/>',
+            template: '<div ui-view />',
             data: {
               access: AccessLevels.anon
             }
@@ -14,7 +14,8 @@ angular.module('stofmaApp')
             controller: 'LoginCtrl',
             templateUrl: 'assets/templates/login.html',
             data: {
-              name: 'Connexion'
+              name: 'Connexion',
+              icon: 'settings_ethernet'
             }
           })
           .state('anon.register', {
@@ -22,12 +23,13 @@ angular.module('stofmaApp')
             controller: 'RegisterCtrl',
             templateUrl: 'assets/templates/register.html',
             data: {
-              name: 'Inscription'
+              name: 'Inscription',
+              icon: 'assignment_ind'
             }
           })
           .state('auth', {
             abstract: true,
-            template: '<ui-view/>',
+            template: '<div ui-view />',
             data: {
               access: AccessLevels.seller
             }
@@ -37,7 +39,8 @@ angular.module('stofmaApp')
             controller: 'HomeCtrl',
             templateUrl: 'assets/templates/home.html',
             data: {
-              name: 'Accueil'
+              name: 'Accueil',
+              icon: 'layers'
             }
           })
           .state('auth.sell', {
@@ -45,7 +48,8 @@ angular.module('stofmaApp')
             controller: 'SellCtrl',
             templateUrl: 'assets/templates/sell.html',
             data: {
-              name: 'Vendre un produit'
+              name: 'Vendre un produit',
+              icon: 'add_shopping_cart'
             },
             resolve: {
               productProvider: 'ProductFactory',
@@ -60,7 +64,8 @@ angular.module('stofmaApp')
             controller: 'SalesCtrl',
             templateUrl: 'assets/templates/sales.html',
             data: {
-              name: 'Les ventes'
+              name: 'Les ventes',
+              icon: 'shopping_cart'
             },
             resolve: {
               salesProvider: 'SaleFactory',
@@ -68,6 +73,22 @@ angular.module('stofmaApp')
 
               salesData: function (salesProvider) {
                 return salesProvider.getSales();
+              }
+            }
+          })
+          .state('auth.purchases', {
+            url: '/purchases',
+            controller: 'PurchaseCtrl',
+            templateUrl: 'assets/templates/purchases.html',
+            data: {
+              name: 'Les achats',
+              icon: 'list'
+            },
+            resolve: {
+              purchasesProvider: 'PurchaseFactory',
+
+              purchasesData: function (purchasesProvider) {
+                return purchasesProvider.getPurchases();
               }
             }
           });

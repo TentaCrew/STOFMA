@@ -1,10 +1,14 @@
 <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z3"
             md-component-id="left"
             md-is-locked-open="$mdMedia('gt-sm')">
-  <section ng-controller="NavCtrl as nav">
+  <section ng-controller="NavCtrl">
     <div ng-show="auth.isAuthenticated()">
-      <md-toolbar class="md-hue-2">
-        <span>{{auth.user().firstname}} {{auth.user().name}}</span>
+      <md-toolbar class="md-tall md-hue-2">
+        <span flex></span>
+        <div layout="column" class="md-toolbar-tools-bottom inset text-center">
+          <div>{{user.firstname}} {{user.name}}</div>
+          <div class="md-caption">{{user.email}}</div>
+        </div>
         <md-menu layout-align="center center" layout="column">
           <md-button aria-label="Account menu" class="md-icon-button" ng-click="$mdOpenMenu()">
             <md-icon md-menu-origin class="material-icons">settings</md-icon>
@@ -28,59 +32,26 @@
       </md-toolbar>
 
       <md-list>
-        <md-list-item>
-          <md-button ui-sref-active="active" ui-sref="auth.home">
-            <md-icon class="material-icons">home</md-icon>
-            Accueil
-          </md-button>
-        </md-list-item>
-
-        <md-list-item>
-          <md-button ui-sref-active="active" ui-sref="auth.sell">
-            <md-icon class="material-icons">local_grocery_store</md-icon>
-            Vendre
-          </md-button>
-        </md-list-item>
-
-        <md-list-item>
-          <md-button ui-sref-active="active" ui-sref="auth.sales">
-            <md-icon class="material-icons">layers</md-icon>
-            Ventes
-          </md-button>
-        </md-list-item>
-
-        <md-list-item>
-          <md-button ui-sref-active="active" ui-sref="auth.purchases">
-            <md-icon class="material-icons">toc</md-icon>
-            Achats
-          </md-button>
-        </md-list-item>
-
-        <md-list-item>
-          <md-button ui-sref-active="active" ui-sref="anon.register">
-            <md-icon class="material-icons">local_grocery_store</md-icon>
-            Inscrire un membre
-          </md-button>
-        </md-list-item>
+        <md-list>
+          <md-list-item ng-repeat="page in pages | filter : { data: { access : '!0'}}">
+            <md-button ui-sref-active="active" ui-sref="{{page.name}}">
+              <md-icon class="material-icons">{{page.data.icon}}</md-icon>
+              {{page.data.name}}
+            </md-button>
+          </md-list-item>
+        </md-list>
       </md-list>
     </div>
 
     <div ng-hide="auth.isAuthenticated()">
       <md-list>
-        <md-list-item>
-          <md-button ui-sref-active="active" ui-sref="anon.login">
-            <md-icon class="material-icons">home</md-icon>
-            Connexion
+        <md-list-item ng-repeat="page in pages | filter : { data: { access : 0}}">
+          <md-button ui-sref-active="active" ui-sref="{{page.name}}">
+            <md-icon class="material-icons">{{page.data.icon}}</md-icon>
+            {{page.data.name}}
           </md-button>
         </md-list-item>
       </md-list>
-
-      <md-list-item>
-        <md-button ui-sref-active="active" ui-sref="anon.register">
-          <md-icon class="material-icons">local_grocery_store</md-icon>
-          Inscription
-        </md-button>
-      </md-list-item>
     </div>
   </section>
 </md-sidenav>
@@ -88,14 +59,14 @@
 <div flex layout="column" tabIndex="-1" role="main" class="md-whiteframe-z2">
 
   <md-toolbar layout="row" class="md-whiteframe-z2 md-toolbar-tools">
-    <md-button class="md-icon-button" hide-gt-sm ng-click="toggleMenu()" aria-label="Afficher le menu">
+    <md-button class="md-icon-button" hide-gt-sm ng-click="main.toggleMenu()" aria-label="Afficher le menu">
       <md-icon class="material-icons">menu</md-icon>
     </md-button>
     <h2 ng-bind="pageTitle"></h2>
   </md-toolbar>
 
-  <md-content layout-padding>
-    <div class="stofma-content" ui-view></div>
+  <md-content layout-padding layout-column layout-align="center start">
+    <div ui-view class="stofma-content"></div>
   </md-content>
 
 </div>

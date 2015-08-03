@@ -1,0 +1,25 @@
+.product-list {
+  width: 100%
+}
+
+.stofma-content {
+  max-width: 1080px;
+}
+
+.product-list-line .md-button.md-icon-button {
+  line-height: 32px;
+  height: 32px;
+  width: 32px;
+}
+
+md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
+  height: 450px;
+}
+
+.btn-product-action {
+  margin-top: 15px;
+}
+
+.text-center {
+  text-align: center;
+}
