@@ -52,8 +52,8 @@ module.exports.routes = {
 
   // Get current session
   'GET /session': {
-   controller: 'SessionController',
-   action: 'get'
+    controller: 'SessionController',
+    action: 'get'
   },
 
 /**
@@ -106,99 +106,134 @@ module.exports.routes = {
     action: 'get'
   },
 
-  /**
-   * Routes about products
-   */
+/**
+ * Routes about products
+ */
 
-   // Add product
-   'POST /product': {
-     controller: 'ProductController',
-     action: 'add'
-   },
-   // Update product
-   'PATCH /product/:id': {
-     controller: 'ProductController',
-     action: 'update'
-   },
-   // Delete product
-   'DELETE /product/:id' :{
-     controller: 'ProductController',
-     action: 'delete'
-   },
-   // Get one product
-   'GET /product/:id': {
-     controller: 'ProductController',
-     action: 'get'
-   },
-   // Get some products
-   'POST /product/search': {
-     controller: 'ProductController',
-     action: 'get'
-   },
+  // Add product
+  'POST /product': {
+    controller: 'ProductController',
+    action: 'add'
+  },
+  // Update product
+  'PATCH /product/:id': {
+    controller: 'ProductController',
+    action: 'update'
+  },
+  // Delete product
+  'DELETE /product/:id' :{
+    controller: 'ProductController',
+    action: 'delete'
+  },
+  // Get one product
+  'GET /product/:id': {
+    controller: 'ProductController',
+    action: 'get'
+  },
+  // Get some products
+  'POST /product/search': {
+    controller: 'ProductController',
+    action: 'get'
+  },
 
-   /**
-    * Routes about products
-    */
+/**
+* Routes about products
+*/
 
-    // Add pair
-    'POST /pair': {
-      controller: 'PairController',
-      action: 'add'
-    },
-    // Delete pair
-    'DELETE /pair/:id': {
-      controller: 'PairController',
-      action: 'delete'
-    },
-    // Update pair
-    'PATCH /pair/:id': {
-      controller: 'PairController',
-      action: 'update'
-    },
-    // Get pair's product
-    'GET /pair/:id/product': {
-      controller: 'PairController',
-      action: 'getProduct'
-    },
+  // Add pair
+  'POST /pair': {
+    controller: 'PairController',
+    action: 'add'
+  },
+  // Delete pair
+  'DELETE /pair/:id': {
+    controller: 'PairController',
+    action: 'delete'
+  },
+  // Update pair
+  'PATCH /pair/:id': {
+    controller: 'PairController',
+    action: 'update'
+  },
+  // Get pair's product
+  'GET /pair/:id/product': {
+    controller: 'PairController',
+    action: 'getProduct'
+  },
 
-    /**
-     * Routes about sales
-     */
+/**
+ * Routes about sales
+ */
 
-     // Add sale
-     'POST /sale': {
-       controller: 'SaleController',
-       action: 'add'
-     },
-     // Update sale
-     'PATCH /sale/:id': {
-       controller: 'SaleController',
-       action: 'update'
-     },
-     // Delete sale
-     'DELETE /sale/:id': {
-       controller: 'SaleController',
-       action: 'delete'
-     },
-     // Get some sales
-     'POST /sale/search': {
-       controller: 'SaleController',
-       action: 'get'
-     },
-     // Get all sales
-     'GET /sale/': {
-       controller: 'SaleController',
-       action: 'get'
-     },
-     // Get one sale by id
-     'GET /sale/:id': {
-       controller: 'SaleController',
-       action: 'get'
-     },
-     // Get sale's pairs
-     'GET /sale/:id/pairs': {
-       controller: 'SaleController',
-       action: 'getPairs'
-     }
+  // Add sale
+  'POST /sale': {
+    controller: 'SaleController',
+    action: 'add'
+  },
+  // Update sale
+  'PATCH /sale/:id': {
+    controller: 'SaleController',
+    action: 'update'
+  },
+  // Delete sale
+  'DELETE /sale/:id': {
+    controller: 'SaleController',
+    action: 'delete'
+  },
+  // Get some sales
+  'POST /sale/search': {
+    controller: 'SaleController',
+    action: 'get'
+  },
+  // Get all sales
+  'GET /sale/': {
+    controller: 'SaleController',
+    action: 'get'
+  },
+  // Get one sale by id
+  'GET /sale/:id': {
+    controller: 'SaleController',
+    action: 'get'
+  },
+  // Get sale's pairs
+  'GET /sale/:id/pairs': {
+    controller: 'SaleController',
+    action: 'getPairs'
+  },
+
+/**
+* Routes about purchases
+*/
+
+  // Add purchase
+  'POST /purchase': {
+    controller: 'PurchaseController',
+    action: 'add'
+  },
+  // Get some purchases
+  'POST /purchase/search': {
+    controller: 'PurchaseController',
+    action: 'get'
+  },
+  // Get some purchases
+  'POST /purchase/search': {
+    controller: 'PurchaseController',
+    action: 'get'
+  },
+  // Get all purchases
+  'GET /purchase/': {
+    controller: 'PurchaseController',
+    action: 'get'
+  },
+  // Get one purchase by id
+  'GET /purchase/:id': {
+    controller: 'PurchaseController',
+    action: 'get'
+  },
+  // Get purchase's pairs
+  'GET /purchase/:id/pairs': {
+    controller: 'PurchaseController',
+    action: 'getPairs'
+  }
 
 };

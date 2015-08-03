@@ -17,6 +17,9 @@ module.exports = {
     },
     associatedSale: {
       model: 'Sale'
+    },
+    associatedPurchase: {
+      model: 'Purchase'
     }
   }
 

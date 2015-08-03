@@ -56,9 +56,10 @@ module.exports.policies = {
   },
 
   'PurchaseController': {
-    '*':      false,
-    'add':    'isManager',
-    'get':    'isManager'
+    '*':        false,
+    'add':      'isManager',
+    'get':      'isManager',
+    'getPairs': 'authenticated'
   },
 
   'SessionController': {
