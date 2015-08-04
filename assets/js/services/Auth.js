@@ -1,64 +1,34 @@
 angular.module('stofmaApp.auth')
-    .factory('Auth', ['$http', 'LocalStorage', 'AccessLevels', function ($http, LocalStorage, AccessLevels) {
+    .factory('Auth', ['$q', 'AccessLevels', 'UserFactory', function ($q, AccessLevels, UserFactory) {
       return {
-        authorize: function (access) {
-          if (access !== AccessLevels.anon) {
-            return this.isAuthenticated();
-          } else {
-            return true;
-          }
-        },
-        isAuthenticated: function () {
-          return LocalStorage.get('auth_token');
-        },
         login: function (credentials) {
-          var login = $http.put('/user/login', credentials);
-          login.success(function (result) {
-            LocalStorage.set('auth_token', JSON.stringify(result));
+          var t = this,
+              defer = $q.defer();
+          UserFactory.login(credentials).then(function () {
+            UserFactory.getCurrentSession().then(function(session){
+              defer.resolve();
+            });
+          }).catch(function(){
+            defer.reject(404);
           });
-          return login;
+          return defer.promise;
         },
         logout: function () {
-          // The backend doesn't care about logouts, delete the token and you're good to go.
-          var logout = $http.put('/user/logout');
-          logout.success(function () {
-            LocalStorage.unset('auth_token');
+          var defer = $q.defer();
+          UserFactory.logout().then(function(){
+            defer.resolve();
           });
-          return logout;
+          return defer.promise;
         },
         register: function (formData) {
-          LocalStorage.unset('auth_token');
-          var register = $http.post('/user', formData);
-          register.success(function (result) {
-            LocalStorage.set('auth_token', JSON.stringify(result));
+          var defer = $q.defer();
+          UserFactory.register(formData).then(function(){
+            UserFactory.getCurrentSession().then(function(session){
+              defer.resolve();
+            });
           });
-          return register;
-        }
-      }
-    }])
-    .factory('AuthInterceptor', function ($q, $injector) {
-      var LocalStorage = $injector.get('LocalStorage');
 
-      return {
-        request: function (config) {
-          var token;
-          if (LocalStorage.get('auth_token')) {
-            token = angular.fromJson(LocalStorage.get('auth_token')).token;
-          }
-          if (token) {
-            config.headers.Authorization = 'Bearer ' + token;
-          }
-          return config;
-        },
-        responseError: function (response) {
-          if (response.status === 401 || response.status === 403) {
-            LocalStorage.unset('auth_token');
-            $injector.get('$state').go('anon.login');
-          }
-          return $q.reject(response);
+          return defer.promise;
         }
-      }
-    })
-    .config(function ($httpProvider) {
-      $httpProvider.interceptors.push('AuthInterceptor');
-    });
+      };
+    }]);

@@ -8,17 +8,19 @@ angular.module('stofmaApp.services')
         getProducts: getProducts
       };
 
-      function getProducts() {
+      function getProducts(forSelling) {
         var defer = $q.defer();
 
         $http.post('/product/search').success(function (data) {
           var r = data;
 
-          // Fix the number of selected product to 0
-          r = r.map(function (o) {
-            o.selected = 0;
-            return o;
-          });
+          if (forSelling) {
+            // Fix the number of selected product to 0
+            r = r.map(function (o) {
+              o.selected = 0;
+              return o;
+            });
+          }
 
           defer.resolve(r);
         }).error(function (err) {

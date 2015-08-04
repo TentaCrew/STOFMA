@@ -1,58 +1,46 @@
 <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z3"
             md-component-id="left"
-            md-is-locked-open="$mdMedia('gt-sm')">
+            md-is-locked-open="$mdMedia('gt-sm')" ng-cloak>
   <section ng-controller="NavCtrl">
-    <div ng-show="auth.isAuthenticated()">
-      <md-toolbar class="md-tall md-hue-2">
-        <span flex></span>
-        <div layout="column" class="md-toolbar-tools-bottom inset text-center">
-          <div>{{user.firstname}} {{user.name}}</div>
-          <div class="md-caption">{{user.email}}</div>
-        </div>
-        <md-menu layout-align="center center" layout="column">
-          <md-button aria-label="Account menu" class="md-icon-button" ng-click="$mdOpenMenu()">
-            <md-icon md-menu-origin class="material-icons">settings</md-icon>
-          </md-button>
-          <md-menu-content width="3">
-            <md-menu-item>
-              <md-button>
-                <md-icon md-menu-align-target class="material-icons">settings</md-icon>
-                <p>Paramètres</p>
-              </md-button>
-            </md-menu-item>
-            <md-menu-divider></md-menu-divider>
-            <md-menu-item ng-click="logout()">
-              <md-button>
-                <md-icon class="material-icons">power_settings_new</md-icon>
-                <p>Déconnexion</p>
-              </md-button>
-            </md-menu-item>
-          </md-menu-content>
-        </md-menu>
-      </md-toolbar>
+    <md-toolbar class="md-tall md-hue-2" ng-if="isUser">
+      <span flex></span>
 
-      <md-list>
-        <md-list>
-          <md-list-item ng-repeat="page in pages | filter : { data: { access : '!0'}}">
-            <md-button ui-sref-active="active" ui-sref="{{page.name}}">
-              <md-icon class="material-icons">{{page.data.icon}}</md-icon>
-              {{page.data.name}}
+      <div layout="column" class="md-toolbar-tools-bottom inset text-center">
+        <div>{{user.firstname}} {{user.name}}</div>
+        <div class="md-caption">{{user.email}}</div>
+      </div>
+      <md-menu layout-align="center center" layout="column">
+        <md-button aria-label="Account menu" class="md-icon-button" ng-click="$mdOpenMenu()">
+          <md-icon md-menu-origin class="material-icons">settings</md-icon>
+        </md-button>
+        <md-menu-content width="3">
+          <md-menu-item>
+            <md-button>
+              <md-icon md-menu-align-target class="material-icons">settings</md-icon>
+              <p>Paramètres</p>
             </md-button>
-          </md-list-item>
-        </md-list>
-      </md-list>
-    </div>
+          </md-menu-item>
+          <md-menu-divider></md-menu-divider>
+          <md-menu-item ng-click="logout()">
+            <md-button>
+              <md-icon class="material-icons">power_settings_new</md-icon>
+              <p>Déconnexion</p>
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+    </md-toolbar>
 
-    <div ng-hide="auth.isAuthenticated()">
+    <md-list>
       <md-list>
-        <md-list-item ng-repeat="page in pages | filter : { data: { access : 0}}">
+        <md-list-item ng-repeat="page in pages">
           <md-button ui-sref-active="active" ui-sref="{{page.name}}">
             <md-icon class="material-icons">{{page.data.icon}}</md-icon>
             {{page.data.name}}
           </md-button>
         </md-list-item>
       </md-list>
-    </div>
+    </md-list>
   </section>
 </md-sidenav>
 

@@ -12,9 +12,9 @@ angular.module('stofmaApp.controllers')
             email: email,
             password: password
           }).then(function (res) {
-            $state.go('auth.home');
-          }).catch(function (err) {
-            switch (err.status) {
+            $state.go('user.home');
+          }).catch(function (status) {
+            switch (status) {
               case 404:
                 var alert = $mdDialog.alert({
                   title: 'Authentification échouée',

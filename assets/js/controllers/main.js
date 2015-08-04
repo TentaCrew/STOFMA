@@ -9,6 +9,13 @@ angular.module('stofmaApp.controllers')
         $scope.pageTitle = $state.current.data.name;
         if($mdSidenav('left').isOpen())
           that.toggleMenu();
+
+        UserFactory.getCurrentSession().then(function (session) {
+          if(!angular.equals(session, $scope.user))
+            $scope.user = session;
+        }, function(err){
+          $scope.user = null;
+        });
       });
 
 

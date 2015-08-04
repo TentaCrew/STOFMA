@@ -21,7 +21,7 @@ angular.module('stofmaApp.controllers')
       $scope.products = productsData;
 
       $scope.refreshProduct = function () {
-        ProductFactory.getProducts().then(function (data) {
+        ProductFactory.getProducts(true).then(function (data) {
           $scope.products = data;
         });
       };

@@ -6,11 +6,11 @@ module.exports = function(session, user) {
     session.user = {
       id:        user.id,
       name:      user.name,
-      firstnam:  user.firstname,
+      firstname:  user.firstname,
       email:     user.email,
       role:      user.role,
       isAdmin:   "ADMINISTRATOR" === user.role,
       isManager: "MANAGER" === user.role
     }
   }
-}
+};

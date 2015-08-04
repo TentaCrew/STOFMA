@@ -38,11 +38,7 @@ angular.module('stofmaApp', [
       return this;
     }])
     .run(['$rootScope', '$state', 'Auth', function ($rootScope, $state, Auth) {
-      $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-        if (!Auth.authorize(toState.data.access)) {
-          event.preventDefault();
-
-          $state.go('anon.login');
-        }
+      $rootScope.$on('$stateChangeError', function (event, toState) {
+        $state.go('anon.login');
       });
     }]);

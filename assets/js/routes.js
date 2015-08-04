@@ -1,6 +1,17 @@
 angular.module('stofmaApp')
     .config(['$stateProvider', '$urlRouterProvider', 'AccessLevels', function ($stateProvider, $urlRouterProvider, AccessLevels) {
 
+      var authenticated = ['$q', 'UserFactory', function ($q, UserFactory) {
+        var defer = $q.defer();
+        UserFactory.getCurrentSession()
+            .then(function (session) {
+              defer.resolve();
+            }).catch(function(){
+              defer.reject('Non connecté');
+            });
+        return defer.promise;
+      }];
+
       $stateProvider
           .state('anon', {
             abstract: true,
@@ -27,23 +38,17 @@ angular.module('stofmaApp')
               icon: 'assignment_ind'
             }
           })
-          .state('auth', {
+          .state('manager', {
             abstract: true,
             template: '<div ui-view />',
             data: {
-              access: AccessLevels.seller
+              access: AccessLevels.manager
+            },
+            resolve : {
+              authenticated : authenticated
             }
           })
-          .state('auth.home', {
-            url: '/home',
-            controller: 'HomeCtrl',
-            templateUrl: 'assets/templates/home.html',
-            data: {
-              name: 'Accueil',
-              icon: 'layers'
-            }
-          })
-          .state('auth.sell', {
+          .state('manager.sell', {
             url: '/sell',
             controller: 'SellCtrl',
             templateUrl: 'assets/templates/sell.html',
@@ -55,11 +60,11 @@ angular.module('stofmaApp')
               productProvider: 'ProductFactory',
 
               productsData: function (productProvider) {
-                return productProvider.getProducts();
+                return productProvider.getProducts(true);
               }
             }
           })
-          .state('auth.sales', {
+          .state('manager.sales', {
             url: '/sales',
             controller: 'SalesCtrl',
             templateUrl: 'assets/templates/sales.html',
@@ -76,7 +81,7 @@ angular.module('stofmaApp')
               }
             }
           })
-          .state('auth.purchases', {
+          .state('manager.purchases', {
             url: '/purchases',
             controller: 'PurchaseCtrl',
             templateUrl: 'assets/templates/purchases.html',
@@ -91,7 +96,43 @@ angular.module('stofmaApp')
                 return purchasesProvider.getPurchases();
               }
             }
+          })
+          .state('user', {
+            abstract: true,
+            template: '<div ui-view />',
+            data: {
+              access: AccessLevels.user
+            },
+            resolve : {
+              authenticated : authenticated
+            }
+          })
+          .state('user.home', {
+            url: '/home',
+            controller: 'HomeCtrl',
+            templateUrl: 'assets/templates/home.html',
+            data: {
+              name: 'Accueil',
+              icon: 'home',
+              weight: -10
+            }
+          })
+          .state('user.products', {
+            url: '/products',
+            controller: 'ProductCtrl',
+            templateUrl: 'assets/templates/products.html',
+            data: {
+              name: 'La cafet\'',
+              icon: 'list'
+            },
+            resolve: {
+              productsProvider: 'ProductFactory',
+
+              productsData: function (productsProvider) {
+                return productsProvider.getProducts(false);
+              }
+            }
           });
 
-      $urlRouterProvider.otherwise('/');
+      $urlRouterProvider.otherwise('/login');
     }]);

@@ -8,6 +8,9 @@ angular.module('stofmaApp.services')
         getCurrentSession: getCurrentSession,
         getAll: getAll,
         get: get,
+        login: login,
+        logout: logout,
+        register: register,
         users: users
       };
 
@@ -17,7 +20,7 @@ angular.module('stofmaApp.services')
         $http.get('/session').success(function (data) {
           defer.resolve(data);
         }).error(function (err) {
-          defer.reject(err.status);
+          defer.reject(false);
         });
 
         return defer.promise;
@@ -51,7 +54,46 @@ angular.module('stofmaApp.services')
               break;
             }
           }
-        }).catch(function(err){
+        }).catch(function (err) {
+          defer.reject(err);
+        });
+
+        return defer.promise;
+      }
+
+      function login(credentials) {
+        var defer = $q.defer();
+
+        $http.put('/user/login', credentials).success(function (result) {
+          defer.resolve(true);
+        }).error(function (err, status) {
+          if (status == 401)
+            defer.resolve(true);
+          else
+            defer.reject();
+        });
+
+        return defer.promise;
+      }
+
+      function logout() {
+        var defer = $q.defer();
+
+        $http.put('/user/logout').success(function () {
+          defer.resolve(true);
+        }).error(function (err) {
+          defer.reject(err);
+        });
+
+        return defer.promise;
+      }
+
+      function register(formData) {
+        var defer = $q.defer();
+
+        $http.post('/user', formData).success(function (result) {
+          defer.resolve(formData);
+        }).error(function (err) {
           defer.reject(err);
         });
 
