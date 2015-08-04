@@ -14,6 +14,13 @@ angular.module('stofmaApp.services')
         $http.post('/product/search').success(function (data) {
           var r = data;
 
+          r = r.map(function(o){
+            o.isOut = function(){
+              return o.quantity == 0;
+            };
+            return o;
+          });
+
           if (forSelling) {
             // Fix the number of selected product to 0
             r = r.map(function (o) {

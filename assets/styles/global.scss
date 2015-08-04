@@ -20,6 +20,20 @@ md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
   margin-top: 15px;
 }
 
+.stock-out {
+  opacity: 0.4;
+}
+
+.stock-out .btn-product-action {
+  display: none;
+}
 .text-center {
   text-align: center;
 }
+
+.sum.selected {
+  color: white;
+  background-color: #000000;
+}
+
+
