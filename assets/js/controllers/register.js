@@ -31,7 +31,7 @@ angular.module('stofmaApp.controllers')
             phoneNumber: phoneNumber,
             birthdate: birthday
           }).then(function (res) {
-            $state.go('auth.home');
+            $state.go('user.home');
           }).catch(function (err) {
             switch (err.status) {
               case 400:
