@@ -11,6 +11,7 @@ module.exports = function(session, user) {
       role:      user.role,
       isAdmin:   "ADMINISTRATOR" === user.role,
       isManager: "MANAGER" === user.role
-    }
+    },
+    session.lazy = true;
   }
 };

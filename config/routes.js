@@ -55,6 +55,11 @@ module.exports.routes = {
     controller: 'SessionController',
     action: 'get'
   },
+  // Toggle lazy mode
+  'PUT /session/lazy/:lazy': {
+    controller: 'SessionController',
+    action: 'toggleLazy'
+  },
 
 /**
  * Routes about users

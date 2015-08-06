@@ -12,5 +12,15 @@ module.exports = {
       return res.send(200, req.session.user);
     else
       return res.send(404);
+  },
+
+  toggleLazy: function (req, res) {
+    if(req.param('lazy')) {
+      req.session.lazy = req.param('lazy');
+    }
+    else {
+      req.session.lazy = !req.session.lazy;
+    }
+    return res.send(200);
   }
 };
