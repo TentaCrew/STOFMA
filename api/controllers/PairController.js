@@ -37,6 +37,27 @@ module.exports = {
          return res.send(200);
        }
    });
- }
+ },
+    get: function(req, res) {
+        if(req.session.lazy) {
+            Pair.find(req.allParams())
+                .populateAll()
+                .exec(function(err,pairs) {
+                    if (err) {
+                        return res.negociate(err);
+                    }
+                    return res.send(pairs);
+            })
+        }
+        else {
+            Pair.find(req.allParams())
+                .exec(function(err,pairs) {
+                    if (err) {
+                        return res.negociate(err);
+                    }
+                    return res.send(pairs);
+                })
+        }
+    }
 
 };

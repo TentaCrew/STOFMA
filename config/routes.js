@@ -142,7 +142,7 @@ module.exports.routes = {
   },
 
 /**
-* Routes about products
+* Routes about pairs
 */
 
   // Add pair
@@ -164,6 +164,10 @@ module.exports.routes = {
   'GET /pair/:id/product': {
     controller: 'PairController',
     action: 'getProduct'
+  },
+  'GET /pair/:id': {
+    controller: 'PairController',
+    action: 'get'
   },
 
 /**

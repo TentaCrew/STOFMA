@@ -52,7 +52,8 @@ module.exports.policies = {
     'add':        'isManager',
     'delete':     'isManager',
     'update':     'isManager',
-    'getProduct': 'authenticated'
+    'getProduct': 'authenticated',
+    'get':        'authenticated'
   },
 
   'PurchaseController': {
