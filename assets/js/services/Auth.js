@@ -17,6 +17,8 @@ angular.module('stofmaApp.auth')
           var defer = $q.defer();
           UserFactory.logout().then(function(){
             defer.resolve();
+          }, function(){
+            defer.resolve();
           });
           return defer.promise;
         },

@@ -12,6 +12,7 @@ angular.module('stofmaApp.controllers')
             email: email,
             password: password
           }).then(function (res) {
+            $scope.user = res;
             $state.go('user.home');
           }).catch(function (status) {
             switch (status) {
