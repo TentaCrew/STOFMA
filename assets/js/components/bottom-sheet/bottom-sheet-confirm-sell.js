@@ -11,10 +11,14 @@ angular.module('stofmaApp.components')
       $scope.confirm = function () {
         if($scope.isConfirmable()){
           var su = $scope.confirmSale.invitedUser.$modelValue ? -1 : $scope.confirmSale.selectedUser.$modelValue;
-          var user = 'l\'invité';
+          var user = {
+            id : -1,
+            name : 'l\'invité'
+          };
           if(su >= 0){
             UserFactory.get(su).then(function(u){
-              user = u.firstname + ' ' + u.name;
+              user.name = u.firstname + ' ' + u.name;
+              user.id = u.id;
 
               $mdBottomSheet.hide({
                 ok : true,

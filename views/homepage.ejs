@@ -34,10 +34,13 @@
     <md-list>
       <md-list>
         <md-list-item ng-repeat="page in pages">
-          <md-button ui-sref-active="active" ui-sref="{{page.name}}">
+          <md-button ng-hide="page.isHeader" ui-sref-active="active" ui-sref="{{page.name}}">
             <md-icon class="material-icons">{{page.data.icon}}</md-icon>
             {{page.data.name}}
           </md-button>
+          <md-subheader ng-show="page.isHeader">
+            {{page.data.name}}
+          </md-subheader>
         </md-list-item>
       </md-list>
     </md-list>

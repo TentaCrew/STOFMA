@@ -5,8 +5,8 @@ angular.module('stofmaApp')
         var defer = $q.defer();
         UserFactory.getCurrentSession()
             .then(function (session) {
-              defer.resolve();
-            }).catch(function(){
+              defer.resolve(session);
+            }).catch(function () {
               defer.reject('Non connecté');
             });
         return defer.promise;
@@ -38,14 +38,61 @@ angular.module('stofmaApp')
               icon: 'assignment_ind'
             }
           })
+          .state('user', {
+            abstract: true,
+            template: '<div ui-view />',
+            data: {
+              access: AccessLevels.user,
+              name: 'Membre'
+            },
+            resolve: {
+              authenticated: authenticated
+            }
+          })
+          .state('user.home', {
+            url: '/home',
+            controller: 'HomeCtrl',
+            templateUrl: 'assets/templates/home.html',
+            data: {
+              name: 'Accueil',
+              icon: 'home',
+              weight: -10
+            }
+          })
+          .state('user.products', {
+            url: '/products',
+            controller: 'ProductCtrl',
+            templateUrl: 'assets/templates/products.html',
+            data: {
+              name: 'La cafet\'',
+              icon: 'list'
+            },
+            resolve: {
+              productsProvider: 'ProductFactory',
+
+              productsData: function (productsProvider) {
+                return productsProvider.getProducts(false);
+              }
+            }
+          })
           .state('manager', {
             abstract: true,
             template: '<div ui-view />',
             data: {
-              access: AccessLevels.manager
+              access: AccessLevels.manager,
+              name: 'Manager'
             },
-            resolve : {
-              authenticated : authenticated
+            resolve: {
+              authenticated: authenticated,
+
+              isManager: ['$q', 'authenticated', function ($q, authenticated) {
+                var defer = $q.defer();
+                if (authenticated.isManager || authenticated.isAdmin)
+                  defer.resolve();
+                else
+                  defer.reject();
+                return defer.promise;
+              }]
             }
           })
           .state('manager.sell', {
@@ -97,42 +144,42 @@ angular.module('stofmaApp')
               }
             }
           })
-          .state('user', {
+          .state('admin', {
             abstract: true,
             template: '<div ui-view />',
             data: {
-              access: AccessLevels.user
+              access: AccessLevels.admin,
+              name: 'Administrateur'
             },
-            resolve : {
-              authenticated : authenticated
+            resolve: {
+              authenticated: authenticated,
+
+              isAdmin: ['$q', 'authenticated', function ($q, authenticated) {
+                var defer = $q.defer();
+                if (authenticated.isAdmin)
+                  defer.resolve();
+                else
+                  defer.reject();
+                return defer.promise;
+              }]
             }
           })
-          .state('user.home', {
-            url: '/home',
-            controller: 'HomeCtrl',
-            templateUrl: 'assets/templates/home.html',
-            data: {
-              name: 'Accueil',
-              icon: 'home',
-              weight: -10
-            }
-          })
-          .state('user.products', {
-            url: '/products',
+          .state('admin.stock', {
+            url: '/stock',
             controller: 'ProductCtrl',
             templateUrl: 'assets/templates/products.html',
             data: {
-              name: 'La cafet\'',
-              icon: 'list'
+              name: 'Les stocks',
+              icon: 'layers'
             },
             resolve: {
-              productsProvider: 'ProductFactory',
+              produtsProvider: 'ProductFactory',
 
-              productsData: function (productsProvider) {
-                return productsProvider.getProducts(false);
+              productsData: function (produtsProvider) {
+                return produtsProvider.getProducts();
               }
             }
           });
 
-      $urlRouterProvider.otherwise('/login');
+      $urlRouterProvider.otherwise('/home');
     }]);

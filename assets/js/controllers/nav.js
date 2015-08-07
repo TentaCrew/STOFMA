@@ -11,11 +11,18 @@ angular.module('stofmaApp.controllers')
       $scope.isAdmin = false;
 
       $scope.allPages = $state.get().filter(function (s) {
-        return s.abstract == undefined || s.abstract == false;
+        // Don't include abstract state
+        return angular.isDefined(s.data) && angular.isDefined(s.data.name);
+      });
+
+      $scope.allPages.map(function(o){
+        o.isHeader = angular.isDefined(o.abstract) && o.abstract;
+        return o;
       }).sort(function (p1, p2) {
+        // Sort menu
         var wp1 = angular.isDefined(p1.data.weight) ? p1.data.weight : 0,
             wp2 = angular.isDefined(p2.data.weight) ? p2.data.weight : 0;
-        return wp1 > wp2;
+        return wp1 - wp2;
       });
 
       $scope.$parent.$watch('user', function (nv) {
@@ -29,9 +36,6 @@ angular.module('stofmaApp.controllers')
       });
 
       function haveAccess(s) {
-        if(s.name.indexOf('login') >= 0 || s.name.indexOf('register') >= 0 || s.name.indexOf('home') >= 0)
-          return true;
-
         if ($scope.isAnonymous && s.data.access == AccessLevels.anon)
           return true;
 
@@ -50,12 +54,6 @@ angular.module('stofmaApp.controllers')
           return haveAccess(s);
         });
       }
-
-      $rootScope.$on('$stateChangeStart', function (event, toState) {
-        if (!haveAccess(toState)) {
-          event.preventDefault();
-        }
-      });
 
       $scope.logout = function () {
         $scope.isAnonymous = true;
