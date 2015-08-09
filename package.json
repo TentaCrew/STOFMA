@@ -22,6 +22,7 @@
     "grunt-sails-linker": "~0.9.5",
     "grunt-sync": "~0.0.4",
     "include-all": "~0.1.3",
+    "q": "^1.4.1",
     "rc": "~0.5.0",
     "sails": "~0.11.0",
     "sails-disk": "~0.10.0",
@@ -42,19 +43,19 @@
   },
   "bugs": "https://github.com/ciaa-cnam/STOFMA/issues",
   "author": {
-    "name":  "Frédéric Woelffel",
-    "url":   "http://fredericwoelffel.com",
+    "name": "Frédéric Woelffel",
+    "url": "http://fredericwoelffel.com",
     "email": "woelffel.f@gmail.com"
   },
   "contributors": [
     {
-      "name":  "Corentin Desfarges",
-      "url":   "http://corentindesfarges.fr",
+      "name": "Corentin Desfarges",
+      "url": "http://corentindesfarges.fr",
       "email": "corentin.desfarges.dev@gmail.com"
     },
     {
-      "name":  "Michel Edighoffer",
-      "url":   "http://book.micheledighoffer.fr",
+      "name": "Michel Edighoffer",
+      "url": "http://book.micheledighoffer.fr",
       "email": "edimitchel@gmail.com "
     }
   ],

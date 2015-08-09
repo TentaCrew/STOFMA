@@ -1,8 +1,8 @@
 /**
-* Pair.js
-*
-* @description :: This model describes a Pair.
-*/
+ * Pair.js
+ *
+ * @description :: This model describes a Pair.
+ */
 
 module.exports = {
 
@@ -15,16 +15,33 @@ module.exports = {
       type: 'INTEGER',
       required: true
     },
-    associatedSale: {
-      model: 'Sale'
-    },
-    associatedPurchase: {
-      model: 'Purchase'
-    },
-    amount: {   //necessary because the price of a product can change
+    unitPrice: {
       type: 'FLOAT',
       required: true
+    },
+    totalPrice: function() {
+      return this.unitPrice * this.quantity;
+    }
+
+  },
+
+  beforeValidate: function(values, cb) {
+    var isPriceUpdated = values.product || values.quantity || values.unitPrice;
+    if(!values.unitPrice && isPriceUpdated) {
+      Product
+          .findOne(values.product)
+          .exec(function(err, foundProduct) {
+            if(err) {
+              cb(err);
+            }
+            else {
+              values.unitPrice = foundProduct.price;
+              cb();
+            }
+          });
+    }
+    else {
+      cb();
     }
   }
-
 };

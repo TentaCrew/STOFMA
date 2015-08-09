@@ -142,35 +142,6 @@ module.exports.routes = {
   },
 
 /**
-* Routes about pairs
-*/
-
-  // Add pair
-  'POST /pair': {
-    controller: 'PairController',
-    action: 'add'
-  },
-  // Delete pair
-  'DELETE /pair/:id': {
-    controller: 'PairController',
-    action: 'delete'
-  },
-  // Update pair
-  'PATCH /pair/:id': {
-    controller: 'PairController',
-    action: 'update'
-  },
-  // Get pair's product
-  'GET /pair/:id/product': {
-    controller: 'PairController',
-    action: 'getProduct'
-  },
-  'GET /pair/:id': {
-    controller: 'PairController',
-    action: 'get'
-  },
-
-/**
  * Routes about sales
  */
 
@@ -203,11 +174,6 @@ module.exports.routes = {
   'GET /sale/:id': {
     controller: 'SaleController',
     action: 'get'
-  },
-  // Get sale's pairs
-  'GET /sale/:id/pairs': {
-    controller: 'SaleController',
-    action: 'getPairs'
   },
 
 /**

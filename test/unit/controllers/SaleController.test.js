@@ -1,307 +1,352 @@
+'use strict';
+
 var request = require('supertest');
 var agent;
 
+/**
+ * Setting up some variables for the tests
+ */
+{
+    var user_manager_01 = {
+        firstname: 'manager',
+        name: 'dupond',
+        email: 'manager@sale.com',
+        sex: true,
+        role: 'MANAGER',
+        password: 'sale'
+    };
+
+    var user_customer_01 = {
+        firstname:  'lucie',
+        name:       'customer',
+        email:      'lucie@customer.fr',
+        sex:        false,
+        role:       'USER',
+        password:   'catword'
+    };
+
+    var product_01 = {
+        name: 'prod_sale_2',
+        shortName: 'ps2',
+        price: 0.50,
+        quantity: 5,
+        urlImage: '',
+        minimum: 5,
+        category: 'FOOD'
+    };
+
+    var product_02 = {
+        name: 'prod_sale_1',
+        shortName: 'ps1',
+        price: 0.50,
+        quantity: 2,
+        urlImage: '',
+        minimum: 5,
+        category: 'DRINK'
+    };
+
+}
+
 describe('SaleController', function() {
 
-  before(function(done) {
-    agent = request.agent(sails.hooks.http.app);
-    done();
-  });
+    // Before: Instantiate an user agent
+    before(function(done) {
+        agent = request.agent(sails.hooks.http.app);
+        done();
+    });
 
-  var createdSale;
-  describe('#add() as manager', function() {
-    var manager;
-    //log in (and sign up) as manager
-    before(function(done){
-      agent
-       .post('/user')
-       .send({
-         firstname:  'manager',
-         name:       'dupond',
-         email:      'manager@sale.com',
-         sex:        true,
-         role:       'MANAGER',
-         password:   'sale'
-       })
-       .end(function(err, m) {
-         manager = m.body;
-         done(err);
-       });
-    });
-    //log out after the test
-    after(function(done) {
-       agent
-        .put('/user/logout')
-        .end(function(err, res) {
-          done(err);
-        });
-    });
-    //test
-    it('should create two products and add them to a sale', function (done) {
-      agent
-       .post('/pair')
-       .send({
-         pairs: [
-           {
-             quantity: 2,
-             product:  {
-               name:      'prod_sale_2',
-               shortName: 'ps2',
-               price:     0.50,
-               quantity:  5,
-               urlImage:  '',
-               minimum:   5,
-               category:  'FOOD'
-             },
-             amount: 0.50*5 // product.price * product.quantity
-           },
-           {
-             quantity: 1,
-             product:  {
-               name:      'prod_sale_1',
-               shortName: 'ps1',
-               price:     0.50,
-               quantity:  2,
-               urlImage:  '',
-               minimum:   5,
-               category:  'DRINK'
-             },
-             amount: 0.50*2 // product.price * product.quantity
-           }
-        ]
-       })
-       .end(function(err, pairsToAdd) {
-         agent
-          .post('/sale')
-          .send({
-            saleDate: '11/08/1993',
-            customer: {
-              firstname:  'lucie',
-              name:       'customer',
-              email:      'lucie@customer.fr',
-              sex:        false,
-              role:       'USER',
-              password:   'catword'
+    // Before: Create some products
+    before(function(done) {
+        async.parallel([
+            function(cb) {
+                Product
+                    .create(product_01)
+                    .exec(function(err, newProduct) {
+                        if(err) {
+                            cb(err);
+                        }
+                        else {
+                            product_01.id = newProduct.id;
+                            cb();
+                        }
+                    });
             },
-            manager:  manager.id,
-            amount:   119.99,
-            products: [
-              pairsToAdd.body[0],
-              pairsToAdd.body[1]
-            ] //  pairs.body
-          })
-          .end(function(err2,sale) {
+            function(cb) {
+                Product
+                    .create(product_02)
+                    .exec(function(err, newProduct) {
+                        if(err) {
+                            cb(err);
+                        }
+                        else {
+                            product_02.id = newProduct.id;
+                            cb();
+                        }
+                    });
+            }
+        ], function(err) {
+            done(err);
+        })
+    });
+
+    // Before: Create a manager User
+    before(function(done) {
+        User
+            .create(user_manager_01)
+            .exec(function(err, newUser) {
+                if(err) {
+                    done(err);
+                }
+                else {
+                    user_manager_01.id = newUser.id;
+                    done();
+                }
+            });
+    });
+
+    // Before: Create a regular User
+    before(function(done) {
+        User
+            .create(user_customer_01)
+            .exec(function(err, newUser) {
+                if(err) {
+                    done(err);
+                }
+                else {
+                    user_customer_01.id = newUser.id;
+                    done();
+                }
+            });
+    });
+
+    /**
+     * Add a Sale as a manager User
+     */
+    describe('#add() as a manager User', function() {
+
+        // Before: Log in as a manager User
+        before(function(done){
             agent
-             .get('/sale/'+sale.body.id+'/pairs')
-             .end(function(err3, pairs) {
-               agent
-                .get('/pair/'+pairs.body[0].id+'/product')
-                .expect(200, function(errPairs, product0){
-                  done();
+                .put('/user/login')
+                .send({
+                    email: user_manager_01.email,
+                    password: user_manager_01.password
+                })
+                .expect(200)
+                .end(done);
+        });
+
+        // After: Log out
+        after(function(done) {
+            agent
+                .put('/user/logout')
+                .expect(200)
+                .end(done);
+        });
+
+        // Test
+        it('As a manager User, should create a Sale with 2 Products', function (done) {
+            agent
+                .post('/sale')
+                .send({
+                    // saleDate is optionnal
+                    // manager is optionnal
+                    customerId: user_customer_01.id,
+                    products: [
+                        {product: product_01.id, quantity: 1},
+                        {product: product_02.id, quantity: 12}
+                    ]
+                })
+                .end(function(err, res) {
+                    done(err);
                 });
-             });
-          });
-       });
-     });
-  });
-
-  describe('#add() as user', function() {
-    var manager;
-    //log in (and sign up) as user
-    before(function(done){
-      agent
-       .post('/user')
-       .send({
-         firstname:  'user_sale',
-         name:       'dupond',
-         email:      'user_sale@sale.com',
-         sex:        true,
-         role:       'USER',
-         password:   'sale'
-       })
-       .end(function(err, m) {
-         manager = m.body;
-         done(err);
-       });
-    });
-    //log out after the test
-    after(function(done) {
-       agent
-        .put('/user/logout')
-        .end(function(err, res) {
-          done(err);
         });
     });
-    //test
-    it('should respond with a 401 status because only administrators and manager can add a sale', function (done) {
-      agent
-       .post('/pair')
-       .send({
-         pairs: [
-           {
-             quantity: 2,
-             product:  {
-               name:      'prod_sale_3',
-               shortName: 'ps3',
-               price:     0.75,
-               quantity:  10,
-               urlImage:  '',
-               minimum:   5,
-               category:  'FOOD'
-             }
-           }
-        ]
-       })
-       .end(function(err, pairs) {
-         agent
-          .post('/sale')
-          .send({
-            saleDate: '11/08/2015',
-            customer: {
-              firstname:  'lucie',
-              name:       'hmpl',
-              email:      'lucie@customer.fr',
-              sex:        false,
-              role:       'USER',
-              password:   'ilovecat'
-            },
-            manager:  manager.id,
-            amount:   119.99,
-            products: pairs.body
-          })
-          .expect(401, done);
-       });
-     });
-  });
 
-  // TODO: Need to fix SaleController:update and PairController:update
-  /*describe('#update() as manager', function() {
-    var manager;
-    //log in as user
-    before(function(done){
-      agent
-       .put('/user/login')
-       .send({
-         email:      'manager@sale.com',
-         password:   'sale'
-       })
-       .end(function(err, m) {
-         manager = m.body;
-         done(err);
-       });
-    });
-    //log out after the test
-    after(function(done) {
-       agent
-        .put('/user/logout')
-        .end(function(err, res) {
-          done(err);
+
+    /**
+     * Add as a regular user
+     */
+    describe('#add() as a regular User', function() {
+
+        // Before: Log in as a regular user
+        before(function(done){
+            agent
+                .put('/user/login')
+                .send({
+                    email: user_customer_01.email,
+                    password: user_customer_01.password
+                })
+                .end(done);
+        });
+
+        // After: Log out
+        after(function(done) {
+            agent
+                .put('/user/logout')
+                .end(done);
+        });
+
+        // Test
+        it('As a regular user, can\'t create a Sale', function (done) {
+            agent
+                .post('/sale')
+                .send({
+                    // saleDate is optionnal
+                    // manager is optionnal
+                    customerId: user_customer_01.id,
+                    products: [
+                        {product: product_01.id, quantity: 1},
+                        {product: product_02.id, quantity: 12}
+                    ]
+                })
+                .expect(401)
+                .end(done);
         });
     });
-    //test
-    it('should update the sale', function (done) {
-      console.log(createdSale);
-      agent
-       .patch('/pair/' + createdSale.products)
-       .send({
-         pairs: [
-           {
-             quantity: 4,
-             product:  {
-               name:      'prod_sale_4',
-               shortName: 'ps4',
-               price:     0.75,
-               quantity:  11,
-               urlImage:  '',
-               minimum:   5,
-               category:  'DRINK'
-             }
-           }
-        ]
-       })
-       .end(function(err, pairs) {
-         agent
-          .patch('/sale/' + createdSale)
-          .send({
-            saleDate: '11/08/2015',
-            customer: {
-              firstname:  'lucie',
-              name:       'hmpl',
-              email:      'lucie@customer.fr',
-              sex:        false,
-              role:       'USER',
-              password:   'ilovecat'
-            },
-            manager:  manager.id,
-            amount:   19.99//,
-            //products: pairs.body
-          })
-          .expect(200, done);
-       });
-     });
-  });*/
 
-  describe('#delete() as user', function() {
-    //log in (and sign up) as user
-    before(function(done){
-      agent
-       .post('/user')
-       .send({
-         firstname:  'lucie',
-         name:       'again',
-         email:      'lucie@again.fr',
-         sex:        false,
-         role:       'USER',
-         password:   'man'
-       })
-       .end(function(err, m) {
-         manager = m.body;
-         done(err);
-       });
-    });
-    //log out after the test
-    after(function(done) {
-       agent
-        .put('/user/logout')
-        .end(function(err, res) {
-          done(err);
+    describe('#update() as a manager User', function() {
+
+        // Before: Log in as a manager User
+        before(function(done){
+            agent
+                .put('/user/login')
+                .send({
+                    email: user_manager_01.email,
+                    password: user_manager_01.password
+                })
+                .end(done);
+        });
+
+        // Before: Get a created Sale's Id
+        var saleId;
+        before(function(done) {
+            Sale
+                .find()
+                .limit(1)
+                .exec(function(err, foundSales) {
+                    if(err) {
+                        done(err);
+                    }
+                    else {
+                        saleId = foundSales[0].id;
+                        done();
+                    }
+                });
+        });
+
+        // After: Log out
+        after(function(done) {
+            agent
+                .put('/user/logout')
+                .end(done);
+        });
+
+        // Test
+        it('As a manager User, update a created Sale', function (done) {
+            agent
+                .patch('/sale/' + saleId)
+                .send({
+                    products: [
+                        {product: product_01.id, quantity: 10}
+                    ]
+                })
+                .expect(200)
+                .end(done);
+            // TODO Should also check the new values
         });
     });
-    //test
-    it('should respond with a 401 status because only administrators and manager can add a sale', function (done) {
-      agent
-       .delete('/sale/' + createdSale)
-       .expect(401, done);
-     });
-  });
 
-  describe('#delete() as manager', function() {
-    //log in as manager
-    before(function(done){
-      agent
-       .put('/user/login')
-       .send({
-         email:      'manager@sale.com',
-         password:   'sale'
-       })
-       .end(function(err, m) {
-         done(err);
-       });
-    });
-    //log out after the test
-    after(function(done) {
-       agent
-        .put('/user/logout')
-        .end(function(err, res) {
-          done(err);
+    describe('#delete() as a regular User', function() {
+
+        // Before: Log in as a regular User
+        before(function(done){
+            agent
+                .put('/user/login')
+                .send({
+                    email: user_customer_01.email,
+                    password: user_customer_01.password
+                })
+                .end(done);
+        });
+
+        // Before: Get a created Sale's Id
+        var saleId;
+        before(function(done) {
+            Sale
+                .find()
+                .limit(1)
+                .exec(function(err, foundSales) {
+                    if(err) {
+                        done(err);
+                    }
+                    else {
+                        saleId = foundSales[0].id;
+                        done();
+                    }
+                });
+        });
+
+        // After: Log out
+        after(function(done) {
+            agent
+                .put('/user/logout')
+                .end(done);
+        });
+
+        // Test
+        it('As a regular User, can\'t delete a Sale', function (done) {
+            agent
+                .delete('/sale/' + saleId)
+                .expect(401, done);
         });
     });
-    //test
-    it('should delete the sale', function (done) {
-      agent
-       .delete('/sale/' + createdSale)
-       .expect(200, done);
-     });
-  });
+
+
+    describe('#delete() as a manger User', function() {
+
+        // Before: Log in as a regular User
+        before(function(done){
+            agent
+                .put('/user/login')
+                .send({
+                    email: user_manager_01.email,
+                    password: user_manager_01.password
+                })
+                .end(done);
+        });
+
+        // Before: Get a created Sale's Id
+        var saleId;
+        before(function(done) {
+            Sale
+                .find()
+                .limit(1)
+                .exec(function(err, foundSales) {
+                    if(err) {
+                        done(err);
+                    }
+                    else {
+                        saleId = foundSales[0].id;
+                        done();
+                    }
+                });
+        });
+
+        // After: Log out
+        after(function(done) {
+            agent
+                .put('/user/logout')
+                .end(done);
+        });
+
+        // Test
+        it('As a manager User, delete a Sale', function (done) {
+            agent
+                .delete('/sale/' + saleId)
+                .expect(200)
+                .end(done);
+        });
+    });
 
 });

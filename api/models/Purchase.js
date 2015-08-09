@@ -21,7 +21,6 @@ module.exports = {
     },
     products: {
       collection: 'Pair',
-      via: 'associatedSale',
       required: true
     }
   }
