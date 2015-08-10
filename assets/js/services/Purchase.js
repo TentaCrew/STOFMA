@@ -1,10 +1,8 @@
 'use strict';
 
 angular.module('stofmaApp.services')
-    .factory('PurchaseFactory', ['$q', '$http', function ($q, $http) {
-      return {
-        getPurchases: getPurchases
-      };
+    .service('PurchaseService', ['$q', '$http', function ($q, $http) {
+      this.getPurchases = getPurchases;
 
       function getPurchases() {
         var defer = $q.defer();

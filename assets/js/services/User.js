@@ -1,18 +1,16 @@
 'use strict';
 
 angular.module('stofmaApp.services')
-    .factory('UserFactory', ['$q', '$http', function ($q, $http) {
-      var users = [];
+    .service('UserService', ['$q', '$http', 'UserFactory', function ($q, $http, UserFactory) {
+      var that = this;
+      this.users = [];
 
-      return {
-        getCurrentSession: getCurrentSession,
-        getAll: getAll,
-        get: get,
-        login: login,
-        logout: logout,
-        register: register,
-        users: users
-      };
+      this.getCurrentSession = getCurrentSession;
+      this.getAll = getAll;
+      this.get = get;
+      this.login = login;
+      this.logout = logout;
+      this.register = register;
 
       function getCurrentSession() {
         var defer = $q.defer();
@@ -28,16 +26,15 @@ angular.module('stofmaApp.services')
 
       function getAll() {
         var defer = $q.defer();
-
-        if (users.length == 0) {
+        if (that.users.length == 0) {
           $http.post('/user/search').success(function (data) {
-            users = data;
-            defer.resolve(data);
+            that.users = data.map(UserFactory.remap);
+            defer.resolve(that.users);
           }).error(function (err) {
             defer.reject(err.status);
           });
         } else {
-          defer.resolve(users);
+          defer.resolve(that.users);
         }
 
         return defer.promise;
@@ -46,17 +43,25 @@ angular.module('stofmaApp.services')
       function get(id) {
         var defer = $q.defer();
 
-        getAll().then(function (usersData) {
-          for (var i = 0; i < usersData.length; i++) {
-            var d = usersData[i];
-            if (d.id == id) {
-              defer.resolve(d);
-              break;
+        if(id == -1){
+          defer.resolve({
+            getName: function(){
+              return 'invité';
             }
-          }
-        }).catch(function (err) {
-          defer.reject(err);
-        });
+          });
+        } else {
+          getAll().then(function (usersData) {
+            for (var i = 0; i < usersData.length; i++) {
+              var d = usersData[i];
+              if (d.id == id) {
+                defer.resolve(d);
+                break;
+              }
+            }
+          }).catch(function (err) {
+            defer.reject(err);
+          });
+        }
 
         return defer.promise;
       }
@@ -100,5 +105,14 @@ angular.module('stofmaApp.services')
         return defer.promise;
       }
     }])
-;
+    .factory('UserFactory', function(){
+      return {
+        remap : function(o){
+          o.getName = function(){
+            return o.firstname + ' ' + o.name;
+          };
+          return o;
+        }
+      }
+    });
 

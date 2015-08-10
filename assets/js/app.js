@@ -6,6 +6,7 @@ angular.module('stofmaApp', [
   'stofmaApp.auth',
   'ngMaterial',
   'ngAnimate',
+  'angularMoment',
   'ngMessages',
   'ui.router',
   'oitozero.ngSweetAlert'
@@ -37,8 +38,9 @@ angular.module('stofmaApp', [
 
       return this;
     }])
-    .run(['$rootScope', '$state', 'Auth', function ($rootScope, $state, Auth) {
+    .run(['$rootScope', '$state', 'Auth', 'amMoment', function ($rootScope, $state, Auth, amMoment) {
       $rootScope.$on('$stateChangeError', function (event, toState) {
         $state.go('anon.login');
       });
+      amMoment.changeLocale('fr');
     }]);

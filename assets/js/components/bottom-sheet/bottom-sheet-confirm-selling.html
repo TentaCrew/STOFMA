@@ -1,23 +1,30 @@
 <md-bottom-sheet class="md-list md-has-header">
-  <md-subheader>Confirmer l'achat : <span ng-repeat="product in productsOnSale">
-      {{ product.selected }} x <strong>{{ product.name }}</strong><span ng-if="!$last">, </span>
-    </span></md-subheader>
+  <md-subheader>Confirmation de la vente</md-subheader>
+  <div class="md-display-2 text-center">{{sum | currency:''}} €</div>
+  <div class="md-display-1 text-center" ng-repeat="product in productsOnSale">
+    {{ product.selected }} x <strong>{{ product.name }}</strong>
+  </div>
   <form name="confirmSale">
-    <md-checkbox ng-model="invitedUser" name="invitedUser">
-      Invité ?
-    </md-checkbox>
     <md-select name="selectedUser" ng-model="selectedUser" placeholder="Sélectionner la personne à créditer" ng-disabled="invitedUser">
       <md-option ng-repeat="user in users" ng-value="user.id">{{user.firstname}} {{user.name}}</md-option>
     </md-select>
-
-    <md-button tabindex="-1" class="md-list-item-content md-accent" ng-click="cancel()">
-      <md-icon class="material-icons">clear</md-icon>
-      <span class="md-inline-list-icon-label">Annuler</span>
-    </md-button>
-    <md-button class="md-list-item-content md-primary" ng-click="confirm()" ng-focus>
-      <md-icon class="material-icons">done</md-icon>
-      <span class="md-inline-list-icon-label">Confirmer</span>
-    </md-button>
+    <md-checkbox ng-model="invitedUser" name="invitedUser">
+      Invité ?
+    </md-checkbox>
+    <md-list>
+      <md-list-item>
+        <md-button class="md-list-item-content md-primary" ng-click="confirm()" ng-focus>
+          <md-icon class="material-icons">done</md-icon>
+          <span class="md-inline-list-icon-label">Confirmer</span>
+        </md-button>
+      </md-list-item>
+      <md-list-item>
+          <md-button tabindex="-1" class="md-list-item-content md-accent" ng-click="cancel()">
+          <md-icon class="material-icons">clear</md-icon>
+          <span class="md-inline-list-icon-label">Annuler</span>
+        </md-button>
+      </md-list-item>
+    </md-list>
   </form>
 </md-bottom-sheet>
 

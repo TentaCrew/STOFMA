@@ -2,7 +2,7 @@
 
 angular.module('stofmaApp.controllers')
 
-    .controller('SellCtrl', ['$scope', 'productsData', 'ProductFactory', 'SaleFactory', '$mdBottomSheet', 'SweetAlert', function ($scope, productsData, ProductFactory, SaleFactory, $mdBottomSheet, SweetAlert) {
+    .controller('SellCtrl', ['$scope', 'productsData', 'ProductService', 'SaleService', '$mdBottomSheet', 'SweetAlert', function ($scope, productsData, ProductService, SaleService, $mdBottomSheet, SweetAlert) {
       $scope.categories = [
         {
           id: 'DRINK',
@@ -21,7 +21,7 @@ angular.module('stofmaApp.controllers')
       $scope.products = productsData;
 
       $scope.refreshProduct = function () {
-        ProductFactory.getProducts(true).then(function (data) {
+        ProductService.getProducts(true).then(function (data) {
           $scope.products = data;
         });
       };
@@ -31,24 +31,30 @@ angular.module('stofmaApp.controllers')
           return o.selected > 0;
         });
 
+        var sum = 0;
+        angular.forEach(products, function (p) {
+          sum += p.selected * p.price;
+        });
+
         $mdBottomSheet.show({
           templateUrl: '/js/components/bottom-sheet/bottom-sheet-confirm-selling.html',
           controller: 'BottomSheetConfirmSellCtrl',
           targetEvent: $event,
           locals: {
-            productsToSell: products
+            productsToSell: products,
+            sum: sum
           },
           resolve: {
-            userProvider: 'UserFactory',
-            usersData: function (UserFactory) {
-              return UserFactory.getAll();
+            userProvider: 'UserService',
+            usersData: function (UserService) {
+              return UserService.getAll();
             }
           }
         }).then(function (r) {
           if (r.ok) {
-            SaleFactory.doSale(r.user.id, products).then(function () {
+            SaleService.doSale(r.user.id, products).then(function () {
               SweetAlert.swal({
-                title: 'Vente terminée pour ' + r.user.name + '!',
+                title: 'Vente terminée pour ' + r.user.getName() + '!',
                 type: 'success'
               }, function (ok) {
                 if (ok) {
@@ -58,7 +64,7 @@ angular.module('stofmaApp.controllers')
             }).catch(function () {
               SweetAlert.swal({
                 title: 'La vente n\'a pas réussi.',
-                type: 'fail'
+                type: 'error'
               });
             })
 

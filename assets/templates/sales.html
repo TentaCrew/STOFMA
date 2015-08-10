@@ -1,23 +1,26 @@
-<div class="">
-  <md-list>
-    <md-subheader>La semaine dernière ({{sales.length}} ventes)</md-subheader>
-    <md-list-item ng-repeat="sale in sales" class="md-2-line">
-      <img ng-src="{{sale.buyer.avatar}}" class="md-avatar" alt="{{sale.buyer.name}}"/>
+<md-list>
+  <section ng-repeat="sale in sales">
+    <md-list-item class="md-2-line" ng-if="sale.type != 'header'">
+      <div class="md-list-item-text" flex>
+        <h2>{{sale.saleDate | amDateFormat:'LLLL'}}</h2>
 
-      <div class="md-list-item-text">
-        <h3><strong>{{sale.seller.name}}</strong> a vendu à <strong>{{sale.buyer.name}}</strong> pour {{
-          sale.saleinfo.total | currency:''}} €</h3>
-        <h4><span ng-repeat="ps in sale.saleinfo.products">{{ps.quantity}}x <strong>{{ps.name}}</strong><span
-            ng-if="!$last">, </span></span></h4>
+        <h3><strong>{{sale.manager.firstname}} {{sale.manager.name}}</strong> a vendu à <strong>{{sale.customer.firstname}}
+          {{sale.customer.name}}</strong> pour {{
+          sale.amount | currency:''}} €</h3>
       </div>
       <md-divider ng-if="!$last"></md-divider>
-      <md-button class="md-button md-accent md-icon-button" ng-click="remove(sale.saleinfo.id)">
-        <md-icon class="material-icons">clear</md-icon>
-      </md-button>
-      <md-button class="md-button md-primary md-icon-button" ng-click="amend(sale.saleinfo.id)">
-        <md-icon class="material-icons">create</md-icon>
-      </md-button>
+      <div layout="row" layout-align="end center">
+        <md-button class="md-button md-accent md-icon-button" ng-click="remove(sale.id, $index)">
+          <md-icon class="material-icons">clear</md-icon>
+        </md-button>
+        <md-button class="md-button md-primary md-icon-button" ng-click="amend(sale.id, $index)">
+          <md-icon class="material-icons">create</md-icon>
+        </md-button>
+      </div>
     </md-list-item>
-  </md-list>
-</div>
-
+    <div ng-if="sale.type == 'header'">
+      <md-subheader>{{sale.title}}</md-subheader>
+    </div>
+  </section>
+</md-list>
+<h2 class="text-center" ng-if="sales.length == 0">Aucune vente n'a été enregistrée pour le moment.</h2>

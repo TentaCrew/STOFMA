@@ -1,5 +1,5 @@
 <md-list-item class="md-2-line" ng-class="{'stock-out' : product.isOut()}">
-  <img src="http://placehold.it/50x50" alt="" class="md-avatar"/>
+  <img ng-src="{{product.urlImage}}" alt="" class="md-avatar"/>
   <div class="md-list-item-text">
     <h3 hide-sm>{{product.name}}</h3>
     <h3 hide-gt-sm show-sm>{{product.shortName}}</h3>

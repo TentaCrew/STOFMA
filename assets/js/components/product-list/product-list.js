@@ -1,5 +1,5 @@
 angular.module('stofmaApp.components')
-    .directive('productList', ['ProductFactory', function (ProductFactory) {
+    .directive('productList', ['ProductService', function (ProductService) {
       return {
         restrict: 'A',
         scope: {

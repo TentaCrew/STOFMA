@@ -1,11 +1,11 @@
 angular.module('stofmaApp.auth')
-    .factory('Auth', ['$q', 'AccessLevels', 'UserFactory', function ($q, AccessLevels, UserFactory) {
+    .factory('Auth', ['$q', 'AccessLevels', 'UserService', function ($q, AccessLevels, UserService) {
       return {
         login: function (credentials) {
           var t = this,
               defer = $q.defer();
-          UserFactory.login(credentials).then(function () {
-            UserFactory.getCurrentSession().then(function(session){
+          UserService.login(credentials).then(function () {
+            UserService.getCurrentSession().then(function(session){
               defer.resolve();
             });
           }).catch(function(){
@@ -15,7 +15,7 @@ angular.module('stofmaApp.auth')
         },
         logout: function () {
           var defer = $q.defer();
-          UserFactory.logout().then(function(){
+          UserService.logout().then(function(){
             defer.resolve();
           }, function(){
             defer.resolve();
@@ -24,8 +24,8 @@ angular.module('stofmaApp.auth')
         },
         register: function (formData) {
           var defer = $q.defer();
-          UserFactory.register(formData).then(function(){
-            UserFactory.getCurrentSession().then(function(session){
+          UserService.register(formData).then(function(){
+            UserService.getCurrentSession().then(function(session){
               defer.resolve();
             });
           });

@@ -4,6 +4,9 @@
 
 .stofma-content {
   max-width: 1080px;
+  width: 100%;
+  margin: 0 auto;
+  backound-color: #fff;
 }
 
 .product-list-line .md-button.md-icon-button {
@@ -15,6 +18,22 @@
 
 md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
   height: 450px;
+}
+
+.md-sidenav-left .md-list-item-content.md-button {
+  display: inline-block;
+  width: 100%;
+  text-align: left;
+}
+
+.md-sidenav-left .md-list-item-content.md-button.active {
+  background-color: #e3e3e3;
+}
+.md-toolbar-tools h2.page-title {
+  max-width: 1080px;
+  display: inline-block;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .btn-product-action {

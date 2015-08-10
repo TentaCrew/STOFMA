@@ -3,10 +3,8 @@
 angular.module('stofmaApp.services');
 
 angular.module('stofmaApp.services')
-    .factory('ProductFactory', ['$q', '$http', function ($q, $http) {
-      return {
-        getProducts: getProducts
-      };
+    .service('ProductService', ['$q', '$http', function ($q, $http) {
+      this.getProducts = getProducts;
 
       function getProducts(forSelling) {
         var defer = $q.defer();

@@ -1,9 +1,9 @@
 angular.module('stofmaApp')
     .config(['$stateProvider', '$urlRouterProvider', 'AccessLevels', function ($stateProvider, $urlRouterProvider, AccessLevels) {
 
-      var authenticated = ['$q', 'UserFactory', function ($q, UserFactory) {
+      var authenticated = ['$q', 'UserService', function ($q, UserService) {
         var defer = $q.defer();
-        UserFactory.getCurrentSession()
+        UserService.getCurrentSession()
             .then(function (session) {
               defer.resolve(session);
             }).catch(function () {
@@ -56,7 +56,7 @@ angular.module('stofmaApp')
             data: {
               name: 'Accueil',
               icon: 'home',
-              weight: -10
+              weight: 1
             }
           })
           .state('user.products', {
@@ -68,11 +68,21 @@ angular.module('stofmaApp')
               icon: 'list'
             },
             resolve: {
-              productsProvider: 'ProductFactory',
+              productsProvider: 'ProductService',
 
               productsData: function (productsProvider) {
                 return productsProvider.getProducts(false);
               }
+            }
+          })
+          .state('user.settings', {
+            url: '/settings',
+            controller: 'SettingCtrl',
+            templateUrl: 'assets/templates/settings.html',
+            data: {
+              name: 'Paramètres',
+              icon: 'settings',
+              weight: 20
             }
           })
           .state('manager', {
@@ -104,7 +114,7 @@ angular.module('stofmaApp')
               icon: 'add_shopping_cart'
             },
             resolve: {
-              productProvider: 'ProductFactory',
+              productProvider: 'ProductService',
 
               productsData: function (productProvider) {
                 return productProvider.getProducts(true);
@@ -120,7 +130,7 @@ angular.module('stofmaApp')
               icon: 'shopping_cart'
             },
             resolve: {
-              salesProvider: 'SaleFactory',
+              salesProvider: 'SaleService',
               AccessLevels: 'AccessLevels',
 
               salesData: function (salesProvider) {
@@ -137,7 +147,7 @@ angular.module('stofmaApp')
               icon: 'list'
             },
             resolve: {
-              purchasesProvider: 'PurchaseFactory',
+              purchasesProvider: 'PurchaseService',
 
               purchasesData: function (purchasesProvider) {
                 return purchasesProvider.getPurchases();
@@ -173,7 +183,7 @@ angular.module('stofmaApp')
               icon: 'layers'
             },
             resolve: {
-              produtsProvider: 'ProductFactory',
+              produtsProvider: 'ProductService',
 
               productsData: function (produtsProvider) {
                 return produtsProvider.getProducts();

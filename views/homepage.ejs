@@ -5,36 +5,19 @@
     <md-toolbar class="md-tall md-hue-2" ng-if="isUser">
       <span flex></span>
 
-      <div layout="column" class="md-toolbar-tools-bottom inset text-center">
+      <div layout="column" layout-align="center center" class="md-toolbar-tools-bottom inset text-center">
         <div>{{user.firstname}} {{user.name}}</div>
         <div class="md-caption">{{user.email}}</div>
-      </div>
-      <md-menu layout-align="center center" layout="column">
-        <md-button aria-label="Account menu" class="md-icon-button" ng-click="$mdOpenMenu()">
-          <md-icon md-menu-origin class="material-icons">settings</md-icon>
+        <md-button aria-label="Déconnexion" class="md-icon-button" ng-click="logout()">
+          <md-icon class="material-icons">power_settings_new</md-icon>
         </md-button>
-        <md-menu-content width="3">
-          <md-menu-item>
-            <md-button>
-              <md-icon md-menu-align-target class="material-icons">settings</md-icon>
-              <p>Paramètres</p>
-            </md-button>
-          </md-menu-item>
-          <md-menu-divider></md-menu-divider>
-          <md-menu-item ng-click="logout()">
-            <md-button>
-              <md-icon class="material-icons">power_settings_new</md-icon>
-              <p>Déconnexion</p>
-            </md-button>
-          </md-menu-item>
-        </md-menu-content>
-      </md-menu>
+      </div>
     </md-toolbar>
 
     <md-list>
       <md-list>
         <md-list-item ng-repeat="page in pages">
-          <md-button ng-hide="page.isHeader" ui-sref-active="active" ui-sref="{{page.name}}">
+          <md-button class="md-list-item-content" ng-hide="page.isHeader" ui-sref-active="active" ui-sref="{{page.name}}">
             <md-icon class="material-icons">{{page.data.icon}}</md-icon>
             {{page.data.name}}
           </md-button>
@@ -53,7 +36,7 @@
     <md-button class="md-icon-button" hide-gt-sm ng-click="main.toggleMenu()" aria-label="Afficher le menu">
       <md-icon class="material-icons">menu</md-icon>
     </md-button>
-    <h2 ng-bind="pageTitle"></h2>
+    <h2 ng-bind="pageTitle" class="page-title"></h2>
   </md-toolbar>
 
   <md-content layout-padding layout-column layout-align="center start">

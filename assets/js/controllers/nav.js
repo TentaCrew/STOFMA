@@ -1,5 +1,5 @@
 angular.module('stofmaApp.controllers')
-    .controller('NavCtrl', ['$rootScope', '$scope', 'Auth', 'UserFactory', '$mdBottomSheet', '$mdSidenav', '$state', 'AccessLevels', function ($rootScope, $scope, Auth, UserFactory, $mdBottomSheetr, $mdSidenav, $state, AccessLevels) {
+    .controller('NavCtrl', ['$rootScope', '$scope', 'Auth', '$mdBottomSheet', '$mdSidenav', '$state', 'AccessLevels', function ($rootScope, $scope, Auth, $mdBottomSheetr, $mdSidenav, $state, AccessLevels) {
       var that = this;
       $scope.isCollapsed = true;
       $scope.auth = Auth;
@@ -10,19 +10,11 @@ angular.module('stofmaApp.controllers')
       $scope.isManager = false;
       $scope.isAdmin = false;
 
-      $scope.allPages = $state.get().filter(function (s) {
-        // Don't include abstract state
+      $scope.allPages = angular.copy($state.get()).filter(function (s) {
         return angular.isDefined(s.data) && angular.isDefined(s.data.name);
-      });
-
-      $scope.allPages.map(function(o){
+      }).map(function (o) {
         o.isHeader = angular.isDefined(o.abstract) && o.abstract;
         return o;
-      }).sort(function (p1, p2) {
-        // Sort menu
-        var wp1 = angular.isDefined(p1.data.weight) ? p1.data.weight : 0,
-            wp2 = angular.isDefined(p2.data.weight) ? p2.data.weight : 0;
-        return wp1 - wp2;
       });
 
       $scope.$parent.$watch('user', function (nv) {

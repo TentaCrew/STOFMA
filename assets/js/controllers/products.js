@@ -2,7 +2,7 @@
 
 angular.module('stofmaApp.controllers')
 
-    .controller('ProductCtrl', ['$scope', 'productsData', 'ProductFactory', function ($scope, productsData) {
+    .controller('ProductCtrl', ['$scope', 'productsData', function ($scope, productsData) {
       $scope.categories = [
         {
           id: 'DRINK',

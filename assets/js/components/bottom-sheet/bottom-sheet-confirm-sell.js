@@ -1,34 +1,35 @@
 angular.module('stofmaApp.components')
-    .controller('BottomSheetConfirmSellCtrl', ['$scope', '$mdBottomSheet', 'usersData', 'UserFactory', 'productsToSell', function ($scope, $mdBottomSheet, usersData, UserFactory, productsToSell) {
+    .controller('BottomSheetConfirmSellCtrl', ['$scope', '$mdBottomSheet', 'usersData', 'UserService', 'productsToSell', 'sum', function ($scope, $mdBottomSheet, usersData, UserService, productsToSell, sum) {
       $scope.users = usersData;
 
+      $scope.sum = sum;
       $scope.productsOnSale = productsToSell;
 
-      $scope.isConfirmable = function(){
+      $scope.isConfirmable = function () {
         return $scope.confirmSale.invitedUser.$modelValue === true || $scope.confirmSale.selectedUser.$modelValue != undefined
       };
 
       $scope.confirm = function () {
-        if($scope.isConfirmable()){
+        if ($scope.isConfirmable()) {
           var su = $scope.confirmSale.invitedUser.$modelValue ? -1 : $scope.confirmSale.selectedUser.$modelValue;
           var user = {
-            id : -1,
-            name : 'l\'invité'
+            id: -1,
+            getName: function () {
+              return 'l\'invité';
+            }
           };
-          if(su >= 0){
-            UserFactory.get(su).then(function(u){
-              user.name = u.firstname + ' ' + u.name;
-              user.id = u.id;
-
+          if (su >= 0) {
+            UserService.get(su).then(function (u) {
+              user = u;
               $mdBottomSheet.hide({
-                ok : true,
-                user : user
+                ok: true,
+                user: user
               });
             });
           } else {
             $mdBottomSheet.hide({
-              ok : true,
-              user : user
+              ok: true,
+              user: user
             });
           }
 

@@ -24,8 +24,9 @@ var jsFilesToInject = [
   // Load sails.io before everything else
   'js/dependencies/sails.io.js',
 
-  // Angular dependency
+  // Angular and moment dependency
   'js/lib/**/angular.js',
+  'js/lib/**/moment.js',
 
   // Other dependencies
   'js/lib/**/*.js',

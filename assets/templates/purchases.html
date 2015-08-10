@@ -1,15 +1,17 @@
-<div class="">
-  <md-list>
-    <md-subheader>Les derniers achats ({{purchases.length}} achats)</md-subheader>
-    <md-list-item ng-repeat="purchase in purchases" class="md-2-line">
-      <img ng-src="{{purchase.buyer.avatar}}" class="md-avatar" alt="{{purchase.buyer.name}}"/>
-
+<md-list>
+  <section ng-repeat="purchase in purchases">
+    <md-list-item class="md-2-line">
       <div class="md-list-item-text">
-        <h3><strong>{{purchase.name}}</strong> a vendu à <strong>{{purchase.buyer.name}}</strong> pour {{
-          purchase.total | currency:''}} €</h3>
-        <h4><span ng-repeat="ps in purchase.products">{{ps.quantity}}x <strong>{{ps.name}}</strong><span
-            ng-if="!$last">, </span></span></h4>
+        <h3><strong>{{purchase.manager.name}} a acheté pour un total de {{purchase.amont}}</strong></h3>
+        <ul>
+          <li ng-repeat="ps in purchase.products">{{ps.quantity}}x <strong>{{ps.name}}</strong> : <strong>{{ps.quantity * ps.unitPrice}}</strong>
+          </li>
+        </ul>
       </div>
     </md-list-item>
-  </md-list>
-</div>
+    <div ng-if="sale.type == 'header'">
+      <md-subheader>{{purchase.title}}</md-subheader>
+    </div>
+  </section>
+</md-list>
+<h2 class="text-center" ng-if="purchases.length == 0">Aucun achat n'a été enregistré pour le moment.</h2>
