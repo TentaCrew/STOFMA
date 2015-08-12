@@ -20,44 +20,44 @@ module.exports = {
 
   getProduct: function (req, res) {
     Pair.findOne(req.allParams()).populate('product').exec(function(err, pair) {
-     if (err) {
-       return res.negociate(err);
-     }
-     return res.send(pair.product);
-   });
- },
+      if (err) {
+        return res.negociate(err);
+      }
+      return res.send(pair.product);
+    });
+  },
 
- delete: function (req, res) {
-   // Deleting a Pair
-   Pair.destroy({id: req.param('id')}, function(err, pair) {
-       if (err) {
-         return res.negotiate(err);
-       }
-       else {
-         return res.send(200);
-       }
-   });
- },
-    get: function(req, res) {
-        if(req.session.lazy) {
-            Pair.find(req.allParams())
-                .populateAll()
-                .exec(function(err,pairs) {
-                    if (err) {
-                        return res.negociate(err);
-                    }
-                    return res.send(pairs);
-            })
+  delete: function (req, res) {
+    // Deleting a Pair
+    Pair.destroy({id: req.param('id')}, function(err, pair) {
+      if (err) {
+        return res.negotiate(err);
+      }
+      else {
+        return res.send(200);
+      }
+    });
+  },
+  get: function(req, res) {
+    if(req.session.lazy) {
+      Pair.find(req.allParams())
+      .populateAll()
+      .exec(function(err,pairs) {
+        if (err) {
+          return res.negociate(err);
         }
-        else {
-            Pair.find(req.allParams())
-                .exec(function(err,pairs) {
-                    if (err) {
-                        return res.negociate(err);
-                    }
-                    return res.send(pairs);
-                })
-        }
+        return res.send(pairs);
+      })
     }
+    else {
+      Pair.find(req.allParams())
+      .exec(function(err,pairs) {
+        if (err) {
+          return res.negociate(err);
+        }
+        return res.send(pairs);
+      })
+    }
+  }
 
 };

@@ -29,16 +29,16 @@ module.exports = {
     var isPriceUpdated = values.product || values.quantity || values.unitPrice;
     if(!values.unitPrice && isPriceUpdated) {
       Product
-          .findOne(values.product)
-          .exec(function(err, foundProduct) {
-            if(err) {
-              cb(err);
-            }
-            else {
-              values.unitPrice = foundProduct.price;
-              cb();
-            }
-          });
+      .findOne(values.product)
+      .exec(function(err, foundProduct) {
+        if(err) {
+          cb(err);
+        }
+        else {
+          values.unitPrice = foundProduct.price;
+          cb();
+        }
+      });
     }
     else {
       cb();

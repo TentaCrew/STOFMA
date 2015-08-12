@@ -27,33 +27,33 @@ module.exports = {
   delete: function (req, res) {
     // Deleting a Purchase
     Purchase.destroy({id: req.param('id')}, function(err, purchase) {
-        if (err) {
-          return res.negotiate(err);
-        }
-        else {
-          return res.send(200);
-        }
+      if (err) {
+        return res.negotiate(err);
+      }
+      else {
+        return res.send(200);
+      }
     });
   },
 
   get: function (req, res) {
     // Getting Purchases from some parameters
     Purchase.find(req.allParams(), function(err, purchases) {
-        if (err) {
-          return res.negotiate(err);
-        }
-        else {
-          return res.send(purchases);
-        }
+      if (err) {
+        return res.negotiate(err);
+      }
+      else {
+        return res.send(purchases);
+      }
     });
   },
 
   getPairs: function (req, res) {
-   Purchase.findOne(req.allParams()).populate('products').exec(function(err, purchase) {
-     if (err) {
-       return res.negociate(err);
-     }
-     return res.send(purchase.products);
-   });
+    Purchase.findOne(req.allParams()).populate('products').exec(function(err, purchase) {
+      if (err) {
+        return res.negociate(err);
+      }
+      return res.send(purchase.products);
+    });
   }
 };

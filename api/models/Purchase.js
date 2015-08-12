@@ -1,8 +1,8 @@
 /**
-* Purchase.js
-*
-* @description :: This model describes a Purchase.
-*/
+ * Purchase.js
+ *
+ * @description :: This model describes a Purchase.
+ */
 
 module.exports = {
 

@@ -1,10 +1,10 @@
 var sha1 = require('sha1');
 
 /**
-* User.js
-*
-* @description :: This model describes an User.
-*/
+ * User.js
+ *
+ * @description :: This model describes an User.
+ */
 
 module.exports = {
 

@@ -88,48 +88,48 @@ module.exports = {
     var id_ = req.param('id') ? req.param('id') : req.session.userId;
     // Updating an User
     User.update({id: id_}, req.allParams(), function(err, user) {
-        if (err) {
-          return res.negotiate(err);
-        }
-        else {
-          return res.send(user);
-        }
+      if (err) {
+        return res.negotiate(err);
+      }
+      else {
+        return res.send(user);
+      }
     });
   },
 
   delete: function (req, res) {
     // Deleting an User
     User.destroy({id: req.param('id')}, function(err, user) {
-        if (err) {
-          return res.negotiate(err);
-        }
-        else {
-          return res.send(200);
-        }
+      if (err) {
+        return res.negotiate(err);
+      }
+      else {
+        return res.send(200);
+      }
     });
   },
 
   getAll: function (req, res) {
     // Getting all users
     User.find(function(err, users) {
-        if (err) {
-          return res.negotiate(err);
-        }
-        else {
-          return res.send(200, users);
-        }
+      if (err) {
+        return res.negotiate(err);
+      }
+      else {
+        return res.send(200, users);
+      }
     });
   },
 
   get: function (req, res) {
     // Getting users from some parameters
     User.find(req.allParams(), function(err, user) {
-        if (err) {
-          return res.negotiate(err);
-        }
-        else {
-          return res.send(200, user);
-        }
+      if (err) {
+        return res.negotiate(err);
+      }
+      else {
+        return res.send(200, user);
+      }
     });
   }
 };

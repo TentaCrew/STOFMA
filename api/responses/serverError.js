@@ -74,4 +74,3 @@ module.exports = function serverError (data, options) {
   });
 
 };
-

@@ -31,36 +31,36 @@ module.exports = {
   update: function (req, res) {
     // Updating a Product
     Product.update({id: req.param('id')}, req.allParams(), function(err, product) {
-        if (err) {
-          return res.negotiate(err);
-        }
-        else {
-          return res.send(product);
-        }
+      if (err) {
+        return res.negotiate(err);
+      }
+      else {
+        return res.send(product);
+      }
     });
   },
 
   delete: function (req, res) {
     // Deleting a Product
     Product.destroy({id: req.param('id')}, function(err, product) {
-        if (err) {
-          return res.negotiate(err);
-        }
-        else {
-          return res.send(200);
-        }
+      if (err) {
+        return res.negotiate(err);
+      }
+      else {
+        return res.send(200);
+      }
     });
   },
 
   get: function (req, res) {
     // Getting Product from some parameters
     Product.find(req.allParams(), function(err, product) {
-        if (err) {
-          return res.negotiate(err);
-        }
-        else {
-          return res.send(product);
-        }
+      if (err) {
+        return res.negotiate(err);
+      }
+      else {
+        return res.send(product);
+      }
     });
   }
 

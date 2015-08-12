@@ -79,4 +79,3 @@ module.exports = function notFound (data, options) {
   });
 
 };
-

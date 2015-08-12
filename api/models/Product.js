@@ -1,8 +1,8 @@
 /**
-* Product.js
-*
-* @description :: This model describes a Product.
-*/
+ * Product.js
+ *
+ * @description :: This model describes a Product.
+ */
 
 module.exports = {
 
