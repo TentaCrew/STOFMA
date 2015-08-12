@@ -21,10 +21,6 @@ module.exports = {
       type: 'FLOAT',
       required: true
     },
-    quantity: {
-      type: 'INTEGER',
-      required: true
-    },
     urlImage: {
       type: 'STRING'
     },

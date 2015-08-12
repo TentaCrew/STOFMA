@@ -68,11 +68,11 @@ describe('UsersController', function() {
   describe('#login()', function() {
     //log out after the test
     after(function(done) {
-       agent
-        .put('/user/logout')
-        .end(function(err, res) {
-          done(err);
-        });
+      agent
+      .put('/user/logout')
+      .end(function(err, res) {
+        done(err);
+      });
     });
     //test
     it('should respond with a 401 status because user is already logged in', function (done) {
@@ -91,26 +91,26 @@ describe('UsersController', function() {
     var idToDelete;
     before(function(done) {
       agent
-       .post('/user')
-       .send({
-         firstname:  'the',
-         name:       'manager',
-         email:      'the@manager.com',
-         sex:        true,
-         role:       'MANAGER',
-         password:   'pwd'
-       })
-       .end(function(err, res) {
-         agent
-          .post('/user/search')
-          .send({
-            email: 'foo@bar.com'
-          })
-          .end(function(err2, res2) {
-            idToDelete = res2.body[0].id;
-          });
-         done(err);
-       });
+      .post('/user')
+      .send({
+        firstname:  'the',
+        name:       'manager',
+        email:      'the@manager.com',
+        sex:        true,
+        role:       'MANAGER',
+        password:   'pwd'
+      })
+      .end(function(err, res) {
+        agent
+        .post('/user/search')
+        .send({
+          email: 'foo@bar.com'
+        })
+        .end(function(err2, res2) {
+          idToDelete = res2.body[0].id;
+        });
+        done(err);
+      });
     });
     //test
     it('should respond with a 401 status because only administrators can delete an user', function (done) {
@@ -126,22 +126,22 @@ describe('UsersController', function() {
     var idToUpdate;
     before(function(done) {
       agent
-       .post('/user/search')
-       .send({
-         email: 'foo@bar.com'
-       })
-       .end(function(err2, res2) {
-         idToUpdate = res2.body[0].id;
-       });
+      .post('/user/search')
+      .send({
+        email: 'foo@bar.com'
+      })
+      .end(function(err2, res2) {
+        idToUpdate = res2.body[0].id;
+      });
       done();
     });
     //log out after the test
     after(function(done) {
-       agent
-        .put('/user/logout')
-        .end(function(err, res) {
-          done(err);
-        });
+      agent
+      .put('/user/logout')
+      .end(function(err, res) {
+        done(err);
+      });
     });
     //test
     it('should respond with a 401 status because only administrators can update other users', function (done) {
@@ -167,13 +167,13 @@ describe('UsersController', function() {
       })
       .end(function(err,res){
         agent
-         .post('/user/search')
-         .send({
-           email: 'the@manager.com'
-         })
-         .end(function(err2, res2) {
-           idToUpdate = res2.body[0].id;
-         });
+        .post('/user/search')
+        .send({
+          email: 'the@manager.com'
+        })
+        .end(function(err2, res2) {
+          idToUpdate = res2.body[0].id;
+        });
         done();
       });
     });
@@ -194,14 +194,14 @@ describe('UsersController', function() {
     var idToUpdate;
     before(function(done) {
       agent
-       .post('/user/search')
-       .send({
-         email: 'foo@bar.com'
-       })
-       .end(function(err2, res2) {
-         idToUpdate = res2.body[0].id;
-         done();
-       });
+      .post('/user/search')
+      .send({
+        email: 'foo@bar.com'
+      })
+      .end(function(err2, res2) {
+        idToUpdate = res2.body[0].id;
+        done();
+      });
     });
     //test
     it('should update the account of the current user (1)', function (done) {
@@ -219,11 +219,11 @@ describe('UsersController', function() {
     //is signed as user since the last test
     //log out after the test
     after(function(done) {
-       agent
-        .put('/user/logout')
-        .end(function(err, res) {
-          done(err);
-        });
+      agent
+      .put('/user/logout')
+      .end(function(err, res) {
+        done(err);
+      });
     });
     //test
     it('should update the account of the current user (2)', function (done) {
@@ -242,26 +242,26 @@ describe('UsersController', function() {
     var idToUpdate;
     before(function(done) {
       agent
-       .post('/user')
-       .send({
-         firstname:  'the',
-         name:       'admin',
-         email:      'the@admin.com',
-         sex:        true,
-         role:       'ADMINISTRATOR',
-         password:   'pwd'
-       })
-       .end(function(err, res) {
-         agent
-          .post('/user/search')
-          .send({
-            email: 'the@manager.com'
-          })
-          .end(function(err2, res2) {
-            idToUpdate = res2.body[0].id;
-          });
-         done(err);
-       });
+      .post('/user')
+      .send({
+        firstname:  'the',
+        name:       'admin',
+        email:      'the@admin.com',
+        sex:        true,
+        role:       'ADMINISTRATOR',
+        password:   'pwd'
+      })
+      .end(function(err, res) {
+        agent
+        .post('/user/search')
+        .send({
+          email: 'the@manager.com'
+        })
+        .end(function(err2, res2) {
+          idToUpdate = res2.body[0].id;
+        });
+        done(err);
+      });
     });
     //test
     it('should update the manager', function (done) {
@@ -280,22 +280,22 @@ describe('UsersController', function() {
     var idToDelete;
     before(function(done) {
       agent
-       .post('/user/search')
-       .send({
-         email: 'the@manager.com'
-       })
-       .end(function(err2, res2) {
-         idToDelete = res2.body[0].id;
-       });
+      .post('/user/search')
+      .send({
+        email: 'the@manager.com'
+      })
+      .end(function(err2, res2) {
+        idToDelete = res2.body[0].id;
+      });
       done();
     });
     //log out after the test
     after(function(done) {
-       agent
-        .put('/user/logout')
-        .end(function(err, res) {
-          done(err);
-        });
+      agent
+      .put('/user/logout')
+      .end(function(err, res) {
+        done(err);
+      });
     });
     //test
     it('should delete the manager', function (done) {

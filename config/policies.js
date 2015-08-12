@@ -50,8 +50,9 @@ module.exports.policies = {
   'PurchaseController': {
     '*':        false,
     'add':      'isManager',
-    'get':      'isManager',
-    'getPairs': 'authenticated'
+    'update':   'isManager',
+    'delete':   'isManager',
+    'get':      'isManager'
   },
 
   'SessionController': {
@@ -64,8 +65,7 @@ module.exports.policies = {
     'add':      'isManager',
     'update':   'isManager',
     'delete':   'isManager',
-    'get':      'authenticated',
-    'getPairs': 'authenticated'
+    'get':      'authenticated'
   }
 
 };

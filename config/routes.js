@@ -185,10 +185,15 @@ module.exports.routes = {
     controller: 'PurchaseController',
     action: 'add'
   },
-  // Get some purchases
-  'POST /purchase/search': {
+  // Update purchase
+  'PATCH /purchase/:id': {
     controller: 'PurchaseController',
-    action: 'get'
+    action: 'update'
+  },
+  // Delete purchase
+  'DELETE /purchase/:id': {
+    controller: 'PurchaseController',
+    action: 'delete'
   },
   // Get some purchases
   'POST /purchase/search': {
@@ -204,11 +209,6 @@ module.exports.routes = {
   'GET /purchase/:id': {
     controller: 'PurchaseController',
     action: 'get'
-  },
-  // Get purchase's pairs
-  'GET /purchase/:id/pairs': {
-    controller: 'PurchaseController',
-    action: 'getPairs'
   }
 
 };

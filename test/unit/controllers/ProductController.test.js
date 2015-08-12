@@ -13,18 +13,18 @@ describe('ProductController', function() {
     //sign up as manager before test
     before(function(done) {
       agent
-       .post('/user')
-       .send({
-         firstname:  'man',
-         name:       'ager',
-         email:      'mana@ger.com',
-         sex:        true,
-         role:       'MANAGER',
-         password:   'pwd'
-       })
-       .end(function(err, res) {
-         done(err);
-       });
+      .post('/user')
+      .send({
+        firstname:  'man',
+        name:       'ager',
+        email:      'mana@ger.com',
+        sex:        true,
+        role:       'MANAGER',
+        password:   'pwd'
+      })
+      .end(function(err, res) {
+        done(err);
+      });
     });
 
     //test
@@ -35,7 +35,6 @@ describe('ProductController', function() {
         name:      'coca cola',
         shortName: 'COCA1',
         price:      0.50,
-        quantity:  50,
         urlImage:  '',
         minimum:   10,
         category:  'DRINK'
@@ -54,7 +53,6 @@ describe('ProductController', function() {
         name:      'black cat',
         shortName: 'meiko',
         price:      6000,
-        quantity:  1,
         urlImage:  '',
         minimum:   1,
         category:  'ANIMAL'
@@ -67,11 +65,11 @@ describe('ProductController', function() {
 
     //log out after the test
     after(function(done) {
-       agent
-        .put('/user/logout')
-        .end(function(err, res) {
-          done(err);
-        });
+      agent
+      .put('/user/logout')
+      .end(function(err, res) {
+        done(err);
+      });
     });
 
     it('should respond with a 400 status because the name is already used', function (done) {
@@ -81,7 +79,6 @@ describe('ProductController', function() {
         name:      'coca cola',
         shortName: 'COCA2',
         price:      0.50,
-        quantity:  25,
         urlImage:  '',
         minimum:   5,
         category:  'DRINK'
@@ -95,27 +92,27 @@ describe('ProductController', function() {
     //sign up as simple user before test
     before(function(done) {
       agent
-       .post('/user')
-       .send({
-         firstname:  'simple',
-         name:       'girl',
-         email:      'simple@girl.com',
-         sex:        false,
-         role:       'USER',
-         password:   'simple'
-       })
-       .end(function(err, res) {
-         done(err);
-       });
+      .post('/user')
+      .send({
+        firstname:  'simple',
+        name:       'girl',
+        email:      'simple@girl.com',
+        sex:        false,
+        role:       'USER',
+        password:   'simple'
+      })
+      .end(function(err, res) {
+        done(err);
+      });
     });
 
     //log out after the test
     after(function(done) {
-       agent
-        .put('/user/logout')
-        .end(function(err, res) {
-          done(err);
-        });
+      agent
+      .put('/user/logout')
+      .end(function(err, res) {
+        done(err);
+      });
     });
 
     //test
@@ -126,7 +123,6 @@ describe('ProductController', function() {
         name:      'kinder bueno',
         shortName: 'bueno',
         price:      0.80,
-        quantity:  30,
         urlImage:  '',
         minimum:   15,
         category:  'FOOD'

@@ -12,7 +12,6 @@ module.exports = {
       name:      req.param('name'),
       shortName: req.param('shortName'),
       price:     req.param('price'),
-      quantity:  req.param('quantity'),
       urlImage:  req.param('urlImage'),
       minimum:   req.param('minimum'),
       category:  req.param('category'),

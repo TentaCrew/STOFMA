@@ -10,24 +10,24 @@ var agent;
   var user_manager_01 = {
     firstname: 'manager',
     name: 'dupond',
-    email: 'manager@sale.com',
+    email: 'manager@purchase.com',
     sex: true,
     role: 'MANAGER',
-    password: 'sale'
+    password: 'purchase'
   };
 
   var user_customer_01 = {
     firstname:  'lucie',
     name:       'customer',
-    email:      'lucie@customer.fr',
+    email:      'lucie@purchase.fr',
     sex:        false,
     role:       'USER',
     password:   'catword'
   };
 
   var product_01 = {
-    name: 'prod_sale_2',
-    shortName: 'ps2',
+    name: 'prod_purchase_1',
+    shortName: 'pp1',
     price: 0.50,
     urlImage: '',
     minimum: 5,
@@ -35,8 +35,8 @@ var agent;
   };
 
   var product_02 = {
-    name: 'prod_sale_1',
-    shortName: 'ps1',
+    name: 'prod_purchase_2',
+    shortName: 'pp2',
     price: 0.50,
     urlImage: '',
     minimum: 5,
@@ -45,7 +45,7 @@ var agent;
 
 }
 
-describe('SaleController', function() {
+describe('PurchaseController', function() {
 
   // Before: Instantiate an user agent
   before(function(done) {
@@ -118,7 +118,7 @@ describe('SaleController', function() {
   });
 
   /**
-  * Add a Sale as a manager User
+  * Add a Purchase as a manager User
   */
   describe('#add() as a manager User', function() {
 
@@ -143,16 +143,18 @@ describe('SaleController', function() {
     });
 
     // Test
-    it('As a manager User, should create a Sale with 2 Products', function (done) {
+    it('As a manager User, should create a Purchase with 2 Products', function (done) {
       agent
-      .post('/sale')
+      .post('/purchase')
       .send({
-        // saleDate is optionnal
+        // purchaseDate is optionnal
         // manager is optionnal
-        customerId: user_customer_01.id,
         products: [
-          {product: product_01.id, quantity: 1},
-          {product: product_02.id, quantity: 12}
+          {product: product_01.id, quantity: 100},
+          {product: product_02.id, quantity: 75},
+          {product: product_01.id, quantity: 50},
+          {product: product_02.id, quantity: 15},
+          {product: product_02.id, quantity: 75}
         ]
       })
       .end(function(err, res) {
@@ -186,13 +188,12 @@ describe('SaleController', function() {
     });
 
     // Test
-    it('As a regular user, can\'t create a Sale', function (done) {
+    it('As a regular user, can\'t create a Purchase', function (done) {
       agent
-      .post('/sale')
+      .post('/purchase')
       .send({
-        // saleDate is optionnal
+        // purchaseDate is optionnal
         // manager is optionnal
-        customerId: user_customer_01.id,
         products: [
           {product: product_01.id, quantity: 1},
           {product: product_02.id, quantity: 12}
@@ -216,18 +217,18 @@ describe('SaleController', function() {
       .end(done);
     });
 
-    // Before: Get a created Sale's Id
-    var saleId;
+    // Before: Get a created Purchase's Id
+    var purchaseId;
     before(function(done) {
-      Sale
+      Purchase
       .find()
       .limit(1)
-      .exec(function(err, foundSales) {
+      .exec(function(err, foundPurchases) {
         if(err) {
           done(err);
         }
         else {
-          saleId = foundSales[0].id;
+          purchaseId = foundPurchases[0].id;
           done();
         }
       });
@@ -241,9 +242,9 @@ describe('SaleController', function() {
     });
 
     // Test
-    it('As a manager User, update a created Sale', function (done) {
+    it('As a manager User, update a created Purchase', function (done) {
       agent
-      .patch('/sale/' + saleId)
+      .patch('/purchase/' + purchaseId)
       .send({
         products: [
           {product: product_01.id, quantity: 10}
@@ -268,18 +269,18 @@ describe('SaleController', function() {
       .end(done);
     });
 
-    // Before: Get a created Sale's Id
-    var saleId;
+    // Before: Get a created Purchase's Id
+    var purchaseId;
     before(function(done) {
-      Sale
+      Purchase
       .find()
       .limit(1)
-      .exec(function(err, foundSales) {
+      .exec(function(err, foundPurchases) {
         if(err) {
           done(err);
         }
         else {
-          saleId = foundSales[0].id;
+          purchaseId = foundPurchases[0].id;
           done();
         }
       });
@@ -293,9 +294,9 @@ describe('SaleController', function() {
     });
 
     // Test
-    it('As a regular User, can\'t delete a Sale', function (done) {
+    it('As a regular User, can\'t delete a Purchase', function (done) {
       agent
-      .delete('/sale/' + saleId)
+      .delete('/purchase/' + purchaseId)
       .expect(401, done);
     });
   });
@@ -314,18 +315,18 @@ describe('SaleController', function() {
       .end(done);
     });
 
-    // Before: Get a created Sale's Id
-    var saleId;
+    // Before: Get a created Purchase's Id
+    var purchaseId;
     before(function(done) {
-      Sale
+      Purchase
       .find()
       .limit(1)
-      .exec(function(err, foundSales) {
+      .exec(function(err, foundPurchases) {
         if(err) {
           done(err);
         }
         else {
-          saleId = foundSales[0].id;
+          purchaseId = foundPurchases[0].id;
           done();
         }
       });
@@ -339,9 +340,9 @@ describe('SaleController', function() {
     });
 
     // Test
-    it('As a manager User, delete a Sale', function (done) {
+    it('As a manager User, delete a Purchase', function (done) {
       agent
-      .delete('/sale/' + saleId)
+      .delete('/purchase/' + purchaseId)
       .expect(200)
       .end(done);
     });
