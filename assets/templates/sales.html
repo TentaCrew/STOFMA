@@ -4,9 +4,10 @@
       <div class="md-list-item-text" flex>
         <h2>{{sale.saleDate | amDateFormat:'LLLL'}}</h2>
 
-        <h3><strong>{{sale.manager.firstname}} {{sale.manager.name}}</strong> a vendu à <strong>{{sale.customer.firstname}}
-          {{sale.customer.name}}</strong> pour {{
-          sale.amount | currency:''}} €</h3>
+        <h3><strong>{{sale.manager.firstname}} {{sale.manager.name}}</strong> a vendu à <strong>{{sale.customer.firstname || "un"}}
+          {{sale.customer.name || "invité"}}</strong> pour {{
+          sale.totalPrice | currency:''}} €</h3>
+        <a href="#">Voir +</a>
       </div>
       <md-divider ng-if="!$last"></md-divider>
       <div layout="row" layout-align="end center">

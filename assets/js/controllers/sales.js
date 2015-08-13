@@ -15,11 +15,6 @@ angular.module('stofmaApp.controllers')
           };
 
       angular.forEach($scope.sales, function (s, ks) {
-        $scope.sales[ks].amount = 0;
-        angular.forEach(s.products, function (p, kp) {
-          $scope.sales[ks].amount += p.quantity * p.unitPrice;
-        });
-
         var date = s.saleDate;
         if (moment(date).diff(moment(), 'days') == 0 && headerDates == '') {
           h = 'day';
