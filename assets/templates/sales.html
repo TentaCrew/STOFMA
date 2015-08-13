@@ -7,7 +7,11 @@
         <h3><strong>{{sale.manager.firstname}} {{sale.manager.name}}</strong> a vendu à <strong>{{sale.customer.firstname || "un"}}
           {{sale.customer.name || "invité"}}</strong> pour {{
           sale.totalPrice | currency:''}} €</h3>
-        <a href="#">Voir +</a>
+        <a href="#" ng-click="seeMore=!seeMore">Voir +</a>
+        <section class="ng-hide" ng-show="seeMore" ng-repeat="pair in sale.pairs">
+          <p>{{pair.name}} x{{pair.quantity}} = {{pair.price}}€</p>
+        </section
+
       </div>
       <md-divider ng-if="!$last"></md-divider>
       <div layout="row" layout-align="end center">

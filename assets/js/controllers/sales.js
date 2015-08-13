@@ -14,8 +14,14 @@ angular.module('stofmaApp.controllers')
             past: 'il y a plus d\'une semaine'
           };
 
-      angular.forEach($scope.sales, function (s, ks) {
-        var date = s.saleDate;
+      angular.forEach($scope.sales, function (sale, ksale) {
+
+        $scope.sales[ksale].pairs = new Array();
+        angular.forEach(sale.products, function (pair, kpair) {
+          $scope.sales[ksale].pairs.push({name:pair.product.name, quantity:pair.quantity, price:pair.quantity*pair.unitPrice});
+        });
+
+        var date = sale.saleDate;
         if (moment(date).diff(moment(), 'days') == 0 && headerDates == '') {
           h = 'day';
         } else if (moment(date).diff(moment().weekday(-7)) <= 7 && headerDates != 'week') {
@@ -25,7 +31,7 @@ angular.module('stofmaApp.controllers')
         }
         if (h !== headerDates) {
           headerDates = h;
-          $scope.sales.splice(ks, 0, {
+          $scope.sales.splice(ksale, 0, {
             'title': headerTitles[h],
             'type': 'header'
           });
