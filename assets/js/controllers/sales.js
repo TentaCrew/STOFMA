@@ -5,38 +5,50 @@ angular.module('stofmaApp.controllers')
     .controller('SalesCtrl', ['$scope', 'salesData', 'SaleService', 'UserService', '$mdBottomSheet', '$mdToast', 'amMoment', '$filter', function ($scope, salesData, SaleService, UserService, $mdBottomSheet, $mdToast, amMoment, $filter) {
       $scope.sales = salesData;
 
-      // Possible header title : day, week, past
-      var headerDates = "",
-          h = headerDates,
+      // Possible header title : today, yesterday, week, past
+      var headerDate = '',
+          h = headerDate,
           headerTitles = {
-            day: 'il y a un jour',
-            week: 'il y a une semaine',
+            today: 'aujourd\'hui',
+            yesterday: 'hier',
+            week: 'la semaine dernière',
             past: 'il y a plus d\'une semaine'
           };
 
       angular.forEach($scope.sales, function (sale, ksale) {
-
-        $scope.sales[ksale].pairs = new Array();
-        angular.forEach(sale.products, function (pair, kpair) {
-          $scope.sales[ksale].pairs.push({name:pair.product.name, quantity:pair.quantity, price:pair.quantity*pair.unitPrice});
+        $scope.sales[ksale].pairs = [];
+        angular.forEach(sale.products, function (pair) {
+          $scope.sales[ksale].pairs.push({
+            name: pair.product.name,
+            quantity: pair.quantity,
+            price: pair.quantity * pair.unitPrice
+          });
         });
+      });
 
-        var date = sale.saleDate;
-        if (moment(date).diff(moment(), 'days') == 0 && headerDates == '') {
-          h = 'day';
-        } else if (moment(date).diff(moment().weekday(-7)) <= 7 && headerDates != 'week') {
+      for (var i = 0; i < $scope.sales.length; i++) {
+        var sale = $scope.sales[i];
+
+        var date = moment(sale.saleDate);
+
+        if (moment().diff(date, 'days') == 0 && headerDate != 'today') {
+          h = 'today';
+        } else if (moment().diff(date, 'days') == 1 && headerDate != 'yesterday') {
+          h = 'yesterday';
+        } else if (moment().diff(date, 'days') > 1 && moment().diff(date, 'days') <= 7 && headerDate != 'week') {
           h = 'week';
-        } else if (headerDates = 'past') {
+        } else if (moment().diff(date, 'days') > 7 && headerDate != 'past') {
           h = 'past';
         }
-        if (h !== headerDates) {
-          headerDates = h;
-          $scope.sales.splice(ksale, 0, {
+
+        if (h !== headerDate) {
+          headerDate = h;
+          $scope.sales.splice(i++, 0, {
             'title': headerTitles[h],
             'type': 'header'
           });
         }
-      });
+      }
 
       $scope.toastPosition = {
         bottom: false,

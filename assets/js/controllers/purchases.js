@@ -5,35 +5,48 @@ angular.module('stofmaApp.controllers')
     .controller('PurchaseCtrl', ['$scope', 'purchasesData', 'PurchaseService', function ($scope, purchasesData, PurchaseService) {
       $scope.purchases = purchasesData;
 
-      // Possible header title : day, week, past
-      var headerDates = "",
-          h = headerDates,
+      // Possible header title : today, yesterday, week, past
+      var headerDate = '',
+          h = headerDate,
           headerTitles = {
-            day: 'il y a un jour',
-            week: 'il y a une semaine',
+            today: 'aujourd\'hui',
+            yesterday: 'hier',
+            week: 'la semaine dernière',
             past: 'il y a plus d\'une semaine'
           };
 
-      angular.forEach($scope.purchases, function (p, kp) {
-        $scope.purchases[kp].amount = 0;
-        angular.forEach(p.products, function (p, kp) {
-          $scope.purchases[kp].amount += p.quantity * p.unitPrice;
+      angular.forEach($scope.purchases, function (sale, kpurchase) {
+        $scope.purchases[kpurchase].pairs = [];
+        angular.forEach(sale.products, function (pair) {
+          $scope.purchases[kpurchase].pairs.push({
+            name: pair.product.name,
+            quantity: pair.quantity,
+            price: pair.quantity * pair.unitPrice
+          });
         });
+      });
 
-        var date = p.purchaseDate;
-        if (moment(date).diff(moment(), 'days') == 0 && headerDates == '') {
-          h = 'day';
-        } else if (moment(date).diff(moment().weekday(-7)) <= 7 && headerDates != 'week') {
+      for (var i = 0; i < $scope.purchases.length; i++) {
+        var purchase = $scope.purchases[i];
+
+        var date = moment(purchase.purchaseDate);
+
+        if (moment().diff(date, 'days') == 0 && headerDate != 'today') {
+          h = 'today';
+        } else if (moment().diff(date, 'days') == 1 && headerDate != 'yesterday') {
+          h = 'yesterday';
+        } else if (moment().diff(date, 'days') > 1 && moment().diff(date, 'days') <= 7 && headerDate != 'week') {
           h = 'week';
-        } else if (headerDates = 'past') {
+        } else if (moment().diff(date, 'days') > 7 && headerDate != 'past') {
           h = 'past';
         }
-        if (h !== headerDates) {
-          headerDates = h;
-          $scope.purchases.splice(kp, 0, {
+
+        if (h !== headerDate) {
+          headerDate = h;
+          $scope.purchases.splice(i++, 0, {
             'title': headerTitles[h],
             'type': 'header'
           });
         }
-      });
+      }
     }]);
