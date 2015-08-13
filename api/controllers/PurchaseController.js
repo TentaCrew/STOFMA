@@ -15,7 +15,7 @@ module.exports = {
   * Constructs a new Purchase
   * @param req
   * @param req.param                                     {Object}    Match criteria
-  * @param [req.param.purchaseDate = Current date]           {Date}      Date of the Purchase creation
+  * @param [req.param.purchaseDate = Current date]       {Date}      Date of the Purchase creation
   * @param [req.param.managerId = Current session's id]  {Number}    Id of the manager User
   * @param req.param.products                            {Array}     Array of productId-quantity pairs defined as follows [{productId: <Number>, quantity: <Number>}, ...]
   * @param res
@@ -118,7 +118,39 @@ module.exports = {
           }
         });
       }
-    }
+    },
+
+  /**
+   * Update Purchase
+   * @param req
+   * @param req.param
+   * @param req.param.saleId
+   * @param res
+   */
+  update: function(req, res) {
+
+    //TODO What if Pairs shouldn't be updated?
+
+    var updateValues = {};
+    if(req.param('purchaseDate')) updateValues.saleDate = req.param('purchaseDate');
+    if(req.param('managerId')) updateValues.manager = req.param('managerId');
+
+    createPairs(req.param('products'))
+      .then(function(pairs) {
+        updateValues.products = pairs;
+        // 2d: Create the Sale
+        Purchase.update(req.param('purchaseId'), updateValues, function (err, updatedPurchase) {
+          if (err) {
+            return res.negotiate(err);
+          }
+          else {
+            return res.send(200, updatedPurchase);
+          }
+        });
+      })
+      .catch(res.negotiate);
+  }
+
 };
 
 /**
