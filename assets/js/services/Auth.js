@@ -31,6 +31,26 @@ angular.module('stofmaApp.auth')
           });
 
           return defer.promise;
+        },
+        update: function (formData) {
+          var defer = $q.defer();
+          UserService.update(formData).then(function(){
+            UserService.getCurrentSession().then(function(session){
+              defer.resolve();
+            });
+          });
+
+          return defer.promise;
+        },
+        credit: function (userId, formData) {
+          var defer = $q.defer();
+          UserService.credit(userId, formData).then(function(){
+            UserService.getCurrentSession().then(function(session){
+              defer.resolve();
+            });
+          });
+
+          return defer.promise;
         }
       };
     }]);

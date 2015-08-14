@@ -5,7 +5,7 @@
     {{ product.selected }} x <strong>{{ product.name }}</strong>
   </div>
   <form name="confirmSale">
-    <md-select name="selectedUser" ng-model="selectedUser" placeholder="Sélectionner la personne à créditer" ng-disabled="invitedUser">
+    <md-select name="selectedUser" ng-model="selectedUser" placeholder="Sélectionner la personne à débiter" ng-disabled="invitedUser">
       <md-option ng-repeat="user in users" ng-value="user.id">{{user.firstname}} {{user.name}}</md-option>
     </md-select>
     <md-checkbox ng-model="invitedUser" name="invitedUser">
@@ -27,4 +27,3 @@
     </md-list>
   </form>
 </md-bottom-sheet>
-

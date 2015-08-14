@@ -59,6 +59,15 @@ angular.module('stofmaApp')
               weight: 1
             }
           })
+          .state('user.profile', {
+            url: '/profile',
+            controller: 'ProfileCtrl',
+            templateUrl: 'assets/templates/profile.html',
+            data: {
+              name: 'Mon Compte',
+              icon: 'person'
+            }
+          })
           .state('user.products', {
             url: '/products',
             controller: 'ProductCtrl',
@@ -118,6 +127,21 @@ angular.module('stofmaApp')
 
               productsData: function (productProvider) {
                 return productProvider.getProducts(true);
+              }
+            }
+          })
+          .state('manager.credit', {
+            url: '/credit',
+            controller: 'CreditCtrl',
+            templateUrl: 'assets/templates/credit.html',
+            data: {
+              name: 'Créditer un compte',
+              icon: 'attach_money'
+            },
+            resolve: {
+              userProvider: 'UserService',
+              usersData: function (UserService) {
+                return UserService.getAll();
               }
             }
           })

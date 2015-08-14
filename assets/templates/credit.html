@@ -1,0 +1,28 @@
+<div class="">
+
+  <h3>Créditer le compte d'un utilisateur.</h3>
+
+  <form name="creditAccount">
+    <md-input-container class="md-icon-float">
+      <label>Montant à créditer</label>
+      <md-icon class="material-icons">attach_money</md-icon>
+      <input type="number" name="amountToCredit" ng-model="amountToCredit" required>
+
+      <div ng-messages="creditAccount.amountToCredit.$error" ng-show="creditAccount.amountToCredit.$dirty">
+        <div ng-message="required">Ce champ est obligatoire</div>
+        <div ng-message="pattern">La valeur saisie n'est pas correcte</div>
+      </div>
+    </md-input-container>
+    <md-select name="selectedUser" ng-model="selectedUser" placeholder="Sélectionner la personne à créditer" ng-disabled="invitedUser" style="margin-left:20px;">
+      <md-option ng-repeat="user in users" ng-value="user.id">{{user.firstname}} {{user.name}}</md-option>
+    </md-select>
+    <md-list>
+      <md-list-item>
+        <md-button class="md-list-item-content md-primary">
+          <md-icon class="material-icons">done</md-icon>
+          <md-button ng-click="credit($event)" class="md-primary">Créditer le compte</md-button>
+        </md-button>
+      </md-list-item>
+    </md-list>
+  </form>
+</div>

@@ -18,7 +18,7 @@ angular.module('stofmaApp.controllers')
       });
 
       $scope.$parent.$watch('user', function (nv) {
-        $scope.role = nv === null || angular.isUndefined(nv) ? null : nv.role.toLowerCase();
+        $scope.role = (nv === null || angular.isUndefined(nv)) ? null : nv.role.toLowerCase();
         $scope.isAnonymous = $scope.role === null;
         $scope.isAdmin = $scope.role == AccessLevels.admin;
         $scope.isManager = $scope.isAdmin ? true : $scope.role == AccessLevels.manager; // Admin can be manager

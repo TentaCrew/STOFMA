@@ -34,6 +34,7 @@ module.exports.policies = {
     'login':  'unauthenticated',
     'logout': 'authenticated',
     'update': 'authenticated',
+    'credit': 'isManager',
     'delete': 'isAdmin',
     'getAll': 'authenticated',
     'get':    'authenticated'

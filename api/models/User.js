@@ -43,6 +43,10 @@ module.exports = {
       type: 'STRING',
       in: ['USER','MANAGER','ADMINISTRATOR'],
       defaultsTo: 'USER'
+    },
+    credit: {
+      type: 'FLOAT',
+      defaultsTo: 0
     }
 
   },

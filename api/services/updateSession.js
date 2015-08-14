@@ -3,15 +3,15 @@ module.exports = function(session, user) {
     delete session.user;
   }
   else {
-    session.user = {
-      id:        user.id,
-      name:      user.name,
-      firstname:  user.firstname,
-      email:     user.email,
-      role:      user.role,
-      isAdmin:   "ADMINISTRATOR" === user.role,
-      isManager: "MANAGER" === user.role
-    },
+    session.user = new Object();
+    session.user.id =        user.id;
+    session.user.name =      user.name;
+    session.user.firstname =  user.firstname;
+    session.user.email =     user.email;
+    session.user.role =      user.role;
+    session.user.isAdmin =   "ADMINISTRATOR" === user.role;
+    session.user.isManager = "MANAGER" === user.role;
+
     session.lazy = true;
   }
 };

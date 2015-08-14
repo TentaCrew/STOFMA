@@ -11,6 +11,8 @@ angular.module('stofmaApp.services')
       this.login = login;
       this.logout = logout;
       this.register = register;
+      this.update = update;
+      this.credit = credit;
 
       function getCurrentSession() {
         var defer = $q.defer();
@@ -104,6 +106,32 @@ angular.module('stofmaApp.services')
 
         return defer.promise;
       }
+
+      function update(formData) {
+        var defer = $q.defer();
+
+        that.users = [];
+        $http.patch('/user', formData).success(function (result) {
+          defer.resolve(formData);
+        }).error(function (err) {
+          defer.reject(err);
+        });
+
+        return defer.promise;
+      }
+
+      function credit(userId, formData) {
+        var defer = $q.defer();
+
+        that.users = [];
+        $http.patch('/user/'+userId+'/credit', formData).success(function (result) {
+          defer.resolve(formData);
+        }).error(function (err) {
+          defer.reject(err);
+        });
+
+        return defer.promise;
+      }
     }])
     .factory('UserFactory', function(){
       return {
@@ -115,4 +143,3 @@ angular.module('stofmaApp.services')
         }
       }
     });
-

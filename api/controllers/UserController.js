@@ -44,7 +44,7 @@ module.exports = {
         sails.log.debug("User " + req.session.user.id + " does no longer exist.");
       }
       // Login out
-      sails.log.debug("User " + (foundUser?foundUser.email:req.session.userId) + " logged out.");
+      sails.log.debug("User " + (foundUser?foundUser.email:req.session.user.id) + " logged out.");
       updateSession(req.session);
       return res.send(200);
     });
@@ -60,7 +60,8 @@ module.exports = {
       password:    req.param('password'),
       email:       req.param('email'),
       phoneNumber: req.param('phoneNumber'),
-      role:        req.param('role')
+      role:        req.param('role'),
+      credit:      req.param('credit')
     }, function (err, newUser) {
       if (err) {
         return res.negotiate(err);
@@ -75,19 +76,38 @@ module.exports = {
 
   update: function (req, res) {
 
+    var updateHimSelf = !req.param('id') || req.param('id') == req.session.user.id;
+
     // only admin can update other users
-    if(!req.session.user.isAdmin && req.param('id') && req.session.user.id != req.param('id')) {
-      return res.send(401, 'You do not have sufficient privileges.');
+    if(!req.session.user.isAdmin && !updateHimSelf) {
+      return res.send(401, 'You do not have sufficient privileges to update other users.');
     }
 
-    // only admin can update his own role
+    // only admin can update user's role
     if(!req.session.user.isAdmin && req.param('role')) {
-      return res.send(401, 'You do not have sufficient privileges.');
+      return res.send(401, 'You do not have sufficient privileges to update user\'s role.');
     }
 
-    var id_ = req.param('id') ? req.param('id') : req.session.userId;
+    var id_ = req.param('id') ? req.param('id') : req.session.user.id;
+
     // Updating an User
     User.update({id: id_}, req.allParams(), function(err, user) {
+      if (err) {
+        return res.negotiate(err);
+      }
+      else {
+        updateSession(req.session, user[0]);
+        return res.send(user);
+      }
+    });
+  },
+
+  credit: function(req,res) {
+    if(!req.session.user.isManager) {
+      return res.send(401, 'You do not have sufficient privileges to credit user\'s account.');
+    }
+
+    User.update({id: req.param('id')}, req.allParams(), function(err, user) {
       if (err) {
         return res.negotiate(err);
       }
