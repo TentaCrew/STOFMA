@@ -10,9 +10,9 @@ angular.module('stofmaApp.controllers')
         if ($mdSidenav('left').isOpen())
           that.toggleMenu();
 
-        UserService.getCurrentSession().then(function (session) {
-          if (!angular.equals(session, $scope.user))
-            $scope.user = session;
+        UserService.getFromSession().then(function (user) {
+          if (!angular.equals(user, $scope.user))
+            $scope.user = user;
         }, function (err) {
           $scope.user = null;
         });
@@ -21,6 +21,7 @@ angular.module('stofmaApp.controllers')
       $rootScope.$on("$stateChangeError", function (event, toState, d, fromState) {
         if(fromState.data)
           $scope.pageTitle = fromState.data.name;
+        console.log(arguments);
       });
 
 

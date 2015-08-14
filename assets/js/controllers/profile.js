@@ -1,17 +1,7 @@
 'use strict';
 
 angular.module('stofmaApp.controllers')
-  .controller('ProfileCtrl', ['$q','$scope', '$state', 'Auth', 'UserService', 'SweetAlert', function ($q, $scope, $state, Auth, UserService, SweetAlert) {
-
-    UserService.getCurrentSession().then(function (session) {
-      UserService.get(session.id).then(function (user) {
-        $scope.user = user;
-      }, function (err) {
-        $scope.user = null;
-      });
-    }, function (err) {
-      $scope.user = null;
-    });
+  .controller('ProfileCtrl', ['$q','$scope', 'userData', '$state', 'Auth', 'UserService', 'SweetAlert', function ($q, $scope, userData, $state, Auth, UserService, SweetAlert) {
 
     $scope.update = function ($event) {
       var form = $scope.updateUser,

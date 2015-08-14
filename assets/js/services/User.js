@@ -8,6 +8,7 @@ angular.module('stofmaApp.services')
       this.getCurrentSession = getCurrentSession;
       this.getAll = getAll;
       this.get = get;
+      this.getFromSession = getFromSession;
       this.login = login;
       this.logout = logout;
       this.register = register;
@@ -64,6 +65,22 @@ angular.module('stofmaApp.services')
             defer.reject(err);
           });
         }
+
+        return defer.promise;
+      }
+
+      function getFromSession() {
+        var defer = $q.defer();
+
+        getCurrentSession().then(function (session) {
+          get(session.id).then(function (user) {
+            defer.resolve(user);
+          }, function (err) {
+            defer.reject(null);
+          });
+        }, function (err) {
+          defer.reject(null);
+        });
 
         return defer.promise;
       }

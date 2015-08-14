@@ -66,6 +66,13 @@ angular.module('stofmaApp')
             data: {
               name: 'Mon Compte',
               icon: 'person'
+            },
+            resolve: {
+              userProvider: 'UserService',
+
+              userData: function (userProvider) {
+                return userProvider.getFromSession();
+              }
             }
           })
           .state('user.products', {
@@ -140,8 +147,8 @@ angular.module('stofmaApp')
             },
             resolve: {
               userProvider: 'UserService',
-              usersData: function (UserService) {
-                return UserService.getAll();
+              usersData: function (userProvider) {
+                return userProvider.getAll();
               }
             }
           })
