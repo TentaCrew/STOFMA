@@ -27,18 +27,32 @@ module.exports = {
     // 1st: Create the Pairs
     createPairs(req.param('products'))
     .then(function(pairs) {
-      // 2d: Create the Sale
-      Sale.create({
-        saleDate: req.param('saleDate') || new Date(),
-        customer: req.param('customerId'),
-        manager:  req.param('managerId') || req.session.user.id,
-        products: pairs
-      }, function (err, newSale) {
-        if (err) {
-          return res.negotiate(err);
+      // check the credit of the customer
+      User.findOne(req.param('customerId'), function(err, customer){
+        var totalPrice = 0;
+        for (var i = 0; i < pairs.length; i++) {
+          totalPrice += pairs[i].unitPrice * pairs[i].quantity;
+        }
+        if(customer.credit < totalPrice) {
+          return res.send(406, "You don't have enough credit.");
         }
         else {
-          return res.send(200, newSale);
+          // 2d: Create the Sale
+          Sale.create({
+            saleDate: req.param('saleDate') || new Date(),
+            customer: req.param('customerId'),
+            manager:  req.param('managerId') || req.session.user.id,
+            products: pairs
+          }, function (err, newSale) {
+            if (err) {
+              return res.negotiate(err);
+            }
+            else {
+              customer.credit -= newSale.totalPrice;
+              customer.save();
+              return res.send(200, newSale);
+            }
+          });
         }
       });
     })

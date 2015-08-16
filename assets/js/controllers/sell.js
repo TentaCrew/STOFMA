@@ -64,6 +64,7 @@ angular.module('stofmaApp.controllers')
             }).catch(function () {
               SweetAlert.swal({
                 title: 'La vente n\'a pas réussi.',
+                text: 'Merci de recréditer votre solde.',
                 type: 'error'
               });
             })

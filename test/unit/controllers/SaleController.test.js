@@ -9,11 +9,12 @@ var agent;
 {
   var user_manager_01 = {
     firstname: 'manager',
-    name: 'dupond',
-    email: 'manager@sale.com',
-    sex: true,
-    role: 'MANAGER',
-    password: 'sale'
+    name:      'dupond',
+    email:     'manager@sale.com',
+    sex:       true,
+    role:      'MANAGER',
+    credit:    100,
+    password:  'sale'
   };
 
   var user_customer_01 = {
@@ -22,25 +23,26 @@ var agent;
     email:      'lucie@customer.fr',
     sex:        false,
     role:       'USER',
+    credit:     100,
     password:   'catword'
   };
 
   var product_01 = {
-    name: 'prod_sale_2',
+    name:      'prod_sale_2',
     shortName: 'ps2',
-    price: 0.50,
-    urlImage: '',
-    minimum: 5,
-    category: 'FOOD'
+    price:     0.50,
+    urlImage:  '',
+    minimum:   5,
+    category:  'FOOD'
   };
 
   var product_02 = {
-    name: 'prod_sale_1',
+    name:      'prod_sale_1',
     shortName: 'ps1',
-    price: 0.50,
-    urlImage: '',
-    minimum: 5,
-    category: 'DRINK'
+    price:     0.50,
+    urlImage:  '',
+    minimum:   5,
+    category:  'DRINK'
   };
 
 }
