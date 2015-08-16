@@ -76,7 +76,7 @@ module.exports = {
 
   update: function (req, res) {
 
-    var updateHimSelf = !req.param('id') || req.param('id') == req.session.user.id;
+    var updateHimSelf = req.param('id') == req.session.user.id;
 
     // only admin can update other users
     if(!req.session.user.isAdmin && !updateHimSelf) {
@@ -88,10 +88,13 @@ module.exports = {
       return res.send(401, 'You do not have sufficient privileges to update user\'s role.');
     }
 
-    var id_ = req.param('id') ? req.param('id') : req.session.user.id;
+    // only admin can update user's credit
+    if(!req.session.user.isManager && req.param('credit')) {
+      return res.send(401, 'You do not have sufficient privileges to update user\'s credit.');
+    }
 
     // Updating an User
-    User.update({id: id_}, req.allParams(), function(err, user) {
+    User.update({id: req.param('id')}, req.allParams(), function(err, user) {
       if (err) {
         return res.negotiate(err);
       }
@@ -107,13 +110,19 @@ module.exports = {
       return res.send(401, 'You do not have sufficient privileges to credit user\'s account.');
     }
 
-    User.update({id: req.param('id')}, req.allParams(), function(err, user) {
-      if (err) {
-        return res.negotiate(err);
-      }
-      else {
-        return res.send(user);
-      }
+    User.findOne({id: req.param('id')}, function foundUsr(err, user) {
+      user.credit += req.param('credit');
+      user.save(function(err2, user) {
+        if (err) {
+          return res.negotiate(err);
+        }
+        else if (err2) {
+          return res.negotiate(err2);
+        }
+        else {
+          return res.send(user);
+        }
+      });
     });
   },
 

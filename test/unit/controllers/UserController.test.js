@@ -189,8 +189,8 @@ describe('UsersController', function() {
     });
   });
 
-  describe('#update() as user (update himself) - first way', function() {
-    //is signed as user since the last test
+  describe('#update() as user (update himself)', function() {
+    //is signed as user (foo@bar.com) since the last test
     var idToUpdate;
     before(function(done) {
       agent
@@ -204,7 +204,7 @@ describe('UsersController', function() {
       });
     });
     //test
-    it('should update the account of the current user (1)', function (done) {
+    it('should update the account of the current user', function (done) {
       agent
       .patch('/user/'+idToUpdate)
       .send({
@@ -215,8 +215,20 @@ describe('UsersController', function() {
     });
   });
 
-  describe('#update() as user (update himself) - second way', function() {
-    //is signed as user since the last test
+  describe('#update() as user with credit parameter (update himself)', function() {
+    //is signed as user (foo@bar.com) since the last test
+    var idToUpdate;
+    before(function(done) {
+      agent
+      .post('/user/search')
+      .send({
+        email: 'foo@bar.com'
+      })
+      .end(function(err2, res2) {
+        idToUpdate = res2.body[0].id;
+        done();
+      });
+    });
     //log out after the test
     after(function(done) {
       agent
@@ -226,20 +238,18 @@ describe('UsersController', function() {
       });
     });
     //test
-    it('should update the account of the current user (2)', function (done) {
+    it('should respond with a 401 status because only managers can update an user\'s credit', function (done) {
       agent
-      .patch('/user')
+      .patch('/user/'+idToUpdate)
       .send({
-        name:     'mynewnameagain',
-        password: 'passup2'
+        credit: 9999
       })
-      .expect(200, done);
+      .expect(401, done);
     });
   });
 
   describe('#update() as admin', function() {
     //sign up as administrator before test
-    var idToUpdate;
     before(function(done) {
       agent
       .post('/user')
@@ -260,34 +270,45 @@ describe('UsersController', function() {
         .end(function(err2, res2) {
           idToUpdate = res2.body[0].id;
         });
+        done();
+      });
+    });
+    //log out after the test
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .end(function(err, res) {
         done(err);
       });
     });
     //test
     it('should update the manager', function (done) {
       agent
-      .patch('/user/'+idToUpdate)
-      .send({
-        name:     'newName',
-        password: 'helloworld'
-      })
-      .expect(200, done);
-    });
-  });
-
-  describe('#delete() as admin', function() {
-    //is signed as administrator since the last test
-    var idToDelete;
-    before(function(done) {
-      agent
       .post('/user/search')
       .send({
         email: 'the@manager.com'
       })
-      .end(function(err2, res2) {
-        idToDelete = res2.body[0].id;
+      .end(function(err2, userToUp) {
+        agent
+        .patch('/user/'+userToUp.body[0].id)
+        .send({
+          name:     'John',
+          password: 'helloworld'
+        })
+        .expect(200, done);
       });
-      done();
+    });
+  });
+
+  describe('#delete() as admin', function() {
+    //sign up as administrator before test
+    before(function(done) {
+      agent
+      .put('/user/login')
+      .send({
+        email:      'the@admin.com',
+        password:   'pwd'
+      }).end(done);
     });
     //log out after the test
     after(function(done) {
@@ -300,9 +321,16 @@ describe('UsersController', function() {
     //test
     it('should delete the manager', function (done) {
       agent
-      .delete('/user/'+idToDelete)
-      .send()
-      .expect(200, done);
+      .post('/user/search')
+      .send({
+        email: 'the@manager.com'
+      })
+      .end(function(err, userToDelete) {
+        agent
+        .delete('/user/'+userToDelete.body.id)
+        .send()
+        .expect(200, done);
+      });
     });
   });
 

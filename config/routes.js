@@ -70,11 +70,6 @@ module.exports.routes = {
     controller: 'UserController',
     action: 'signup'
   },
-  // Update current user
-  'PATCH /user': {
-    controller: 'UserController',
-    action: 'update'
-  },
   // Update user
   'PATCH /user/:id': {
     controller: 'UserController',

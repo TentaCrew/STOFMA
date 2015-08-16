@@ -13,5 +13,6 @@ module.exports = function(session, user) {
     session.user.isManager = "MANAGER" === user.role;
 
     session.lazy = true;
+    console.log("ADMINISTRATOR" == user.role , user.role);
   }
 };
