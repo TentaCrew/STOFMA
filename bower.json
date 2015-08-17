@@ -12,6 +12,6 @@
     "angular-moment": "~0.10.2"
   },
   "resolutions": {
-    "angular": "1.4.3"
+    "angular": "1.4.4"
   }
 }
