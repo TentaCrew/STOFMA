@@ -111,16 +111,12 @@ module.exports = {
     }
 
     User.findOne({id: req.param('id')}, function foundUsr(err, user) {
-      user.credit += req.param('credit');
-      user.save(function(err2, user) {
+      User.update(user, {credit: user.credit+req.param('credit')}, function(err,user2){
         if (err) {
           return res.negotiate(err);
         }
-        else if (err2) {
-          return res.negotiate(err2);
-        }
         else {
-          return res.send(user);
+          return res.send(user2);
         }
       });
     });

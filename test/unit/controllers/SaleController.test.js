@@ -9,7 +9,7 @@ var agent;
 {
   var user_manager_01 = {
     firstname: 'manager',
-    name:      'dupond',
+    name:      'michel',
     email:     'manager@sale.com',
     sex:       true,
     role:      'MANAGER',
@@ -182,9 +182,7 @@ describe('SaleController', function() {
           {product: product_02.id, quantity: 12}
         ]
       })
-      .end(function(err, res) {
-        done(err);
-      });
+      .expect(200,done);
     });
   });
 
