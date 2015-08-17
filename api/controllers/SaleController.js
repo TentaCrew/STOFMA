@@ -146,25 +146,53 @@ module.exports = {
    */
   update: function(req, res) {
 
-    //TODO What if Pairs shouldn't be updated?
-
     var updateValues = {};
     if(req.param('saleDate')) updateValues.saleDate = req.param('saleDate');
     if(req.param('customerId')) updateValues.customer = req.param('customerId');
     if(req.param('managerId')) updateValues.manager = req.param('managerId');
-    if(req.param('saleDate')) updateValues.saleDate = req.param('saleDate');
+
+    if(req.param('saleDate'))
+      updateValues.saleDate = req.param('saleDate');
+    else
+      updateValues.saleDate = new Date();
 
     createPairs(req.param('products'))
       .then(function(pairs) {
         updateValues.products = pairs;
-        // 2d: Create the Sale
-        Sale.update(req.param('saleId'), updateValues, function (err, updatedSale) {
-          if (err) {
-            return res.negotiate(err);
-          }
-          else {
-            return res.send(200, updatedSale);
-          }
+        Sale.findOne(req.param('id')).populate('products').exec(function(err,saleToUpdate){
+          // check the credit of the customer
+          User.findOne(saleToUpdate.customer, function(err, customer){
+            var totalPrice = 0;
+            for (var i = 0; i < updateValues.products.length; i++) {
+              totalPrice += updateValues.products[i].unitPrice * updateValues.products[i].quantity;
+            }
+
+            if (customer.credit + saleToUpdate.totalPrice < totalPrice) {
+              for (var i = 0; i < updateValues.products.length; i++) {
+                updateValues.products[i]=null;
+              }
+              return res.send(406, "You don't have enough credit.");
+            }
+            else {
+              // 2d: Create the Sale
+              Sale.update(req.param('saleId'), updateValues, function (err, updatedSale) {
+                updatedSale = updatedSale[0];
+                if (err) {
+                  for (var i = 0; i < updateValues.products.length; i++) {
+                    updateValues.products[i]=null;
+                  }
+                  return res.send(err);
+                }
+                else {
+                  Pair.destroy(saleToUpdate.products.id, function(){
+                    customer.credit = customer.credit + saleToUpdate.totalPrice - updatedSale.totalPrice;
+                    customer.save();
+                    return res.send(200, updatedSale);
+                  });
+                }
+              });
+            }
+          });
         });
       })
       .catch(res.negotiate);
@@ -210,5 +238,4 @@ function createPairs(pairs) {
   });
 
   return deferred.promise;
-
 }

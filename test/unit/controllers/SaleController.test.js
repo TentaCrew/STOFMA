@@ -27,6 +27,16 @@ var agent;
     password:   'catword'
   };
 
+  var user_customer_02 = {
+    firstname:  'coco',
+    name:       'rico',
+    email:      'coco@ri.co',
+    sex:        false,
+    role:       'USER',
+    credit:     10,
+    password:   'rico'
+  };
+
   var product_01 = {
     name:      'prod_sale_2',
     shortName: 'ps2',
@@ -119,6 +129,21 @@ describe('SaleController', function() {
     });
   });
 
+  // Before: Create a regular User
+  before(function(done) {
+    User
+    .create(user_customer_02)
+    .exec(function(err, newUser) {
+      if(err) {
+        done(err);
+      }
+      else {
+        user_customer_02.id = newUser.id;
+        done();
+      }
+    });
+  });
+
   /**
   * Add a Sale as a manager User
   */
@@ -163,20 +188,59 @@ describe('SaleController', function() {
     });
   });
 
+  describe('#add() as a manager User with not enough credit', function() {
+
+    // Before: Log in as a manager User
+    before(function(done){
+      agent
+      .put('/user/login')
+      .send({
+        email: user_manager_01.email,
+        password: user_manager_01.password
+      })
+      .end(done);
+    });
+
+    // After: Log out
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .end(done);
+    });
+
+    // Test
+    it('Shouldn\'t add the new Sale because of the user doesn\'t have enough credit', function (done) {
+      agent
+      .post('/sale')
+      .send({
+        // saleDate is optionnal
+        // manager is optionnal
+        customerId: user_customer_01.id,
+        products: [
+          {product: product_01.id, quantity: 100},
+          {product: product_02.id, quantity: 1200}
+        ]
+      })
+      .expect(406)
+      .end(done);
+      // TODO Should also check the new values
+    });
+  });
 
   /**
   * Add as a regular user
   */
   describe('#add() as a regular User', function() {
 
-    // Before: Log in as a regular user
+    // Before: Log in as a manager User
     before(function(done){
       agent
       .put('/user/login')
       .send({
-        email: user_customer_01.email,
-        password: user_customer_01.password
+        email: user_customer_02.email,
+        password: user_customer_02.password
       })
+      .expect(200)
       .end(done);
     });
 
@@ -202,6 +266,58 @@ describe('SaleController', function() {
       })
       .expect(401)
       .end(done);
+    });
+  });
+
+  describe('#update() as a manager User with not enough credit', function() {
+
+    // Before: Log in as a manager User
+    before(function(done){
+      agent
+      .put('/user/login')
+      .send({
+        email: user_manager_01.email,
+        password: user_manager_01.password
+      })
+      .end(done);
+    });
+
+    // Before: Get a created Sale's Id
+    var saleId;
+    before(function(done) {
+      Sale
+      .find()
+      .limit(1)
+      .exec(function(err, foundSales) {
+        if(err) {
+          done(err);
+        }
+        else {
+          saleId = foundSales[0].id;
+          done();
+        }
+      });
+    });
+
+    // After: Log out
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .end(done);
+    });
+
+    // Test
+    it('As a manager User, can\'t update the created Sale because of the user doesn\'t have enough credit', function (done) {
+      agent
+      .patch('/sale/' + saleId)
+      .send({
+        products: [
+          {product: product_01.id, quantity: 5000}
+        ]
+      })
+      .expect(406)
+      .end(done);
+      // TODO Should also check the new values
     });
   });
 
@@ -248,7 +364,7 @@ describe('SaleController', function() {
       .patch('/sale/' + saleId)
       .send({
         products: [
-          {product: product_01.id, quantity: 10}
+          {product: product_01.id, quantity: 2}
         ]
       })
       .expect(200)
@@ -264,8 +380,8 @@ describe('SaleController', function() {
       agent
       .put('/user/login')
       .send({
-        email: user_customer_01.email,
-        password: user_customer_01.password
+        email: user_customer_02.email,
+        password: user_customer_02.password
       })
       .end(done);
     });
