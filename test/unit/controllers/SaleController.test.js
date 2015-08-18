@@ -38,8 +38,8 @@ var agent;
   };
 
   var product_01 = {
-    name:      'prod_sale_2',
-    shortName: 'ps2',
+    name:      'prod_sale_1',
+    shortName: 'ps1',
     price:     0.50,
     urlImage:  '',
     minimum:   5,
@@ -47,12 +47,30 @@ var agent;
   };
 
   var product_02 = {
-    name:      'prod_sale_1',
-    shortName: 'ps1',
+    name:      'prod_sale_2',
+    shortName: 'ps2',
     price:     0.50,
     urlImage:  '',
     minimum:   5,
     category:  'DRINK'
+  };
+
+  var product_03 = {
+    name:      'prod_sale_3',
+    shortName: 'ps3',
+    price:     0.90,
+    urlImage:  '',
+    minimum:   15,
+    category:  'OTHER'
+  };
+
+  var product_04 = {
+    name:      'prod_sale_4',
+    shortName: 'ps4',
+    price:     0.10,
+    urlImage:  '',
+    minimum:   10,
+    category:  'FOOD'
   };
 
 }
@@ -90,6 +108,32 @@ describe('SaleController', function() {
           }
           else {
             product_02.id = newProduct.id;
+            cb();
+          }
+        });
+      },
+      function(cb) {
+        Product
+        .create(product_03)
+        .exec(function(err, newProduct) {
+          if(err) {
+            cb(err);
+          }
+          else {
+            product_03.id = newProduct.id;
+            cb();
+          }
+        });
+      },
+      function(cb) {
+        Product
+        .create(product_04)
+        .exec(function(err, newProduct) {
+          if(err) {
+            cb(err);
+          }
+          else {
+            product_04.id = newProduct.id;
             cb();
           }
         });
@@ -170,7 +214,7 @@ describe('SaleController', function() {
     });
 
     // Test
-    it('As a manager User, should create a Sale with 2 Products', function (done) {
+    it('As a manager User, should create 2 Sales with 2 and 3 Pair of Products', function (done) {
       agent
       .post('/sale')
       .send({
@@ -182,7 +226,36 @@ describe('SaleController', function() {
           {product: product_02.id, quantity: 12}
         ]
       })
-      .expect(200,done);
+      .expect(200, function(){
+        agent
+        .post('/sale')
+        .send({
+          // saleDate is optionnal
+          // manager is optionnal
+          customerId: user_customer_02.id,
+          products: [
+            {product: product_01.id, quantity: 2},
+            {product: product_02.id, quantity: 5},
+            {product: product_03.id, quantity: 1},
+            {product: product_04.id, quantity: 1}
+          ]
+        })
+        .end(function(){
+          agent
+          .post('/sale')
+          .send({
+            // saleDate is optionnal
+            // manager is optionnal
+            customerId: user_customer_02.id,
+            products: [
+              {product: product_03.id, quantity: 2},
+              {product: product_01.id, quantity: 4},
+              {product: product_04.id, quantity: 1}
+            ]
+          })
+          .end(done);
+        });
+      });
     });
   });
 
@@ -362,7 +435,7 @@ describe('SaleController', function() {
       .patch('/sale/' + saleId)
       .send({
         products: [
-          {product: product_01.id, quantity: 2}
+          {product: product_03.id, quantity: 9}
         ]
       })
       .expect(200)
@@ -417,7 +490,7 @@ describe('SaleController', function() {
   });
 
 
-  describe('#delete() as a manger User', function() {
+  /*describe('#delete() as a manger User', function() {
 
     // Before: Log in as a regular User
     before(function(done){
@@ -461,6 +534,6 @@ describe('SaleController', function() {
       .expect(200)
       .end(done);
     });
-  });
+  });*/
 
 });

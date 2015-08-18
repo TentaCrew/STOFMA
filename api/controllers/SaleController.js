@@ -24,30 +24,43 @@ module.exports = {
 
     // TODO Verify parameters
 
-    // 1st: Create the Pairs
+    //create the pairs
     createPairs(req.param('products'))
     .then(function(pairs) {
-      // check the credit of the customer
+
+      //get the customer
       User.findOne(req.param('customerId'), function(err, customer){
+
+        //get his credit
         var totalPrice = 0;
         for (var i = 0; i < pairs.length; i++) {
           totalPrice += pairs[i].unitPrice * pairs[i].quantity;
         }
+
+        //check if he has enough credit
         if(customer.credit < totalPrice) {
+
+          //destroy the new pairs if he hasn't
+          for (var i = 0; i < pairs.length; i++) {
+            Pair.destroy(pairs[i]);
+          }
           return res.send(406, "You don't have enough credit.");
         }
         else {
-          // 2d: Create the Sale
+          //create the Sale
           Sale.create({
             saleDate: req.param('saleDate') || new Date(),
             customer: req.param('customerId'),
             manager:  req.param('managerId') || req.session.user.id,
             products: pairs
           }, function (err, newSale) {
+
             if (err) {
               return res.negotiate(err);
             }
             else {
+              
+              //update the user's credit
               customer.credit -= newSale.totalPrice;
               customer.save();
               return res.send(200, newSale);
@@ -146,50 +159,59 @@ module.exports = {
    */
   update: function(req, res) {
 
-    var updateValues = {};
-    if(req.param('saleDate')) updateValues.saleDate = req.param('saleDate');
-    if(req.param('customerId')) updateValues.customer = req.param('customerId');
-    if(req.param('managerId')) updateValues.manager = req.param('managerId');
+    // TODO Verify parameters
+
+    var updatedValues = {};
+    if(req.param('saleDate')) updatedValues.saleDate = req.param('saleDate');
+    if(req.param('customerId')) updatedValues.customer = req.param('customerId');
+    if(req.param('managerId')) updatedValues.manager = req.param('managerId');
 
     if(req.param('saleDate'))
-      updateValues.saleDate = req.param('saleDate');
+      updatedValues.saleDate = req.param('saleDate');
     else
-      updateValues.saleDate = new Date();
+      updatedValues.saleDate = new Date();
 
+    //create the pairs
     createPairs(req.param('products'))
       .then(function(pairs) {
-        updateValues.products = pairs;
+
+        //get the sale to update
         Sale.findOne(req.param('id')).populate('products').exec(function(err,saleToUpdate){
-          // check the credit of the customer
+
+          //get the customer
           User.findOne(saleToUpdate.customer, function(err, customer){
+
+            //get his credit
             var totalPrice = 0;
-            for (var i = 0; i < updateValues.products.length; i++) {
-              totalPrice += updateValues.products[i].unitPrice * updateValues.products[i].quantity;
+            for (var i = 0; i < pairs.length; i++) {
+              totalPrice += pairs[i].unitPrice * pairs[i].quantity;
             }
 
+            //check if he has enough credit
             if (customer.credit + saleToUpdate.totalPrice < totalPrice) {
-              for (var i = 0; i < updateValues.products.length; i++) {
-                updateValues.products[i]=null;
+
+              //destroy the new pairs if he hasn't
+              for (var i = 0; i < pairs.length; i++) {
+                Pair.destroy(pairs[i]);
               }
               return res.send(406, "You don't have enough credit.");
             }
             else {
-              // 2d: Create the Sale
-              Sale.update(req.param('saleId'), updateValues, function (err, updatedSale) {
+
+              //add the new pairs
+              updatedValues.products = pairs;
+
+              //update the sale with the new values
+              Sale.update(saleToUpdate.id, updatedValues, function (err, updatedSale) {
+
+                //get the updated sale
                 updatedSale = updatedSale[0];
-                if (err) {
-                  for (var i = 0; i < updateValues.products.length; i++) {
-                    updateValues.products[i]=null;
-                  }
-                  return res.send(err);
-                }
-                else {
-                  Pair.destroy(saleToUpdate.products.id, function(){
-                    customer.credit = customer.credit + saleToUpdate.totalPrice - updatedSale.totalPrice;
-                    customer.save();
-                    return res.send(200, updatedSale);
-                  });
-                }
+
+                //update the user's credit
+                customer.credit = customer.credit + saleToUpdate.totalPrice - updatedSale.totalPrice;
+                customer.save();
+
+                return res.send(200, updatedSale);
               });
             }
           });
