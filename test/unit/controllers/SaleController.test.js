@@ -490,7 +490,7 @@ describe('SaleController', function() {
   });
 
 
-  /*describe('#delete() as a manger User', function() {
+  describe('#delete() as a manger User', function() {
 
     // Before: Log in as a regular User
     before(function(done){
@@ -534,6 +534,6 @@ describe('SaleController', function() {
       .expect(200)
       .end(done);
     });
-  });*/
+  });
 
 });

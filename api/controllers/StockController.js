@@ -31,7 +31,7 @@ module.exports = {
   },
 
   update: function (req, res) {
-    that.localUpdate(productId)
+    that.localUpdate(req.param('productId'))
     .then(function(stock) {
       return res.send(200,stock);
     });

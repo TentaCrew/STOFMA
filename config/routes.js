@@ -220,7 +220,7 @@ module.exports.routes = {
     controller: 'StockController',
     action: 'get'
   },
-  // Update stock
+  // Update stock of a product
   'PATCH /stock/:productId': {
     controller: 'StockController',
     action: 'update'

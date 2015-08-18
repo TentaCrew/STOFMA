@@ -59,7 +59,7 @@ module.exports = {
               return res.negotiate(err);
             }
             else {
-              
+
               //update the user's credit
               customer.credit -= newSale.totalPrice;
               customer.save();
@@ -79,15 +79,43 @@ module.exports = {
   * @param res
   */
   delete: function (req, res) {
-    Sale
-    .destroy(req.allParams())
-    .exec(function(err, deletedSale) {
-      if (err) {
-        return res.negotiate(err);
-      }
-      else {
-        return res.send(200);
-      }
+
+
+    Sale.findOne(req.allParams()).populate('products').exec(function(err,sale){
+
+      async.parallel({
+
+        //update stocks
+        updateStocks: function(cb){
+          async.each(sale.products, function(pair, next) {
+            sails.controllers.stock.localUpdate(pair.product)
+            .then(function(s) {
+              cb();
+            });
+          });
+        },
+
+        //reimburse user
+        recreditUser: function(cb){
+          User.findOne(sale.customer, function(err,customer){
+            customer.credit += sale.totalPrice;
+            customer.save();
+            cb();
+          });
+        },
+
+        //delete sale
+        deleteSale: function(cb){
+          Sale
+          .destroy(req.allParams())
+          .exec(function(err, deletedSale) {
+            cb();
+          });
+        }
+      },
+      function(err, results) {
+        return res.send(200,'Sale deleted with success');
+      });
     });
   },
 
