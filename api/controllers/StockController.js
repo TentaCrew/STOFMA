@@ -37,6 +37,19 @@ module.exports = {
     });
   },
 
+  updateAll: function() {
+    var deferred = q.defer();
+    var that = this;
+    Product.find().exec(function(err,products){
+      async.each(products, function(product, next) {
+        that.localUpdate(product.id);
+        next();
+      });
+    });
+    deferred.resolve();
+    return deferred.promise;
+  },
+
   localUpdate: function(productId) {
     var deferred = q.defer();
     async.parallel({
@@ -61,7 +74,7 @@ module.exports = {
           async.each(purchases, function(purchase, next) {
             async.each(purchase.products, function(pair, next) {
               if(productId==pair.product){
-                numberBought -= pair.quantity;
+                numberBought += pair.quantity;
               }
               next();
             });

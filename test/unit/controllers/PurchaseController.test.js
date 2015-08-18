@@ -5,44 +5,75 @@ var agent;
 
 /**
 * Setting up some variables for the tests
+* TODO : Set them to global
 */
 {
   var user_manager_01 = {
+    id:         1,
     firstname: 'manager',
-    name: 'dupond',
-    email: 'manager@purchase.com',
-    sex: true,
-    role: 'MANAGER',
-    password: 'purchase'
+    name:      'michel',
+    email:     'manager@pro.com',
+    sex:       true,
+    role:      'MANAGER',
+    credit:    100,
+    password:  'sale'
   };
-
   var user_customer_01 = {
+    id:         2,
     firstname:  'lucie',
     name:       'customer',
-    email:      'lucie@purchase.fr',
+    email:      'lucie@customer.fr',
     sex:        false,
     role:       'USER',
+    credit:     100,
     password:   'catword'
   };
-
+  var user_customer_02 = {
+    id:         3,
+    firstname:  'coco',
+    name:       'rico',
+    email:      'coco@ri.co',
+    sex:        false,
+    role:       'USER',
+    credit:     10,
+    password:   'rico'
+  };
   var product_01 = {
-    name: 'prod_purchase_1',
-    shortName: 'pp1',
-    price: 0.50,
-    urlImage: '',
-    minimum: 5,
-    category: 'FOOD'
+    id:         1,
+    name:      'product_1',
+    shortName: 'ps1',
+    price:     0.50,
+    urlImage:  '',
+    minimum:   5,
+    category:  'FOOD'
   };
-
   var product_02 = {
-    name: 'prod_purchase_2',
-    shortName: 'pp2',
-    price: 0.50,
-    urlImage: '',
-    minimum: 5,
-    category: 'DRINK'
+    id:         2,
+    name:      'product_2',
+    shortName: 'ps2',
+    price:     0.50,
+    urlImage:  '',
+    minimum:   5,
+    category:  'DRINK'
   };
-
+  var product_03 = {
+    id:         3,
+    name:      'product_3',
+    shortName: 'ps3',
+    price:     0.90,
+    urlImage:  '',
+    minimum:   15,
+    category:  'OTHER'
+  };
+  var product_04 = {
+    id:         4,
+    name:      'product_4',
+    shortName: 'ps4',
+    price:     0.10,
+    urlImage:  '',
+    minimum:   10,
+    category:  'FOOD'
+  };
 }
 
 describe('PurchaseController', function() {
@@ -51,70 +82,6 @@ describe('PurchaseController', function() {
   before(function(done) {
     agent = request.agent(sails.hooks.http.app);
     done();
-  });
-
-  // Before: Create some products
-  before(function(done) {
-    async.parallel([
-      function(cb) {
-        Product
-        .create(product_01)
-        .exec(function(err, newProduct) {
-          if(err) {
-            cb(err);
-          }
-          else {
-            product_01.id = newProduct.id;
-            cb();
-          }
-        });
-      },
-      function(cb) {
-        Product
-        .create(product_02)
-        .exec(function(err, newProduct) {
-          if(err) {
-            cb(err);
-          }
-          else {
-            product_02.id = newProduct.id;
-            cb();
-          }
-        });
-      }
-    ], function(err) {
-      done(err);
-    })
-  });
-
-  // Before: Create a manager User
-  before(function(done) {
-    User
-    .create(user_manager_01)
-    .exec(function(err, newUser) {
-      if(err) {
-        done(err);
-      }
-      else {
-        user_manager_01.id = newUser.id;
-        done();
-      }
-    });
-  });
-
-  // Before: Create a regular User
-  before(function(done) {
-    User
-    .create(user_customer_01)
-    .exec(function(err, newUser) {
-      if(err) {
-        done(err);
-      }
-      else {
-        user_customer_01.id = newUser.id;
-        done();
-      }
-    });
   });
 
   /**

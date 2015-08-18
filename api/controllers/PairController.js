@@ -1,3 +1,7 @@
+"use strict";
+
+var q = require('q');
+
 /**
  * PairController
  *
@@ -58,6 +62,45 @@ module.exports = {
         return res.send(pairs);
       })
     }
+  },
+
+  /**
+  * Creates Pairs
+  * @param pairs {Array} Array of productId-quantity pairs defined as follows [{productId: <Number>, quantity: <Number>}, ...]
+  */
+  createPairs: function(pairs) {
+
+    var deferred = q.defer();
+    var createdPairs = [];
+
+    async.each(pairs, function(pair, cb) {
+
+      var productId = pair.productId || pair.product;
+      var quantity = pair.quantity;
+
+      Pair.create({
+        product: productId,
+        quantity: quantity
+      }, function(err, newPair) {
+        if(err) {
+          cb(err);
+        }
+        else {
+          createdPairs.push(newPair);
+          cb();
+        }
+      })
+
+    }, function(err) {
+      if(err) {
+        deferred.reject(err);
+      }
+      else {
+        deferred.resolve(createdPairs);
+      }
+    });
+
+    return deferred.promise;
   }
 
 };

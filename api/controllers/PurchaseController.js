@@ -1,16 +1,13 @@
 "use strict";
 
-var q = require('q');
-
 /**
  * PurchaseController
  *
  * @description :: Server-side logic for managing Purchases
- * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 module.exports = {
-  
+
   /**
   * Constructs a new Purchase
   * @param req
@@ -24,10 +21,11 @@ module.exports = {
 
     // TODO Verify parameters
 
-    // 1st: Create the Pairs
-    createPairs(req.param('products'))
+    //create the pairs
+    sails.controllers.pair.createPairs(req.param('products'))
     .then(function(pairs) {
-      // 2d: Create the Purchase
+
+      //create the Purchase
       Purchase.create({
         purchaseDate: req.param('purchaseDate') || new Date(),
         manager:      req.param('managerId') || req.session.user.id,
@@ -51,15 +49,32 @@ module.exports = {
   * @param res
   */
   delete: function (req, res) {
-    Purchase
-    .destroy(req.allParams())
-    .exec(function(err, deletedPurchase) {
-      if (err) {
-        return res.negotiate(err);
-      }
-      else {
-        return res.send(200);
-      }
+    Purchase.findOne(req.allParams()).populate('products').exec(function(err,purchase){
+
+      async.parallel({
+
+        //update stocks
+        updateStocks: function(cb){
+          async.each(purchase.products, function(pair, next) {
+            sails.controllers.stock.localUpdate(pair.product)
+            .then(function(s) {
+              cb();
+            });
+          });
+        },
+
+        //delete purchase
+        deletePurchase: function(cb){
+          Purchase
+          .destroy(req.allParams())
+          .exec(function(err, deletedPurchase) {
+            cb();
+          });
+        }
+      },
+      function(err, results) {
+        return res.send(200,'Purchase deleted with success');
+      });
     });
   },
 
@@ -124,70 +139,33 @@ module.exports = {
    * Update Purchase
    * @param req
    * @param req.param
-   * @param req.param.saleId
+   * @param req.param.purchaseId
    * @param res
    */
   update: function(req, res) {
 
-    //TODO What if Pairs shouldn't be updated?
+    // TODO Verify parameters
 
-    var updateValues = {};
-    if(req.param('purchaseDate')) updateValues.saleDate = req.param('purchaseDate');
-    if(req.param('managerId')) updateValues.manager = req.param('managerId');
+    var updatedValues = {};
+    if(req.param('managerId')) updatedValues.manager = req.param('managerId');
+    if(req.param('purchaseDate'))
+      updatedValues.purchaseDate = req.param('purchaseDate');
+    else
+      updatedValues.purchaseDate = new Date();
 
-    createPairs(req.param('products'))
+    //create the pairs
+    sails.controllers.pair.createPairs(req.param('products'))
       .then(function(pairs) {
-        updateValues.products = pairs;
-        // 2d: Create the Sale
-        Purchase.update(req.param('purchaseId'), updateValues, function (err, updatedPurchase) {
-          if (err) {
-            return res.negotiate(err);
-          }
-          else {
-            return res.send(200, updatedPurchase);
-          }
+
+        //add the new pairs
+        updatedValues.products = pairs;
+
+        //update the purchase with the new values
+        Purchase.update(req.param('id'), updatedValues, function (err, updatedPurchase) {
+          return res.send(200, updatedPurchase);
         });
       })
       .catch(res.negotiate);
   }
 
 };
-
-/**
-* Creates Pairs
-* @param pairs {Array} Array of productId-quantity pairs defined as follows [{productId: <Number>, quantity: <Number>}, ...]
-*/
-function createPairs(pairs) {
-
-  var deferred = q.defer();
-  var createdPairs = [];
-
-  async.each(pairs, function(pair, cb) {
-
-    var productId = pair.productId || pair.product;
-    var quantity = pair.quantity;
-
-    Pair.create({
-      product: productId,
-      quantity: quantity
-    }, function(err, newPair) {
-      if(err) {
-        cb(err);
-      }
-      else {
-        createdPairs.push(newPair);
-        cb();
-      }
-    })
-
-  }, function(err) {
-    if(err) {
-      deferred.reject(err);
-    }
-    else {
-      deferred.resolve(createdPairs);
-    }
-  });
-
-  return deferred.promise;
-}

@@ -1,7 +1,5 @@
 "use strict";
 
-var q = require('q');
-
 /**
  * SaleController
  *
@@ -25,7 +23,7 @@ module.exports = {
     // TODO Verify parameters
 
     //create the pairs
-    createPairs(req.param('products'))
+    sails.controllers.pair.createPairs(req.param('products'))
     .then(function(pairs) {
 
       //get the customer
@@ -99,8 +97,9 @@ module.exports = {
         recreditUser: function(cb){
           User.findOne(sale.customer, function(err,customer){
             customer.credit += sale.totalPrice;
-            customer.save();
-            cb();
+            customer.save(function(){
+              cb();
+            });
           });
         },
 
@@ -190,17 +189,15 @@ module.exports = {
     // TODO Verify parameters
 
     var updatedValues = {};
-    if(req.param('saleDate')) updatedValues.saleDate = req.param('saleDate');
     if(req.param('customerId')) updatedValues.customer = req.param('customerId');
     if(req.param('managerId')) updatedValues.manager = req.param('managerId');
-
     if(req.param('saleDate'))
       updatedValues.saleDate = req.param('saleDate');
     else
       updatedValues.saleDate = new Date();
 
     //create the pairs
-    createPairs(req.param('products'))
+    sails.controllers.pair.createPairs(req.param('products'))
       .then(function(pairs) {
 
         //get the sale to update
@@ -249,43 +246,3 @@ module.exports = {
   }
 
 };
-
-/**
-* Creates Pairs
-* @param pairs {Array} Array of productId-quantity pairs defined as follows [{productId: <Number>, quantity: <Number>}, ...]
-*/
-function createPairs(pairs) {
-
-  var deferred = q.defer();
-
-  var createdPairs = [];
-
-  async.each(pairs, function(pair, cb) {
-
-    var productId = pair.productId || pair.product;
-    var quantity = pair.quantity;
-
-    Pair.create({
-      product: productId,
-      quantity: quantity
-    }, function(err, newPair) {
-      if(err) {
-        cb(err);
-      }
-      else {
-        createdPairs.push(newPair);
-        cb();
-      }
-    })
-
-  }, function(err) {
-    if(err) {
-      deferred.reject(err);
-    }
-    else {
-      deferred.resolve(createdPairs);
-    }
-  });
-
-  return deferred.promise;
-}
