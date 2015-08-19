@@ -22,7 +22,7 @@ module.exports = {
     // TODO Verify parameters
 
     //create the pairs
-    sails.controllers.pair.createPairs(req.param('products'))
+    Pair.createPairs(req.param('products'))
     .then(function(pairs) {
 
       //create the Purchase
@@ -154,7 +154,7 @@ module.exports = {
       updatedValues.purchaseDate = new Date();
 
     //create the pairs
-    sails.controllers.pair.createPairs(req.param('products'))
+    Pair.createPairs(req.param('products'))
       .then(function(pairs) {
 
         //add the new pairs
