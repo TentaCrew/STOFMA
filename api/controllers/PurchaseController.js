@@ -91,6 +91,7 @@ module.exports = {
         .find(req.allParams())
         .populate('manager')
         .populate('products')
+        .sort('purchaseDate desc')
         .exec(function(err, foundPurchases) {
           if (err) {
             return res.negotiate(err);
@@ -124,6 +125,7 @@ module.exports = {
       else { // Return the Purchases un-populated
         Purchase
         .find(req.allParams())
+        .sort('purchaseDate desc')
         .exec(function(err, foundPurchases) {
           if (err) {
             return res.negotiate(err);

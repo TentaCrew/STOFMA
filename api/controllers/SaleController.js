@@ -133,6 +133,7 @@ module.exports = {
       .populate('manager')
       .populate('customer')
       .populate('products')
+      .sort('saleDate desc')
       .exec(function(err, foundSales) {
         if (err) {
           return res.negotiate(err);
@@ -166,6 +167,7 @@ module.exports = {
     else { // Return the Sales un-populated
       Sale
       .find(req.allParams())
+      .sort('saleDate desc')
       .exec(function(err, foundSales) {
         if (err) {
           return res.negotiate(err);

@@ -166,7 +166,7 @@ module.exports.routes = {
     action: 'get'
   },
   // Get all sales
-  'GET /sale/': {
+  'GET /sale': {
     controller: 'SaleController',
     action: 'get'
   },
@@ -201,7 +201,7 @@ module.exports.routes = {
     action: 'get'
   },
   // Get all purchases
-  'GET /purchase/': {
+  'GET /purchase': {
     controller: 'PurchaseController',
     action: 'get'
   },
