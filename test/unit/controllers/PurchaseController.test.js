@@ -1,5 +1,6 @@
 'use strict';
 
+var assert = require('assert');
 var request = require('supertest');
 var agent;
 
@@ -42,6 +43,7 @@ var agent;
     id:         1,
     name:      'product_1',
     shortName: 'ps1',
+    quantity:  0,
     price:     0.50,
     urlImage:  '',
     minimum:   5,
@@ -51,6 +53,7 @@ var agent;
     id:         2,
     name:      'product_2',
     shortName: 'ps2',
+    quantity:  0,
     price:     0.50,
     urlImage:  '',
     minimum:   5,
@@ -60,6 +63,7 @@ var agent;
     id:         3,
     name:      'product_3',
     shortName: 'ps3',
+    quantity:  0,
     price:     0.90,
     urlImage:  '',
     minimum:   15,
@@ -69,6 +73,7 @@ var agent;
     id:         4,
     name:      'product_4',
     shortName: 'ps4',
+    quantity:  0,
     price:     0.10,
     urlImage:  '',
     minimum:   10,
@@ -111,21 +116,28 @@ describe('PurchaseController', function() {
 
     // Test
     it('As a manager User, should create a Purchase with 2 Products', function (done) {
-      agent
-      .post('/purchase')
-      .send({
-        // purchaseDate is optionnal
-        // manager is optionnal
-        products: [
-          {product: product_01.id, quantity: 100},
-          {product: product_02.id, quantity: 75},
-          {product: product_01.id, quantity: 50},
-          {product: product_02.id, quantity: 15},
-          {product: product_02.id, quantity: 75}
-        ]
-      })
-      .end(function(err, res) {
-        done(err);
+      Product.find([{id: product_01.id},{id: product_02.id},{id: product_03.id},{id: product_04.id}], function(err,productsBefore){
+        agent
+        .post('/purchase')
+        .send({
+          products: [
+            {product: product_01.id, quantity: 100},
+            {product: product_02.id, quantity: 75},
+            {product: product_03.id, quantity: 80},
+            //{product: product_02.id, quantity: 15},   //currently ignored because of concurrent access to the resource
+            {product: product_04.id, quantity: 99}
+          ]
+        })
+        .expect(200)
+        .end(function() {
+          Product.find([{id: product_01.id},{id: product_02.id},{id: product_03.id},{id: product_04.id}], function(err,productsAfter){
+            assert.equal(productsAfter[0].quantity,  productsBefore[0].quantity + 100, 'Wrong quantity of product_01');
+            assert.equal(productsAfter[1].quantity,  productsBefore[1].quantity + 75,  'Wrong quantity of product_02');
+            assert.equal(productsAfter[2].quantity,  productsBefore[2].quantity + 80,  'Wrong quantity of product_03');
+            assert.equal(productsAfter[3].quantity,  productsBefore[3].quantity + 99,  'Wrong quantity of product_04');
+            done();
+          });
+        });
       });
     });
   });
@@ -210,16 +222,27 @@ describe('PurchaseController', function() {
 
     // Test
     it('As a manager User, update a created Purchase', function (done) {
-      agent
-      .patch('/purchase/' + purchaseId)
-      .send({
-        products: [
-          {product: product_01.id, quantity: 10}
-        ]
-      })
-      .expect(200)
-      .end(done);
-      // TODO Should also check the new values
+      Product.find([{id: product_01.id},{id: product_02.id},{id: product_03.id},{id: product_04.id}], function(err,productsBefore){
+        agent
+        .patch('/purchase/2')
+        .send({
+          products: [
+            // remove {product: product_02.id, quantity: 11}
+            {product: product_01.id, quantity: 10}
+            // remove {product: product_03.id, quantity: 3}
+          ]
+        })
+        .expect(200)
+        .end(function() {
+          Product.find([{id: product_01.id},{id: product_02.id},{id: product_03.id},{id: product_04.id}], function(err,productsAfter){
+            assert.equal(productsAfter[0].quantity,  productsBefore[0].quantity + 10, 'Wrong quantity of product_01');
+            assert.equal(productsAfter[1].quantity,  productsBefore[1].quantity - 11, 'Wrong quantity of product_02');
+            assert.equal(productsAfter[2].quantity,  productsBefore[2].quantity - 3 , 'Wrong quantity of product_03');
+            assert.equal(productsAfter[3].quantity,  productsBefore[3].quantity,      'Wrong quantity of product_04');
+            done();
+          });
+        });
+      });
     });
   });
 
@@ -269,7 +292,7 @@ describe('PurchaseController', function() {
   });
 
 
-  describe('#delete() as a manger User', function() {
+  describe('#delete() as a manager User', function() {
 
     // Before: Log in as a regular User
     before(function(done){
@@ -282,23 +305,6 @@ describe('PurchaseController', function() {
       .end(done);
     });
 
-    // Before: Get a created Purchase's Id
-    var purchaseId;
-    before(function(done) {
-      Purchase
-      .find()
-      .limit(1)
-      .exec(function(err, foundPurchases) {
-        if(err) {
-          done(err);
-        }
-        else {
-          purchaseId = foundPurchases[0].id;
-          done();
-        }
-      });
-    });
-
     // After: Log out
     after(function(done) {
       agent
@@ -308,10 +314,20 @@ describe('PurchaseController', function() {
 
     // Test
     it('As a manager User, delete a Purchase', function (done) {
-      agent
-      .delete('/purchase/' + purchaseId)
-      .expect(200)
-      .end(done);
+      Product.find([{id: product_01.id},{id: product_02.id},{id: product_03.id},{id: product_04.id}], function(err,productsBefore){
+        agent
+        .delete('/purchase/3')
+        .expect(200)
+        .end(function() {
+          Product.find([{id: product_01.id},{id: product_02.id},{id: product_03.id},{id: product_04.id}], function(err,productsAfter){
+            assert.equal(productsAfter[0].quantity,  productsBefore[0].quantity,     'Wrong quantity of product_01');
+            assert.equal(productsAfter[1].quantity,  productsBefore[1].quantity,     'Wrong quantity of product_02');
+            assert.equal(productsAfter[2].quantity,  productsBefore[2].quantity,     'Wrong quantity of product_03');
+            assert.equal(productsAfter[3].quantity,  productsBefore[3].quantity - 1, 'Wrong quantity of product_04');
+            done();
+          });
+        });
+      });
     });
   });
 

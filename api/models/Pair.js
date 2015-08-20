@@ -52,8 +52,9 @@ module.exports = {
   /**
   * Creates Pairs
   * @param pairs {Array} Array of productId-quantity pairs defined as follows [{productId: <Number>, quantity: <Number>}, ...]
+  * @param saleMode {bool} true = sale , false = purchase
   */
-  createPairs: function(pairs) {
+  createPairs: function(pairs,saleMode) {
 
     var deferred = q.defer();
     var createdPairs = [];
@@ -72,7 +73,15 @@ module.exports = {
         }
         else {
           createdPairs.push(newPair);
-          cb();
+          Product.findOne(newPair.product, function(err,product){
+            if(saleMode){
+                product.quantity -= newPair.quantity;
+            }
+            else {
+              product.quantity += newPair.quantity;
+            }
+            product.save(cb);
+          });
         }
       })
 
@@ -82,6 +91,44 @@ module.exports = {
       }
       else {
         deferred.resolve(createdPairs);
+      }
+    });
+
+    return deferred.promise;
+  },
+
+  /**
+  * Deletes pair
+  * @param pairs {Array} Array of productId-quantity pairs defined as follows [{productId: <Number>, quantity: <Number>}, ...]
+  * @param saleMode {bool} true = sale , false = purchase
+  */
+  deletePairs: function(pairs,saleMode) {
+
+    var deferred = q.defer();
+
+    async.each(pairs, function(p, cb) {
+
+      Pair.findOne(p.id, function(err,pair){
+        Product.findOne(pair.product, function(err,product){
+          if(saleMode){
+            product.quantity += pair.quantity;
+          }
+          else {
+            product.quantity -= pair.quantity;
+          }
+          product.save(cb);
+        });
+      });
+
+    }, function(err) {
+      if(err) {
+        deferred.reject(err);
+      }
+      else {
+        var pairIds = pairs.map(function(pair){return pair.id;});
+        Pair.destroy(pairIds, function(err,deletedPairs){
+          deferred.resolve(deletedPairs);
+        });
       }
     });
 

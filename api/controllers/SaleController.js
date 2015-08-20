@@ -23,7 +23,7 @@ module.exports = {
     // TODO Verify parameters
 
     //create the pairs
-    Pair.createPairs(req.param('products'))
+    Pair.createPairs(req.param('products'),true)
     .then(function(pairs) {
 
       //get the customer
@@ -39,10 +39,10 @@ module.exports = {
         if(customer.credit < totalPrice) {
 
           //destroy the new pairs if he hasn't
-          for (var i = 0; i < pairs.length; i++) {
-            Pair.destroy(pairs[i]);
-          }
-          return res.send(406, "You don't have enough credit.");
+          Pair.deletePairs(pairs,true)
+          .then(function(){
+            return res.send(406, "You don't have enough credit.");
+          });
         }
         else {
           //create the Sale
@@ -60,8 +60,9 @@ module.exports = {
 
               //update the user's credit
               customer.credit -= newSale.totalPrice;
-              customer.save();
-              return res.send(200, newSale);
+              customer.save(function(){
+                return res.send(200, newSale);
+              });
             }
           });
         }
@@ -85,11 +86,9 @@ module.exports = {
 
         //update stocks
         updateStocks: function(cb){
-          async.each(sale.products, function(pair, next) {
-            sails.controllers.stock.localUpdate(pair.product)
-            .then(function(s) {
-              cb();
-            });
+          Pair.deletePairs(sale.products,true)
+          .then(function(){
+            cb();
           });
         },
 
@@ -199,7 +198,7 @@ module.exports = {
       updatedValues.saleDate = new Date();
 
     //create the pairs
-    Pair.createPairs(req.param('products'))
+    Pair.createPairs(req.param('products'),true)
       .then(function(pairs) {
 
         //get the sale to update
@@ -225,20 +224,25 @@ module.exports = {
             }
             else {
 
-              //add the new pairs
-              updatedValues.products = pairs;
+              //remove the old pairs
+              Pair.deletePairs(saleToUpdate.products,true)
+              .then(function(){
 
-              //update the sale with the new values
-              Sale.update(saleToUpdate.id, updatedValues, function (err, updatedSale) {
+                //add the new pairs
+                updatedValues.products = pairs;
 
-                //get the updated sale
-                updatedSale = updatedSale[0];
+                //update the sale with the new values
+                Sale.update(saleToUpdate.id, updatedValues, function (err, updatedSale) {
 
-                //update the user's credit
-                customer.credit = customer.credit + saleToUpdate.totalPrice - updatedSale.totalPrice;
-                customer.save();
+                  //get the updated sale
+                  updatedSale = updatedSale[0];
 
-                return res.send(200, updatedSale);
+                  //update the user's credit
+                  customer.credit = customer.credit + saleToUpdate.totalPrice - updatedSale.totalPrice;
+                  customer.save(function(){
+                    return res.send(200, updatedSale);
+                  });
+                });
               });
             }
           });

@@ -211,19 +211,4 @@ module.exports.routes = {
     action: 'get'
   },
 
-/**
-* Routes about purchases
-*/
-
-  // Get stock
-  'GET /stock/:productId': {
-    controller: 'StockController',
-    action: 'get'
-  },
-  // Update stock of a product
-  'PATCH /stock/:productId': {
-    controller: 'StockController',
-    action: 'update'
-  }
-
 };

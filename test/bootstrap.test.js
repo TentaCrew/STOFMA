@@ -51,6 +51,7 @@ before(function(done) {
           id:         1,
           name:      'product_1',
           shortName: 'p1',
+          quantity:  0,
           price:     0.50,
           urlImage:  '',
           minimum:   5,
@@ -60,6 +61,7 @@ before(function(done) {
           id:         2,
           name:      'product_2',
           shortName: 'p2',
+          quantity:  0,
           price:     0.50,
           urlImage:  '',
           minimum:   5,
@@ -69,6 +71,7 @@ before(function(done) {
           id:         3,
           name:      'product_3',
           shortName: 'p3',
+          quantity:  0,
           price:     0.90,
           urlImage:  '',
           minimum:   15,
@@ -78,6 +81,7 @@ before(function(done) {
           id:         4,
           name:      'product_4',
           shortName: 'p4',
+          quantity:  0,
           price:     0.10,
           urlImage:  '',
           minimum:   10,
@@ -127,7 +131,7 @@ before(function(done) {
           };
           var salePair_13 = {
             id:       13,
-            product:  3,
+            product:  2,
             quantity: 4
           };
           var salePair_14 = {
@@ -145,13 +149,8 @@ before(function(done) {
             product:  4,
             quantity: 1
           };
-          var salePair_17 = {
-            id:       17,
-            product:  1,
-            quantity: 200
-          };
           Pair.create([purchasePair_01,purchasePair_02,purchasePair_03,purchasePair_04,purchasePair_05,purchasePair_06,
-                       salePair_11,salePair_12,salePair_13,salePair_14,salePair_15,salePair_16,salePair_17], function(){
+                       salePair_11,salePair_12,salePair_13,salePair_14,salePair_15,salePair_16], function(){
 
             async.parallel({
               createPurchases: function(callback){
@@ -208,10 +207,7 @@ before(function(done) {
               }
             },
             function(err, results) {
-              sails.controllers.stock.updateAll()
-              .then(function(){
-                cb();
-              });
+              cb();
             });
           });
         });

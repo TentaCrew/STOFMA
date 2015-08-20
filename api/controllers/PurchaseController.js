@@ -22,7 +22,7 @@ module.exports = {
     // TODO Verify parameters
 
     //create the pairs
-    Pair.createPairs(req.param('products'))
+    Pair.createPairs(req.param('products'),false)
     .then(function(pairs) {
 
       //create the Purchase
@@ -55,11 +55,9 @@ module.exports = {
 
         //update stocks
         updateStocks: function(cb){
-          async.each(purchase.products, function(pair, next) {
-            sails.controllers.stock.localUpdate(pair.product)
-            .then(function(s) {
-              cb();
-            });
+          Pair.deletePairs(purchase.products,false)
+          .then(function(){
+            cb();
           });
         },
 
@@ -155,19 +153,26 @@ module.exports = {
     else
       updatedValues.purchaseDate = new Date();
 
-    //create the pairs
-    Pair.createPairs(req.param('products'))
-      .then(function(pairs) {
+    Purchase.findOne(req.param('id')).populate('products').exec(function(err,purchaseToUpdate){
+      //create the pairs
+      Pair.createPairs(req.param('products'),false)
+        .then(function(pairs) {
 
-        //add the new pairs
-        updatedValues.products = pairs;
+          //remove the old pairs
+          Pair.deletePairs(purchaseToUpdate.products,false)
+          .then(function(){
 
-        //update the purchase with the new values
-        Purchase.update(req.param('id'), updatedValues, function (err, updatedPurchase) {
-          return res.send(200, updatedPurchase);
-        });
-      })
-      .catch(res.negotiate);
+            //add the new pairs
+            updatedValues.products = pairs;
+
+            //update the purchase with the new values
+            Purchase.update(req.param('id'), updatedValues, function (err, updatedPurchase) {
+              return res.send(200, updatedPurchase);
+            });
+          });
+        })
+        .catch(res.negotiate);
+    });
   }
 
 };
