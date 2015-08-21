@@ -44,6 +44,15 @@ module.exports = {
             return res.send(406, "You don't have enough credit.");
           });
         }
+        //check if he has enough credit
+        else if(customer.credit < totalPrice) {
+
+          //destroy the new pairs if he hasn't
+          Pair.deletePairs(pairs,true)
+          .then(function(){
+            return res.send(406, "You don't have enough credit.");
+          });
+        }
         else {
           //create the Sale
           Sale.create({
@@ -215,12 +224,11 @@ module.exports = {
 
             //check if he has enough credit
             if (customer.credit + saleToUpdate.totalPrice < totalPrice) {
-
               //destroy the new pairs if he hasn't
-              for (var i = 0; i < pairs.length; i++) {
-                Pair.destroy(pairs[i]);
-              }
-              return res.send(406, "You don't have enough credit.");
+              Pair.deletePairs(pairs,true)
+              .then(function(){
+                return res.send(406, "You don't have enough credit.");
+              });
             }
             else {
 

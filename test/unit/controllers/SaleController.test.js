@@ -311,7 +311,7 @@ describe('SaleController', function() {
 
     // Test
     it('As a manager User, can\'t update the created Sale because of the user doesn\'t have enough credit', function (done) {
-      Product.find({id: product_01.id}, function(err,productBefore){
+      Product.find([{id: product_01.id}], function(err,productBefore){
         User.findOne(sale.customer, function(err,user){
           //get the credit's user before the sale
           var oldCredit = user.credit;
@@ -326,8 +326,8 @@ describe('SaleController', function() {
           .end(function(){
             User.findOne(sale.customer, function(err,userAfter){
               assert.equal(oldCredit, userAfter.credit, 'Credit\'s user has changed, but it shouldn\'t.');
-              Product.find({id: product_01.id}, function(err,productAfter){
-                assert.equal(productAfter.quantity, productBefore.quantity, 'Wrong quantity of product_01');
+              Product.find([{id: product_01.id}], function(err,productAfter){
+                assert.equal(productAfter[0].quantity, productBefore[0].quantity, 'Wrong quantity of product_01');
                 done();
               });
             });
