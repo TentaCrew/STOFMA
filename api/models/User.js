@@ -64,13 +64,15 @@ module.exports = {
 
   beforeUpdate: function (values, cb) {
     // Encrypting password
-    User.findOne(values.id, function(err,oldUser){
-      if(oldUser.password !== values.password){
-        if(values.password) {
-          values.password = sha1(values.password);
+    if(values.id){
+      User.findOne(values.id, function(err,oldUser){
+        if(oldUser.password && (oldUser.password !== values.password)){
+          if(values.password) {
+            values.password = sha1(values.password);
+          }
         }
-      }
-    });
+      });
+    }
 
     // Removing white spaces from the phone number
     if(values.phoneNumber) {

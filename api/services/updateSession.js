@@ -10,7 +10,7 @@ module.exports = function(session, user) {
     session.user.email =     user.email;
     session.user.role =      user.role;
     session.user.isAdmin =   "ADMINISTRATOR" === user.role;
-    session.user.isManager = "MANAGER" === user.role;
+    session.user.isManager = "MANAGER" === user.role || "ADMINISTRATOR" === user.role;
 
     session.lazy = true;
   }

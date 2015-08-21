@@ -1,3 +1,6 @@
+'use strict';
+
+var assert = require('assert');
 var request = require('supertest');
 var agent;
 
@@ -266,9 +269,6 @@ describe('UsersController', function() {
         .post('/user/search')
         .send({
           email: 'the@manager.com'
-        })
-        .end(function(err2, res2) {
-          idToUpdate = res2.body[0].id;
         });
         done();
       });
@@ -284,19 +284,12 @@ describe('UsersController', function() {
     //test
     it('should update the manager', function (done) {
       agent
-      .post('/user/search')
+      .patch('/user/3')
       .send({
-        email: 'the@manager.com'
+        name:     'John',
+        password: 'helloworld'
       })
-      .end(function(err2, userToUp) {
-        agent
-        .patch('/user/'+userToUp.body[0].id)
-        .send({
-          name:     'John',
-          password: 'helloworld'
-        })
-        .expect(200, done);
-      });
+      .expect(200, done);
     });
   });
 
@@ -308,7 +301,8 @@ describe('UsersController', function() {
       .send({
         email:      'the@admin.com',
         password:   'pwd'
-      }).end(done);
+      })
+      .end(done);
     });
     //log out after the test
     after(function(done) {
@@ -330,6 +324,114 @@ describe('UsersController', function() {
         .delete('/user/'+userToDelete.body.id)
         .send()
         .expect(200, done);
+      });
+    });
+  });
+
+  describe('#credit() as admin', function() {
+    //sign up as administrator before test
+    before(function(done) {
+      agent
+      .put('/user/login')
+      .send({
+        email:      'the@admin.com',
+        password:   'pwd'
+      })
+      .end(done);
+    });
+    //log out after the test
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .end(function(err, res) {
+        done(err);
+      });
+    });
+    //test
+    it('should increase the credit\'s user', function (done) {
+      User.findOne({id:2}, function(err,userBefore){
+        agent
+        .patch('/user/2/credit')
+        .send({credit: 10})
+        .expect(200)
+        .end(function(){
+          User.findOne({id:2}, function(err,userAfter){
+            assert.equal(userBefore.credit + 10, userAfter.credit, 'New credit is wrong.');
+            done();
+          });
+        });
+      });
+    });
+  });
+
+  describe('#credit() as user Manager', function() {
+    //sign up as administrator before test
+    before(function(done) {
+      agent
+      .put('/user/login')
+      .send({
+        email:      'manager@pro.com',
+        password:   'sale'
+      })
+      .end(done);
+    });
+    //log out after the test
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .end(function(err, res) {
+        done(err);
+      });
+    });
+    //test
+    it('should increase the credit\'s user', function (done) {
+      User.findOne({id:2}, function(err,userBefore){
+        agent
+        .patch('/user/2/credit')
+        .send({credit: 20})
+        .expect(200)
+        .end(function(){
+          User.findOne({id:2}, function(err,userAfter){
+            assert.equal(userBefore.credit + 20, userAfter.credit, 'New credit is wrong.');
+            done();
+          });
+        });
+      });
+    });
+  });
+
+  describe('#credit() as regular User', function() {
+    //sign up as administrator before test
+    before(function(done) {
+      agent
+      .put('/user/login')
+      .send({
+        email:      'lucie@customer.fr',
+        password:   'catword'
+      })
+      .end(done);
+    });
+    //log out after the test
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .end(function(err, res) {
+        done(err);
+      });
+    });
+    //test
+    it('shouldn\'t increase the credit\'s user because a regular user hasn\'t the right', function (done) {
+      User.findOne({id:2}, function(err,userBefore){
+        agent
+        .patch('/user/2/credit')
+        .send({credit: 1000})
+        .expect(401)
+        .end(function(){
+          User.findOne({id:2}, function(err,userAfter){
+            assert.equal(userBefore.credit, userAfter.credit, 'New credit is wrong.');
+            done();
+          });
+        });
       });
     });
   });
