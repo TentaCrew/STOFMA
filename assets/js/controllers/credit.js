@@ -28,6 +28,10 @@ angular.module('stofmaApp.controllers')
             SweetAlert.swal({
               title: 'Le compte de '+user.firstname+' '+user.name+' a été crédité de '+amount+'€',
               type: 'success'
+            }, function (ok) {
+              if (ok) {
+                $state.reload();
+              }
             });
           }).catch(function (err) {
             SweetAlert.swal({

@@ -51,6 +51,15 @@ angular.module('stofmaApp.auth')
           });
 
           return defer.promise;
+        },
+        setRole: function (userId, formData) {
+          var defer = $q.defer();
+
+          UserService.setRole(userId, formData).then(function(){
+            defer.resolve();
+          });
+
+          return defer.promise;
         }
       };
     }]);

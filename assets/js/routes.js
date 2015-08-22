@@ -185,6 +185,22 @@ angular.module('stofmaApp')
               }
             }
           })
+          .state('manager.stock', {
+            url: '/stock',
+            controller: 'ProductCtrl',
+            templateUrl: 'assets/templates/products.html',
+            data: {
+              name: 'Les stocks',
+              icon: 'layers'
+            },
+            resolve: {
+              produtsProvider: 'ProductService',
+
+              productsData: function (produtsProvider) {
+                return produtsProvider.getProducts();
+              }
+            }
+          })
           .state('admin', {
             abstract: true,
             template: '<div ui-view />',
@@ -205,19 +221,18 @@ angular.module('stofmaApp')
               }]
             }
           })
-          .state('admin.stock', {
-            url: '/stock',
-            controller: 'ProductCtrl',
-            templateUrl: 'assets/templates/products.html',
+          .state('admin.role', {
+            url: '/role',
+            controller: 'RoleCtrl',
+            templateUrl: 'assets/templates/role.html',
             data: {
-              name: 'Les stocks',
-              icon: 'layers'
+              name: 'Gérer les rôles',
+              icon: 'group'
             },
             resolve: {
-              produtsProvider: 'ProductService',
-
-              productsData: function (produtsProvider) {
-                return produtsProvider.getProducts();
+              userProvider: 'UserService',
+              usersData: function (userProvider) {
+                return userProvider.getAll();
               }
             }
           });

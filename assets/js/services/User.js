@@ -14,6 +14,7 @@ angular.module('stofmaApp.services')
       this.register = register;
       this.update = update;
       this.credit = credit;
+      this.setRole = setRole;
 
       function getCurrentSession() {
         var defer = $q.defer();
@@ -143,6 +144,19 @@ angular.module('stofmaApp.services')
         that.users = [];
         $http.patch('/user/'+userId+'/credit', formData).success(function (result) {
           defer.resolve(formData);
+        }).error(function (err) {
+          defer.reject(err);
+        });
+
+        return defer.promise;
+      }
+
+      function setRole(userId, formData) {
+        var defer = $q.defer();
+
+        that.users = [];
+        $http.patch('/user/'+userId, formData).success(function (result) {
+          defer.resolve(result);
         }).error(function (err) {
           defer.reject(err);
         });

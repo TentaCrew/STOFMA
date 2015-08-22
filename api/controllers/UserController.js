@@ -99,7 +99,9 @@ module.exports = {
         return res.negotiate(err);
       }
       else {
-        updateSession(req.session, user[0]);
+        if(updateHimSelf){
+          updateSession(req.session, user[0]);
+        }
         return res.send(user);
       }
     });
