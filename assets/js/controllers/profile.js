@@ -18,20 +18,21 @@ angular.module('stofmaApp.controllers')
 
       if (form.$valid) {
         phoneNumber = phoneNumber.replace(/ /, '');
-
-        Auth.update({
-          email: email,
-          password: password,
-          phoneNumber: phoneNumber
-        }).then(function (res) {
-          SweetAlert.swal({
-            title: 'Mise à jour effecutée avec succès',
-            type: 'success'
-          });
-        }).catch(function (err) {
-          SweetAlert.swal({
-            title: 'Échec de la mise à jour du profile',
-            type: 'error'
+        UserService.getCurrentSession().then(function (session) {
+          Auth.update(session.id,{
+            email: email,
+            password: password,
+            phoneNumber: phoneNumber
+          }).then(function (res) {
+            SweetAlert.swal({
+              title: 'Mise à jour effecutée avec succès',
+              type: 'success'
+            });
+          }).catch(function (err) {
+            SweetAlert.swal({
+              title: 'Échec de la mise à jour du profile',
+              type: 'error'
+            });
           });
         });
       }

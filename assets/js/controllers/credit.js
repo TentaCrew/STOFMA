@@ -27,6 +27,7 @@ angular.module('stofmaApp.controllers')
           .then(function (res) {
             SweetAlert.swal({
               title: 'Le compte de '+user.firstname+' '+user.name+' a été crédité de '+amount+'€',
+              text: 'Ancien solde : '+user.credit+'€\nNouveau solde : '+(user.credit+amount)+'€',
               type: 'success'
             }, function (ok) {
               if (ok) {

@@ -63,21 +63,20 @@ module.exports = {
   },
 
   beforeUpdate: function (values, cb) {
-    // Encrypting password
-    if(values.id){
-      User.findOne(values.id, function(err,oldUser){
-        if(oldUser.password && (oldUser.password !== values.password)){
-          if(values.password) {
-            values.password = sha1(values.password);
-          }
+    User.findOne(values.id, function(err,oldUser){
+      // Encrypting password
+      if(oldUser && oldUser.password !== values.password) {
+        if(values.password) {
+          console.log(values);
+          values.password = sha1(values.password);
+          console.log(values);
         }
-      });
-    }
-
-    // Removing white spaces from the phone number
-    if(values.phoneNumber) {
-      values.phoneNumber = values.phoneNumber.replace(/ /g,'')
-    }
-    cb();
+      }
+      // Removing white spaces from the phone number
+      if(values.phoneNumber) {
+        values.phoneNumber = values.phoneNumber.replace(/ /g,'')
+      }
+      cb();
+    });
   }
 };

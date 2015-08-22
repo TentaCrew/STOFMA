@@ -117,7 +117,7 @@ angular.module('stofmaApp.services')
         var defer = $q.defer();
 
         $http.post('/user', formData).success(function (result) {
-          defer.resolve(formData);
+          defer.resolve(result);
         }).error(function (err) {
           defer.reject(err);
         });
@@ -125,12 +125,12 @@ angular.module('stofmaApp.services')
         return defer.promise;
       }
 
-      function update(formData) {
+      function update(userId, formData) {
         var defer = $q.defer();
 
         that.users = [];
-        $http.patch('/user', formData).success(function (result) {
-          defer.resolve(formData);
+        $http.patch('/user/'+userId, formData).success(function (result) {
+          defer.resolve(result);
         }).error(function (err) {
           defer.reject(err);
         });
@@ -143,7 +143,7 @@ angular.module('stofmaApp.services')
 
         that.users = [];
         $http.patch('/user/'+userId+'/credit', formData).success(function (result) {
-          defer.resolve(formData);
+          defer.resolve(result);
         }).error(function (err) {
           defer.reject(err);
         });
