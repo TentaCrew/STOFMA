@@ -67,6 +67,12 @@ module.exports.policies = {
     'update':   'isManager',
     'delete':   'isManager',
     'get':      'authenticated'
+  },
+
+  'PaymentController': {
+    '*':        false,
+    'add':      'isManager',
+    'get':      'isManager'
   }
 
 };

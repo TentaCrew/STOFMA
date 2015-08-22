@@ -1,19 +1,29 @@
 'use strict';
 
 angular.module('stofmaApp.controllers')
-  .controller('CreditCtrl', ['$q','$scope', '$state', 'usersData', 'Auth', 'UserService', 'SweetAlert', function ($q, $scope, $state, usersData, Auth, UserService, SweetAlert) {
+  .controller('CreditCtrl', ['$q','$scope', '$state', 'usersData', 'Auth', 'UserService', 'PaymentService', 'SweetAlert', function ($q, $scope, $state, usersData, Auth, UserService, PaymentService, SweetAlert) {
 
     $scope.users = usersData;
+    $scope.payments = [];
+    $scope.manager;
 
     UserService.getCurrentSession().then(function (session) {
-      UserService.get(session.id).then(function (user) {
-        $scope.user = user;
+      UserService.get(session.id).then(function (manager) {
+        $scope.manager = manager;
       }, function (err) {
-        $scope.user = null;
+        $scope.manager = null;
       });
     }, function (err) {
-      $scope.user = null;
+      $scope.manager = null;
     });
+
+    $scope.refreshPaymentsList = function(first){
+      PaymentService.getAll().then(function(payments){
+        $scope.payments = payments;
+      });
+    };
+
+    $scope.refreshPaymentsList();
 
     $scope.credit = function ($event) {
       var form = $scope.creditAccount,
@@ -31,6 +41,8 @@ angular.module('stofmaApp.controllers')
               type: 'success'
             }, function (ok) {
               if (ok) {
+                $scope.refreshPaymentsList();
+                $scope.payments.push({paymentDate:new Date(), customer:user, manager:$scope.manager, amount:amount});
                 $state.reload();
               }
             });

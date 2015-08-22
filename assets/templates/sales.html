@@ -6,7 +6,11 @@
 
         <h3><strong>{{sale.manager.firstname}} {{sale.manager.name}}</strong> a vendu à <strong>{{sale.customer.firstname || "un"}}
           {{sale.customer.name || "invité"}}</strong> pour {{
-          sale.totalPrice | currency:''}} €</h3>
+          sale.totalPrice | currency:''}} €<br><br>
+        <em class="ng-hide" ng-show="seeMore">
+          {{sale.saleDate | amDateFormat:'DD/MM/YYYY HH:mm'}}
+        </em>
+        </h3>
       </div>
       <ul class="ng-hide" ng-show="seeMore">
         <li ng-repeat="pair in sale.pairs">

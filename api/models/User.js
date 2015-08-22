@@ -1,3 +1,5 @@
+'use strict';
+
 var sha1 = require('sha1');
 
 /**
@@ -67,9 +69,7 @@ module.exports = {
       // Encrypting password
       if(oldUser && oldUser.password !== values.password) {
         if(values.password) {
-          console.log(values);
           values.password = sha1(values.password);
-          console.log(values);
         }
       }
       // Removing white spaces from the phone number

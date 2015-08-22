@@ -211,4 +211,19 @@ module.exports.routes = {
     action: 'get'
   },
 
+/**
+* Routes about payments
+*/
+
+  // Add payment
+  'POST /payment': {
+    controller: 'PaymentController',
+    action: 'add'
+  },
+  // Get all payments
+  'GET /payment': {
+    controller: 'PaymentController',
+    action: 'get'
+  }
+
 };

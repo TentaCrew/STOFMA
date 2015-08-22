@@ -142,7 +142,7 @@ angular.module('stofmaApp')
             controller: 'CreditCtrl',
             templateUrl: 'assets/templates/credit.html',
             data: {
-              name: 'Créditer un compte',
+              name: 'Paiements et soldes',
               icon: 'attach_money'
             },
             resolve: {

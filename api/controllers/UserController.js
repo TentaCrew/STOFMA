@@ -1,3 +1,5 @@
+'use strict';
+
 var sha1 = require('sha1');
 
 /**
@@ -113,12 +115,24 @@ module.exports = {
     }
 
     User.findOne({id: req.param('id')}, function foundUsr(err, user) {
-      User.update(user, {credit: user.credit+req.param('credit')}, function(err,user2){
+      User.update(user, {credit: user.credit+req.param('credit')}, function(err,user){
         if (err) {
           return res.negotiate(err);
         }
         else {
-          return res.send(user2);
+          Payment.create({
+            paymentDate : new Date(),
+            customer    : req.param('id'),
+            manager     : req.session.user.id,
+            amount      : req.param('credit')
+          }, function (err, newPayment) {
+            if (err) {
+              return res.negotiate(err);
+            }
+            else {
+              return res.send(user);
+            }
+          });
         }
       });
     });
