@@ -121,11 +121,11 @@ describe('PurchaseController', function() {
         .post('/purchase')
         .send({
           products: [
-            {product: product_01.id, quantity: 100},
-            {product: product_02.id, quantity: 75},
-            {product: product_03.id, quantity: 80},
-            //{product: product_02.id, quantity: 15},   //currently ignored because of concurrent access to the resource
-            {product: product_04.id, quantity: 99}
+            {product: product_01.id, quantity: 100, unitPrice: 1},
+            {product: product_02.id, quantity: 75, unitPrice: 1},
+            {product: product_03.id, quantity: 80, unitPrice: 1},
+            //{product: product_02.id, quantity: 15, unitPrice: 1},   //currently ignored because of concurrent access to the resource
+            {product: product_04.id, quantity: 99, unitPrice: 1}
           ]
         })
         .expect(200)
@@ -227,9 +227,9 @@ describe('PurchaseController', function() {
         .patch('/purchase/2')
         .send({
           products: [
-            // remove {product: product_02.id, quantity: 11}
-            {product: product_01.id, quantity: 10}
-            // remove {product: product_03.id, quantity: 3}
+            // remove {product: product_02.id, quantity: 11, unitPrice: 1}
+            {product: product_01.id, quantity: 10, unitPrice: 1}
+            // remove {product: product_03.id, quantity: 3, unitPrice: 1}
           ]
         })
         .expect(200)

@@ -30,23 +30,15 @@ module.exports = {
   },
 
   beforeValidate: function(values, cb) {
-    var isPriceUpdated = values.product || values.quantity || values.unitPrice;
-    if(!values.unitPrice && isPriceUpdated) {
-      Product
-      .findOne(values.product)
-      .exec(function(err, foundProduct) {
-        if(err) {
-          cb(err);
-        }
-        else {
+    Product
+    .findOne(values.product)
+    .exec(function(err, foundProduct) {
+      if(foundProduct) {
+        if(!values.unitPrice || values.unitPrice == -1)
           values.unitPrice = foundProduct.price;
-          cb();
-        }
-      });
-    }
-    else {
+      }
       cb();
-    }
+    });
   },
 
   /**
@@ -66,7 +58,8 @@ module.exports = {
 
       Pair.create({
         product: productId,
-        quantity: quantity
+        quantity: quantity,
+        unitPrice: pair.unitPrice || -1
       }, function(err, newPair) {
         if(err) {
           cb(err);

@@ -19,7 +19,13 @@ module.exports = {
   */
   add: function (req, res) {
 
-    // TODO Verify parameters
+    //need a unit price for each pair
+    var products = req.param('products');
+    for(var i=0;i<products.length;i++){
+      if(typeof products[i].unitPrice === 'undefined'){
+        return res.send(400, 'Unit price must be provided');
+      }
+    }
 
     //create the pairs
     Pair.createPairs(req.param('products'),false)
