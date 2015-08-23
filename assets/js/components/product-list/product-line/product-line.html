@@ -3,7 +3,7 @@
   <div class="md-list-item-text">
     <h3 hide-sm>{{product.name}}</h3>
     <h3 hide-gt-sm show-sm>{{product.shortName}}</h3>
-    <h4><strong>{{product.price | currency:''}} €</strong></h4>
+    <h4><em ng-if="$parent.isSelectingMode">{{product.quantity}}x – </em><strong>{{product.price | currency:''}} €</strong><em ng-if="$parent.isSelectingMode"> ({{product.price / product.quantity | currency:''}} € / ptc)</em></h4>
   </div>
   <div flex></div>
   <div ng-if="$parent.isSellingMode" layout="row" layout-align="end center" class="btn-product-action">
@@ -17,11 +17,16 @@
       <md-icon class="material-icons">add_circle</md-icon>
     </md-button>
   </div>
-  <div ng-if="$parent.isListingMode">
+  <div ng-if="$parent.isSelectingMode" layout="row" layout-align="end center">
+    <md-button class="md-icon-button md-accent" ng-click="clear(product.id)">
+      <md-icon class="material-icons">clear</md-icon>
+    </md-button>
+  </div>
+  <div ng-if="$parent.isListingMode && !product.isOut()">
     <strong>{{product.quantity}} disponible<span ng-if="product.quantity > 1">s</span></strong>
   </div>
   <div ng-if="product.isOut()">
-    <strong>Le produit est en rupture.</strong>
+    <strong>Le produit est en rupture de stock.</strong>
   </div>
 </md-list-item>
 <md-divider ng-if="!$parent.$last"></md-divider>

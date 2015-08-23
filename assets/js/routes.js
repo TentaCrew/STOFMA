@@ -201,6 +201,22 @@ angular.module('stofmaApp')
               }
             }
           })
+          .state('manager.addpurchase', {
+            url: '/purchase/add',
+            controller: 'AddPurchaseCtrl',
+            templateUrl: 'assets/templates/addpurchase.html',
+            data: {
+              name: 'Ajout d\'un achat',
+              hidden: true
+            },
+            resolve: {
+              productsProvider: 'ProductService',
+
+              productsData: function (productsProvider) {
+                return productsProvider.getProducts();
+              }
+            }
+          })
           .state('admin', {
             abstract: true,
             template: '<div ui-view />',
@@ -233,6 +249,7 @@ angular.module('stofmaApp')
               userProvider: 'UserService',
               usersData: function (userProvider) {
                 return userProvider.getAll();
+
               }
             }
           });

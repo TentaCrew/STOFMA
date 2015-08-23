@@ -15,19 +15,17 @@ angular.module('stofmaApp.controllers')
             past: 'il y a plus d\'une semaine'
           };
 
-      angular.forEach($scope.sales, function (sale, ksale) {
-        $scope.sales[ksale].pairs = [];
+      for (var i = 0; i < $scope.sales.length; i++) {
+        var sale = $scope.sales[i];
+
+        $scope.sales[i].pairs = [];
         angular.forEach(sale.products, function (pair) {
-          $scope.sales[ksale].pairs.push({
+          $scope.sales[i].pairs.push({
             name: pair.product.name,
             quantity: pair.quantity,
             price: pair.quantity * pair.unitPrice
           });
         });
-      });
-
-      for (var i = 0; i < $scope.sales.length; i++) {
-        var sale = $scope.sales[i];
 
         var date = moment(sale.saleDate);
 

@@ -19,9 +19,8 @@ angular.module('stofmaApp.controllers')
       });
 
       $rootScope.$on("$stateChangeError", function (event, toState, d, fromState) {
-        if(fromState.data)
+        if (fromState.data)
           $scope.pageTitle = fromState.data.name;
-        console.log(arguments);
       });
 
 

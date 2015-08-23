@@ -1,0 +1,23 @@
+<md-list>
+  <div data-product-list data-categories="categories" data-products="productsOnSale" data-usage="selecting"
+       class="product-list"></div>
+</md-list>
+<form name="selectProduct" flex layout="column" novalidate>
+  <md-select name="productSelected" ng-model="productSelected" required placeholder="Sélectionner le produit acheté">
+    <md-option ng-repeat="product in availableProducts" ng-value="product">{{product.name}}</md-option>
+  </md-select>
+  <div layout="row">
+    <md-input-container>
+      <label>Nombre de produits achetés</label>
+      <input type="number" name="howmany" ng-model="number" required aria-label="number of product">
+    </md-input-container>
+    <md-input-container>
+      <label>Prix total payé</label>
+      <input type="text" name="cost" ng-model="totalprice" required aria-label="price of product">
+    </md-input-container>
+  </div>
+  <md-button class="md-button md-accent md-icon-button" ng-click="addProduct()">
+    <md-icon class="material-icons">add</md-icon>
+  </md-button>
+</form>
+<md-button class="md-button md-primary" ng-click="addPurchase($event)">Confirmer l'achat de {{sum | currency:''}} €.</md-button>

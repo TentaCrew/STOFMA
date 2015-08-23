@@ -22,7 +22,7 @@ module.exports = {
       required: true
     },
     totalPrice: {
-      type: 'FLOAT',
+      type: 'FLOAT'
     }
   },
 
@@ -49,7 +49,7 @@ module.exports = {
         else {
           cb();
         }
-      },
+      }
     ], cb);
   }
 

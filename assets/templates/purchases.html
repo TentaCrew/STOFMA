@@ -1,17 +1,35 @@
 <md-list>
   <section ng-repeat="purchase in purchases">
-    <md-list-item class="md-2-line">
-      <div class="md-list-item-text">
-        <h3><strong>{{purchase.manager.name}} a acheté pour un total de {{purchase.amont}}</strong></h3>
-        <ul>
-          <li ng-repeat="ps in purchase.products">{{ps.quantity}}x <strong>{{ps.name}}</strong> : <strong>{{ps.quantity * ps.unitPrice}}</strong>
-          </li>
-        </ul>
+    <md-list-item class="md-2-line" ng-if="purchase.type != 'header'">
+      <div class="md-list-item-text" layout="row" layout-sm="column">
+        <h3 title="{{purchase.purchaseDate | amDateFormat:'LLLL'}}">{{purchase.purchaseDate | amDateFormat:'HH:mm'}}&nbsp;</h3>
+
+        <h3><strong>{{purchase.manager.name}} a acheté pour un total de {{purchase.totalPrice | currency:''}}</strong><br><br>
+          <em class="ng-hide" ng-show="seeMore">
+            {{purchase.purchaseDate | amDateFormat:'DD/MM/YYYY HH:mm'}}
+          </em>
+        </h3>
+      </div>
+      <ul class="ng-hide" ng-show="seeMore">
+        <li ng-repeat="ps in purchase.pairs">{{ps.quantity}} x <strong>{{ps.name}}</strong> : <strong>{{ps.price | currency:''}} €</strong>
+        </li>
+      </ul>
+      <div layout="row" layout-align="end center">
+        <md-button class="md-button md-icon-button" ng-click="seeMore=!seeMore">
+          <md-icon class="material-icons">add</md-icon>
+        </md-button>
+        <md-button class="md-button md-accent md-icon-button" ng-click="remove(purchase.id, $index)">
+          <md-icon class="material-icons">clear</md-icon>
+        </md-button>
       </div>
     </md-list-item>
-    <div ng-if="sale.type == 'header'">
+    <div ng-if="purchase.type == 'header'">
       <md-subheader>{{purchase.title}}</md-subheader>
     </div>
+    <md-divider ng-if="!$last"></md-divider>
   </section>
 </md-list>
 <h2 class="text-center" ng-if="purchases.length == 0">Aucun achat n'a été enregistré pour le moment.</h2>
+<md-button class="md-fab md-fab-bottom-right md-accent" ng-click="addPurchase()">
+  <md-icon class="material-icons">add</md-icon>
+</md-button>

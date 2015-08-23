@@ -2,7 +2,7 @@
 
 angular.module('stofmaApp.controllers')
 
-    .controller('PurchaseCtrl', ['$scope', 'purchasesData', 'PurchaseService', function ($scope, purchasesData, PurchaseService) {
+    .controller('PurchaseCtrl', ['$scope', 'purchasesData', 'PurchaseService', '$state', function ($scope, purchasesData, PurchaseService, $state) {
       $scope.purchases = purchasesData;
 
       // Possible header title : today, yesterday, week, past
@@ -15,19 +15,17 @@ angular.module('stofmaApp.controllers')
             past: 'il y a plus d\'une semaine'
           };
 
-      angular.forEach($scope.purchases, function (sale, kpurchase) {
-        $scope.purchases[kpurchase].pairs = [];
-        angular.forEach(sale.products, function (pair) {
-          $scope.purchases[kpurchase].pairs.push({
+      for (var i = 0; i < $scope.purchases.length; i++) {
+        var purchase = $scope.purchases[i];
+
+        $scope.purchases[i].pairs = [];
+        angular.forEach(purchase.products, function (pair) {
+          $scope.purchases[i].pairs.push({
             name: pair.product.name,
             quantity: pair.quantity,
             price: pair.quantity * pair.unitPrice
           });
         });
-      });
-
-      for (var i = 0; i < $scope.purchases.length; i++) {
-        var purchase = $scope.purchases[i];
 
         var date = moment(purchase.purchaseDate);
 
@@ -48,5 +46,9 @@ angular.module('stofmaApp.controllers')
             'type': 'header'
           });
         }
+      }
+
+      $scope.addPurchase = function () {
+        $state.go('manager.addpurchase');
       }
     }]);

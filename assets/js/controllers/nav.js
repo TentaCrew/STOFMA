@@ -11,7 +11,8 @@ angular.module('stofmaApp.controllers')
       $scope.isAdmin = false;
 
       $scope.allPages = angular.copy($state.get()).filter(function (s) {
-        return angular.isDefined(s.data) && angular.isDefined(s.data.name);
+        return angular.isDefined(s.data) && angular.isDefined(s.data.name)
+            && (angular.isUndefined(s.data.hidden) || !s.data.hidden);
       }).map(function (o) {
         o.isHeader = angular.isDefined(o.abstract) && o.abstract;
         return o;

@@ -3,21 +3,6 @@
 angular.module('stofmaApp.controllers')
 
     .controller('SellCtrl', ['$scope', 'productsData', 'ProductService', 'SaleService', '$mdBottomSheet', 'SweetAlert', function ($scope, productsData, ProductService, SaleService, $mdBottomSheet, SweetAlert) {
-      $scope.categories = [
-        {
-          id: 'DRINK',
-          name: 'Boissons'
-        },
-        {
-          id: 'FOOD',
-          name: 'Nourritures'
-        },
-        {
-          id: 'OTHER',
-          name: 'Autres'
-        }
-      ];
-
       $scope.products = productsData;
 
       $scope.refreshProduct = function () {

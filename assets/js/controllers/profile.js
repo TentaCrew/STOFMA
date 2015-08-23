@@ -30,7 +30,7 @@ angular.module('stofmaApp.controllers')
             });
           }).catch(function (err) {
             SweetAlert.swal({
-              title: 'Échec de la mise à jour du profile',
+              title: 'Échec de la mise à jour du profil',
               type: 'error'
             });
           });

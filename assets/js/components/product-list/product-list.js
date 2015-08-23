@@ -12,12 +12,33 @@ angular.module('stofmaApp.components')
           $scope.isSellable = false;
           $scope.isSellingMode = false;
           $scope.isListingMode = false;
+          $scope.isSelectingMode = false;
+
+          $scope.categories = [
+            {
+              id: 'DRINK',
+              name: 'Boissons'
+            },
+            {
+              id: 'FOOD',
+              name: 'Nourritures'
+            },
+            {
+              id: 'OTHER',
+              name: 'Autres'
+            }
+          ];
 
           $scope.selectProduct = function (id, c) {
             angular.forEach($scope.products, function (v, k) {
               if (v.id == id) {
-                if (c == 0)
-                  $scope.products[k].selected = 0;
+                if (c == 0){
+                  if($scope.isSelectingMode){
+                    $scope.products.splice(k, 1);
+                  } else {
+                    $scope.products[k].selected = 0;
+                  }
+                }
                 else
                   $scope.products[k].selected = v.selected + c > 0 ? (v.selected + c > v.quantity ? v.quantity : v.selected += c) : 0;
               }
@@ -31,6 +52,7 @@ angular.module('stofmaApp.components')
           $scope.$watch("usage", function (nv, ov) {
             $scope.isSellingMode = nv == 'selling';
             $scope.isListingMode = nv == 'listing';
+            $scope.isSelectingMode = nv == 'selecting';
           });
 
           $scope.$watch("products", function (nv, ov) {

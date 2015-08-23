@@ -12,8 +12,8 @@ angular.module('stofmaApp.services')
         $http.post('/product/search').success(function (data) {
           var r = data;
 
-          r = r.map(function(o){
-            o.isOut = function(){
+          r = r.map(function (o) {
+            o.isOut = function () {
               return o.quantity == 0;
             };
             return o;
@@ -33,6 +33,16 @@ angular.module('stofmaApp.services')
         });
 
         return defer.promise;
+      }
+    }])
+    .factory('ProductFactory', [function () {
+      return {
+        remapForApi: function (o) {
+          var p = {};
+          p.productId = o.id;
+          p.quantity = o.quantity;
+          return p;
+        }
       }
     }]);
 

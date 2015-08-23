@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('stofmaApp.services')
-    .service('SaleService', ['$q', '$http', 'SaleFactory', function ($q, $http, SaleFactory) {
+    .service('SaleService', ['$q', '$http', 'SaleFactory', 'ProductFactory', function ($q, $http, SaleFactory, ProductFactory) {
       this.getSales = getSales;
       this.doSale = doSale;
       this.deleteSale = deleteSale;
@@ -21,12 +21,7 @@ angular.module('stofmaApp.services')
       function doSale(customerId, products) {
         var defer = $q.defer();
         // Remapping object.
-        products = products.map(function (o) {
-          var newo = {};
-          newo.productId = o.id;
-          newo.quantity = o.selected;
-          return newo;
-        });
+        products = products.map(ProductFactory.remapForApi);
 
         $http.post('/sale', {
           customerId: customerId,
