@@ -48,7 +48,7 @@ angular.module('stofmaApp.controllers')
         }
       }
 
-      $scope.addPurchase = function () {
+      $scope.setFabButton('add', function(){
         $state.go('manager.addpurchase');
-      }
+      });
     }]);

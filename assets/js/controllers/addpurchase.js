@@ -75,5 +75,17 @@ angular.module('stofmaApp.controllers')
 
       $scope.remove = function (index) {
         $scope.productsOnSale.splice(index, 1);
-      }
+      };
+
+      $scope.$watch('listingDisplayMode', function (v) {
+        if (v === true) {
+          $scope.setFabButton('view_week', function () {
+            $scope.listingDisplayMode = !$scope.listingDisplayMode;
+          });
+        } else if (v === false) {
+          $scope.setFabButton('list', function () {
+            $scope.listingDisplayMode = !$scope.listingDisplayMode;
+          });
+        }
+      });
     }]);

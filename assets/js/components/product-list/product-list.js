@@ -67,6 +67,10 @@ angular.module('stofmaApp.components')
             $scope.sum = sum;
             $scope.isSellable = sum > 0;
 
+            if(typeof $scope.$parent.setFabButton == 'function' && $scope.isSellable){
+              $scope.$parent.setFabButton('done', $scope.check);
+            }
+
             if($scope.isSelectingMode && angular.isArray(nv) && angular.isArray(ov) && nv.length != ov.length){
               var categoryToGo;
               if(nv.length > ov.length){
@@ -84,7 +88,6 @@ angular.module('stofmaApp.components')
                   break;
                 }
               }
-
             }
           }, true);
 

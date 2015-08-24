@@ -16,6 +16,8 @@ angular.module('stofmaApp.controllers')
         }, function (err) {
           $scope.user = null;
         });
+
+        $scope.setFabButton(false);
       });
 
       $rootScope.$on("$stateChangeError", function (event, toState, d, fromState) {
@@ -31,4 +33,17 @@ angular.module('stofmaApp.controllers')
           $mdSidenav('left').toggle();
         });
       };
+
+      $scope.fabbutton = null;
+
+      $scope.setFabButton = function (icon, onclickcb) {
+        if (angular.isUndefined(icon) || icon === false)
+          $scope.fabbutton = null;
+        else {
+          $scope.fabbutton = {
+            icon: icon,
+            handler: onclickcb
+          }
+        }
+      }
     }]);
