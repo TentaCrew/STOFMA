@@ -20,8 +20,14 @@ angular.module('stofmaApp.services')
 
       function doSale(customerId, products) {
         var defer = $q.defer();
-        // Remapping object.
-        products = products.map(ProductFactory.remapForApi);
+        // Remapping objects.
+        products = products.map(function (o) {
+          var newo = {};
+          newo.productId = o.id;
+          newo.quantity = o.selected;
+          return newo;
+        });
+
 
         $http.post('/sale', {
           customerId: customerId,

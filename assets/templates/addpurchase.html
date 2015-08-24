@@ -1,23 +1,49 @@
-<md-list>
+<md-list ng-if="!listingDisplayMode">
   <div data-product-list data-categories="categories" data-products="productsOnSale" data-usage="selecting"
        class="product-list"></div>
 </md-list>
-<form name="selectProduct" flex layout="column" novalidate>
-  <md-select name="productSelected" ng-model="productSelected" required placeholder="Sélectionner le produit acheté">
-    <md-option ng-repeat="product in availableProducts" ng-value="product">{{product.name}}</md-option>
-  </md-select>
-  <div layout="row">
-    <md-input-container>
-      <label>Nombre de produits achetés</label>
-      <input type="number" name="howmany" ng-model="number" required aria-label="number of product">
-    </md-input-container>
-    <md-input-container>
-      <label>Prix total payé</label>
-      <input type="text" name="cost" ng-model="totalprice" required aria-label="price of product">
-    </md-input-container>
+<md-list ng-if="listingDisplayMode" class="padding">
+  <md-list-item class="md-2-line" ng-repeat="product in productsOnSale">
+    <div class="md-list-item-text">
+      <h3>{{product.name}}</h3>
+      <h4><em>{{product.quantity}}x – </em><strong>{{product.price | currency:''}} €</strong><em> ({{product.price / product.quantity | currency:''}} € / ptc)</em></h4>
+    </div>
+    <div layout="row" layout-align="end center">
+      <md-button class="md-button md-accent md-icon-button" ng-click="remove($index)">
+        <md-icon class="material-icons">clear</md-icon>
+      </md-button>
+    </div>
+  </md-list-item>
+</md-list>
+<form name="selectProduct" novalidate layout-padding>
+  <div>
+    <h1 class="md-title">Ajout des articles achetés</h1>
+
+    <div layout="row" layout-sm="column">
+      <md-input-container>
+        <label>Sélection de l'article</label>
+        <md-select ng-model="productSelected" required>
+          <md-option ng-repeat="product in availableProducts" ng-value="product">{{product.name}}</md-option>
+        </md-select>
+      </md-input-container>
+      <md-input-container>
+        <label>Nombre de produits achetés</label>
+        <input type="number" name="howmany" ng-model="number" required aria-label="number of product">
+      </md-input-container>
+      <md-input-container>
+        <label>Prix total payé</label>
+        <input type="text" name="cost" ng-model="totalprice" required aria-label="price of product">
+      </md-input-container>
+      <md-button class="md-button md-accent" ng-click="addProduct()">
+        <md-icon class="material-icons">add</md-icon>
+        Ajouter
+      </md-button>
+    </div>
   </div>
-  <md-button class="md-button md-accent md-icon-button" ng-click="addProduct()">
-    <md-icon class="material-icons">add</md-icon>
-  </md-button>
 </form>
-<md-button class="md-button md-primary" ng-click="addPurchase($event)">Confirmer l'achat de {{sum | currency:''}} €.</md-button>
+<md-button class="md-button md-primary md-raised" ng-click="addPurchase($event)">Confirmer l'achat de {{sum | currency:''}} €.</md-button>
+<md-button class="md-fab md-fab-bottom-right md-accent" ng-click="listingDisplayMode=!listingDisplayMode">
+  <md-icon class="material-icons" ng-if="!listingDisplayMode">list</md-icon>
+  <md-icon class="material-icons" ng-if="listingDisplayMode">view_week</md-icon>
+</md-button>
+

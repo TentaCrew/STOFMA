@@ -13,6 +13,7 @@ angular.module('stofmaApp.components')
           $scope.isSellingMode = false;
           $scope.isListingMode = false;
           $scope.isSelectingMode = false;
+          $scope.tabSelected = 0;
 
           $scope.categories = [
             {
@@ -65,6 +66,26 @@ angular.module('stofmaApp.components')
             });
             $scope.sum = sum;
             $scope.isSellable = sum > 0;
+
+            if($scope.isSelectingMode && angular.isArray(nv) && angular.isArray(ov) && nv.length != ov.length){
+              var categoryToGo;
+              if(nv.length > ov.length){
+                // Adding a product
+                console.log(nv, ov);
+                categoryToGo = nv.filter(function(i) {return ov.map(function(e) { return e.id; }).indexOf(i.id) < 0;})[0].category;
+              } else {
+                // Removing a product
+                categoryToGo = ov.filter(function(i) {return nv.map(function(e) { return e.id; }).indexOf(i.id) < 0;})[0].category;
+              }
+              for(var i = 0; i < $scope.categories.length; i++){
+                if($scope.categories[i].id == categoryToGo)
+                {
+                  $scope.tabSelected = i;
+                  break;
+                }
+              }
+
+            }
           }, true);
 
           $scope.check = function ($event) {

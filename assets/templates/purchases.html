@@ -4,7 +4,7 @@
       <div class="md-list-item-text" layout="row" layout-sm="column">
         <h3 title="{{purchase.purchaseDate | amDateFormat:'LLLL'}}">{{purchase.purchaseDate | amDateFormat:'HH:mm'}}&nbsp;</h3>
 
-        <h3><strong>{{purchase.manager.name}} a acheté pour un total de {{purchase.totalPrice | currency:''}}</strong><br><br>
+        <h3><strong>{{purchase.manager.name}} a acheté pour un total de {{purchase.totalPrice | currency:''}} €</strong><br><br>
           <em class="ng-hide" ng-show="seeMore">
             {{purchase.purchaseDate | amDateFormat:'DD/MM/YYYY HH:mm'}}
           </em>

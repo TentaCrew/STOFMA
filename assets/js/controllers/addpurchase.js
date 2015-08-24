@@ -4,6 +4,7 @@ angular.module('stofmaApp.controllers')
     .controller('AddPurchaseCtrl', ['$scope', '$state', 'productsData', 'PurchaseService', 'ProductFactory', 'SweetAlert', function ($scope, $state, productsData, PurchaseService, ProductFactory, SweetAlert) {
       $scope.availableProducts = productsData;
       $scope.productsOnSale = [];
+      $scope.listingDisplayMode = true;
 
       $scope.$watch('productSelected', function (n, o) {
         if (!angular.equals(n, o) && angular.isDefined(n)) {
@@ -71,4 +72,8 @@ angular.module('stofmaApp.controllers')
           });
         });
       };
+
+      $scope.remove = function (index) {
+        $scope.productsOnSale.splice(index, 1);
+      }
     }]);
