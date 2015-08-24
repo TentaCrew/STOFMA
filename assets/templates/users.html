@@ -9,8 +9,13 @@
     <tr ng-repeat="user in users">
       <td width="30%"><strong>{{user.name}} {{user.firstname}}</strong></td>
       <td width="20%">{{user.role}}</td>
-      <td class="text-center" width="20%">{{user.credit}}</td>
+      <td class="text-center" width="15%">{{user.credit}}</td>
       <td width="30%">{{user.email}}</td>
+      <td width="5%">
+        <md-button class="md-button md-primary md-icon-button" ng-click="goProfileEditor(user.id)">
+          <md-icon class="material-icons">create</md-icon>
+        </md-button>
+      </td>
     </tr>
   </table>
 </md-list>

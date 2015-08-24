@@ -1,7 +1,10 @@
 'use strict';
 
 angular.module('stofmaApp.controllers')
-  .controller('ProfileCtrl', ['$q','$scope', 'userData', '$state', 'Auth', 'UserService', 'SweetAlert', function ($q, $scope, userData, $state, Auth, UserService, SweetAlert) {
+  .controller('ProfileCtrl', ['$q','$scope', 'updateHimSelf','userData', '$state', 'Auth', 'UserService', 'SweetAlert', function ($q, $scope, updateHimSelf, userData, $state, Auth, UserService, SweetAlert) {
+
+    $scope.user = userData;
+    $scope.updateHimSelf = updateHimSelf;
 
     $scope.update = function ($event) {
       var form = $scope.updateUser,
@@ -18,8 +21,8 @@ angular.module('stofmaApp.controllers')
 
       if (form.$valid) {
         phoneNumber = phoneNumber.replace(/ /, '');
-        UserService.getCurrentSession().then(function (session) {
-          Auth.update(session.id,{
+        UserService.get(userData.id).then(function (user) {
+          Auth.update(user.id,{
             email: email,
             password: password,
             phoneNumber: phoneNumber

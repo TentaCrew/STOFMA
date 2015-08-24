@@ -69,6 +69,9 @@ angular.module('stofmaApp')
             },
             resolve: {
               userProvider: 'UserService',
+              updateHimSelf: function(){
+                return true;
+              },
 
               userData: function (userProvider) {
                 return userProvider.getFromSession();
@@ -251,6 +254,26 @@ angular.module('stofmaApp')
                   defer.reject();
                 return defer.promise;
               }]
+            }
+          })
+          .state('admin.profile', {
+            url: '/profile/:id',
+            controller: 'ProfileCtrl',
+            templateUrl: 'assets/templates/profile.html',
+            data: {
+              name: 'Édition du profile',
+              icon: 'person',
+              hidden : true
+            },
+            resolve: {
+              userProvider: 'UserService',
+              updateHimSelf: function(){
+                return false;
+              },
+
+              userData: function (userProvider, $stateParams) {
+                return userProvider.get($stateParams.id);
+              }
             }
           })
           .state('admin.role', {

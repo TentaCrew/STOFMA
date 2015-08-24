@@ -5,6 +5,10 @@ angular.module('stofmaApp.controllers')
 
     $scope.users = usersData;
 
+    $scope.goProfileEditor = function(id) {
+      $state.go('admin.profile', {id: id});
+    };
+
     $scope.loadUsers = function () {
       UserService.getAll().then(function(users){
         $scope.users = users;

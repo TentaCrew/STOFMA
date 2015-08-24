@@ -1,7 +1,12 @@
 <div class="">
-  <h2>Bienvenue sur votre profile {{user.firstname}} {{user.name}}</h2>
 
-  <h3>Vous avez un solde de {{user.credit}}€ sur votre compte.</h3>
+  <div ng-if="updateHimSelf">
+    <h2>Bienvenue sur votre profil {{user.firstname}} {{user.name}}</h2>
+    <h3>Vous avez un solde de {{user.credit}}€ sur votre compte.</h3>
+  </div>
+  <div ng-if="!updateHimSelf">
+    <h2>Édition du profil de {{user.firstname}} {{user.name}}</h2>
+  </div>
 
   <form name="updateUser">
     <md-input-container class="md-icon-float">
