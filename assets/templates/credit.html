@@ -4,7 +4,7 @@
   <md-input-container class="md-icon-float">
     <label>Montant à créditer</label>
     <md-icon class="material-icons">attach_money</md-icon>
-    <input type="number" name="amountToCredit" ng-model="amountToCredit" required>
+    <input type="text" name="amountToCredit" ng-model="amountToCredit" required>
 
     <div ng-messages="creditAccount.amountToCredit.$error" ng-show="creditAccount.amountToCredit.$dirty">
       <div ng-message="required">Ce champ est obligatoire</div>

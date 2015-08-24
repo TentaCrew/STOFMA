@@ -115,7 +115,7 @@ module.exports = {
     }
 
     User.findOne({id: req.param('id')}, function foundUsr(err, user) {
-      User.update(user, {credit: user.credit+req.param('credit')}, function(err,user){
+      User.update(user, {credit: Number(user.credit)+Number(req.param('credit'))}, function(err,user){
         if (err) {
           return res.negotiate(err);
         }

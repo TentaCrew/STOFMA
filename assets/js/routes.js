@@ -185,6 +185,22 @@ angular.module('stofmaApp')
               }
             }
           })
+          .state('manager.users', {
+            url: '/users',
+            controller: 'UserCtrl',
+            templateUrl: 'assets/templates/users.html',
+            data: {
+              name: 'Utilisateurs',
+              icon: 'face'
+            },
+            resolve: {
+              usersProvider: 'UserService',
+
+              usersData: function (usersProvider) {
+                return usersProvider.getAll();
+              }
+            }
+          })
           .state('manager.stock', {
             url: '/stock',
             controller: 'ProductCtrl',

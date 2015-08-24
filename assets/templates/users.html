@@ -1,0 +1,16 @@
+<md-list>
+  <table>
+    <thead>
+      <th>Nom</th>
+      <th>Rôle</th>
+      <th>Solde</th>
+      <th>E-mail</th>
+    </thead>
+    <tr ng-repeat="user in users">
+      <td width="30%"><strong>{{user.name}} {{user.firstname}}</strong></td>
+      <td width="20%">{{user.role}}</td>
+      <td class="text-center" width="20%">{{user.credit}}</td>
+      <td width="30%">{{user.email}}</td>
+    </tr>
+  </table>
+</md-list>

@@ -68,10 +68,10 @@ module.exports = {
           createdPairs.push(newPair);
           Product.findOne(newPair.product, function(err,product){
             if(saleMode){
-                product.quantity -= newPair.quantity;
+                product.quantity -= Number(newPair.quantity);
             }
             else {
-              product.quantity += newPair.quantity;
+              product.quantity += Number(newPair.quantity);
             }
             product.save(cb);
           });
@@ -104,10 +104,10 @@ module.exports = {
       Pair.findOne(p.id, function(err,pair){
         Product.findOne(pair.product, function(err,product){
           if(saleMode){
-            product.quantity += pair.quantity;
+            product.quantity += Number(pair.quantity);
           }
           else {
-            product.quantity -= pair.quantity;
+            product.quantity -= Number(pair.quantity);
           }
           product.save(cb);
         });

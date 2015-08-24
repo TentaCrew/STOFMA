@@ -32,7 +32,7 @@ module.exports = {
         //get his credit
         var totalPrice = 0;
         for (var i = 0; i < pairs.length; i++) {
-          totalPrice += pairs[i].unitPrice * pairs[i].quantity;
+          totalPrice += Number(pairs[i].unitPrice * pairs[i].quantity);
         }
 
         //check if he has enough credit
@@ -59,7 +59,7 @@ module.exports = {
             else {
 
               //update the user's credit
-              customer.credit -= newSale.totalPrice;
+              customer.credit -= Number(newSale.totalPrice);
               customer.save(function(){
                 return res.send(200, newSale);
               });
@@ -95,7 +95,7 @@ module.exports = {
         //reimburse user
         recreditUser: function(cb){
           User.findOne(sale.customer, function(err,customer){
-            customer.credit += sale.totalPrice;
+            customer.credit += Number(sale.totalPrice);
             customer.save(function(){
               cb();
             });
@@ -210,11 +210,11 @@ module.exports = {
             //get his credit
             var totalPrice = 0;
             for (var i = 0; i < pairs.length; i++) {
-              totalPrice += pairs[i].unitPrice * pairs[i].quantity;
+              totalPrice += Number(pairs[i].unitPrice * pairs[i].quantity);
             }
 
             //check if he has enough credit
-            if (customer.credit + saleToUpdate.totalPrice < totalPrice) {
+            if (Number(customer.credit) + Number(saleToUpdate.totalPrice) < Number(totalPrice)) {
               //destroy the new pairs if he hasn't
               Pair.deletePairs(pairs,true)
               .then(function(){
@@ -237,7 +237,7 @@ module.exports = {
                   updatedSale = updatedSale[0];
 
                   //update the user's credit
-                  customer.credit = customer.credit + saleToUpdate.totalPrice - updatedSale.totalPrice;
+                  customer.credit = Number(customer.credit) + Number(saleToUpdate.totalPrice) - Number(updatedSale.totalPrice);
                   customer.save(function(){
                     return res.send(200, updatedSale);
                   });
