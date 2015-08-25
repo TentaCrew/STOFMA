@@ -12,6 +12,17 @@
 module.exports.bootstrap = function(cb) {
 
   sails.on('lifted', function() {
+
+    defaultAdmin()
+      .then(function(newAdmin) {
+        if(newAdmin) {
+          console.log("Default admin account:\n\temail: " + newAdmin.email + "\n\tpassword: " + newAdmin.password);
+        }
+      })
+      .catch(function(err) {
+        sails.log.error("Couldn't create default admin account:\n" + err);
+      });
+
     if('development' === sails.config.environment) {
       // TODO Inject fake data
     }
