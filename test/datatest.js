@@ -74,7 +74,7 @@ module.exports = {
       shortName: 'BUENO',
       quantity:  10,
       price:     0.50,
-      urlImage:  '',
+      urlImage:  'https://farm3.staticflickr.com/2605/3674263209_c66b1c8228_o_d.jpg',
       minimum:   5,
       category:  'FOOD'
     },
@@ -84,7 +84,7 @@ module.exports = {
       shortName: 'COCA0',
       quantity:  12,
       price:     0.50,
-      urlImage:  '',
+      urlImage:  'http://www.moes.com/public/images/food/beverages/coca-cola-zero.jpg',
       minimum:   5,
       category:  'DRINK'
     },
@@ -94,7 +94,7 @@ module.exports = {
       shortName: 'TSB',
       quantity:  8,
       price:     9.99,
-      urlImage:  '',
+      urlImage:  'http://slacks.com/wp-content/uploads/2013/04/divablue-essential-nobg.jpg',
       minimum:   15,
       category:  'OTHER'
     },
@@ -104,7 +104,7 @@ module.exports = {
       shortName: 'SNKR',
       quantity:  20,
       price:     0.10,
-      urlImage:  '',
+      urlImage:  'http://www.findthatlogo.com/wp-content/uploads/2011/10/snickers-logo-official.jpg',
       minimum:   10,
       category:  'FOOD'
     },
@@ -114,7 +114,7 @@ module.exports = {
       shortName: 'ORAN',
       quantity:  30,
       price:     0.50,
-      urlImage:  '',
+      urlImage:  'https://leafaitsapub.files.wordpress.com/2013/04/orangina-logo.jpg',
       minimum:   10,
       category:  'DRINK'
     },
@@ -124,7 +124,7 @@ module.exports = {
       shortName: 'SKIT',
       quantity:  20,
       price:     0.30,
-      urlImage:  '',
+      urlImage:  'http://www.mygermanmarket.com/media/aitmanufacturers/176.png',
       minimum:   10,
       category:  'FOOD'
     },
@@ -134,7 +134,7 @@ module.exports = {
       shortName: 'H2O',
       quantity:  3,
       price:     0.40,
-      urlImage:  '',
+      urlImage:  'https://evianyoung.files.wordpress.com/2012/10/evian-logo11.jpg',
       minimum:   10,
       category:  'DRINK'
     },
@@ -144,7 +144,7 @@ module.exports = {
       shortName: 'COCA',
       quantity:  100,
       price:     0.50,
-      urlImage:  '',
+      urlImage:  'http://hotrodsubs.com/images/CokeLogo.jpg',
       minimum:   20,
       category:  'DRINK'
     },
