@@ -3,7 +3,7 @@
     <md-tab-label>{{cat.name}}</md-tab-label>
     <md-tab-body>
       <md-list>
-        <product-line ng-repeat="product in products | filter : cat.id track by product.id" product="product"></product-line>
+        <product-line ng-repeat="product in products | filter :{ category:cat.id } track by product.id" product="product"></product-line>
       </md-list>
     </md-tab-body>
   </md-tab>
