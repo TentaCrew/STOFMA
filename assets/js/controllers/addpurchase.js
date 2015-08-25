@@ -1,15 +1,17 @@
 'use strict';
 
 angular.module('stofmaApp.controllers')
-    .controller('AddPurchaseCtrl', ['$scope', '$state', 'productsData', 'PurchaseService', 'ProductFactory', 'SweetAlert', function ($scope, $state, productsData, PurchaseService, ProductFactory, SweetAlert) {
+    .controller('AddPurchaseCtrl', ['$scope', '$state', 'productsData', 'PurchaseService', 'ProductFactory', 'SweetAlert', '$timeout', function ($scope, $state, productsData, PurchaseService, ProductFactory, SweetAlert, $timeout) {
       $scope.availableProducts = productsData;
       $scope.productsOnSale = [];
       $scope.listingDisplayMode = true;
 
       $scope.$watch('productSelected', function (n, o) {
-        if (!angular.equals(n, o) && angular.isDefined(n)) {
-          // Pupolate a proposal number calculated with the minimum of the selected product
-          $scope.number = n == null ? null : n.minimum * 2;
+        if (!angular.equals(n, o) && angular.isDefined(n) && n !== null) {
+          // Focus the number input
+          $timeout(function(){
+            document.querySelector('#numberProduct').focus();
+          }, 500);
         }
       });
 
@@ -46,6 +48,7 @@ angular.module('stofmaApp.controllers')
 
             $scope.productSelected = null;
             $scope.totalprice = '';
+            $scope.number = '';
           }
         }
       };
