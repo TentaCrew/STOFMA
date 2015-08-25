@@ -1,5 +1,6 @@
 'use strict';
 
+var data = require('../../datatest.js');
 var assert = require('assert');
 var request = require('supertest');
 var agent;
@@ -24,13 +25,12 @@ describe('UsersController', function() {
       agent
       .post('/user')
       .send({
-        firstname: 'foo',
-        name: 'bar',
-        email: 'foo@bar.com',
-        sex: true,
-        password: 'foobar',
-        birthdate: '01/01/1991',
-        phoneNumber: '+33 3 10 10 10'
+        id:          data.user_customer_04.id,
+        firstname:   data.user_customer_04.firstname,
+        name:        data.user_customer_04.name,
+        email:       data.user_customer_04.email,
+        sex:         data.user_customer_04.sex,
+        password:    data.user_customer_04.password
       })
       .expect(200, done)
     });
@@ -49,8 +49,8 @@ describe('UsersController', function() {
       agent
       .put('/user/login')
       .send({
-        email: 'bar@foo.com',
-        password: 'barfoo'
+        email: data.user_customer_03.email,
+        password: 'wrongpwd'
       })
       .expect(404, done)
     });
@@ -61,8 +61,8 @@ describe('UsersController', function() {
       agent
       .put('/user/login')
       .send({
-        email: 'foo@bar.com',
-        password: 'foobar'
+        email: data.user_customer_03.email,
+        password: data.user_customer_03.password,
       })
       .expect(200, done);
     });
@@ -82,8 +82,8 @@ describe('UsersController', function() {
       agent
       .put('/user/login')
       .send({
-        email: 'foo@bar.com',
-        password: 'foobar'
+        email: data.user_customer_03.email,
+        password: data.user_customer_03.password,
       })
       .expect(401, done);
     });
@@ -91,52 +91,46 @@ describe('UsersController', function() {
 
   describe('#delete() as manager', function() {
     //sign up as manager before test
-    var idToDelete;
     before(function(done) {
       agent
       .post('/user')
       .send({
-        firstname:  'the',
-        name:       'manager',
-        email:      'the@manager.com',
-        sex:        true,
-        role:       'MANAGER',
-        password:   'pwd'
+        firstname:  data.user_manager_02.firstname,
+        name:       data.user_manager_02.name,
+        email:      data.user_manager_02.email,
+        sex:        data.user_manager_02.sex,
+        role:       data.user_manager_02.role,
+        password:   data.user_manager_02.password
       })
+      .end(done);
+    });
+    //log out after the test
+    after(function(done) {
+      agent
+      .put('/user/logout')
       .end(function(err, res) {
-        agent
-        .post('/user/search')
-        .send({
-          email: 'foo@bar.com'
-        })
-        .end(function(err2, res2) {
-          idToDelete = res2.body[0].id;
-        });
         done(err);
       });
     });
     //test
     it('should respond with a 401 status because only administrators can delete an user', function (done) {
       agent
-      .delete('/user/'+idToDelete)
+      .delete('/user/'+data.user_customer_03.id)
       .send()
       .expect(401, done);
     });
   });
 
   describe('#update() as manager', function() {
-    //is signed as manager since the last test
-    var idToUpdate;
+    //sign up as manager before test
     before(function(done) {
       agent
-      .post('/user/search')
+      .put('/user/login')
       .send({
-        email: 'foo@bar.com'
+        email: data.user_manager_02.email,
+        password: data.user_manager_02.password
       })
-      .end(function(err2, res2) {
-        idToUpdate = res2.body[0].id;
-      });
-      done();
+      .end(done);
     });
     //log out after the test
     after(function(done) {
@@ -149,7 +143,7 @@ describe('UsersController', function() {
     //test
     it('should respond with a 401 status because only administrators can update other users', function (done) {
       agent
-      .patch('/user/'+idToUpdate)
+      .patch('/user/'+data.user_customer_03.id)
       .send({
         name:     'newfoo',
         password: 'pass'
@@ -160,32 +154,29 @@ describe('UsersController', function() {
 
   describe('#update() as user', function() {
     //sign up as user before test
-    var idToUpdate;
     before(function(done) {
       agent
       .put('/user/login')
       .send({
-        email: 'foo@bar.com',
-        password: 'foobar'
+        email: data.user_customer_03.email,
+        password: data.user_customer_03.password
       })
-      .end(function(err,res){
-        agent
-        .post('/user/search')
-        .send({
-          email: 'the@manager.com'
-        })
-        .end(function(err2, res2) {
-          idToUpdate = res2.body[0].id;
-        });
-        done();
+      .end(done);
+    });
+    //log out after the test
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .end(function(err, res) {
+        done(err);
       });
     });
     //test
     it('should respond with a 401 status because only administrators can delete an user', function (done) {
       agent
-      .patch('/user/'+idToUpdate)
+      .patch('/user/'+data.user_customer_01.id)
       .send({
-        name:     'managerupdated',
+        name:     'managernotupdated',
         password: 'passup'
       })
       .expect(401, done);
@@ -193,23 +184,28 @@ describe('UsersController', function() {
   });
 
   describe('#update() as user (update himself)', function() {
-    //is signed as user (foo@bar.com) since the last test
-    var idToUpdate;
+    //sign up as user before test
     before(function(done) {
       agent
-      .post('/user/search')
+      .put('/user/login')
       .send({
-        email: 'foo@bar.com'
+        email: data.user_customer_03.email,
+        password: data.user_customer_03.password
       })
-      .end(function(err2, res2) {
-        idToUpdate = res2.body[0].id;
-        done();
+      .end(done);
+    });
+    //log out after the test
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .end(function(err, res) {
+        done(err);
       });
     });
     //test
     it('should update the account of the current user', function (done) {
       agent
-      .patch('/user/'+idToUpdate)
+      .patch('/user/'+data.user_customer_03.id)
       .send({
         name:     'mynewname',
         password: 'passup'
@@ -219,18 +215,15 @@ describe('UsersController', function() {
   });
 
   describe('#update() as user with credit parameter (update himself)', function() {
-    //is signed as user (foo@bar.com) since the last test
-    var idToUpdate;
+    //sign up as user before test
     before(function(done) {
       agent
-      .post('/user/search')
+      .put('/user/login')
       .send({
-        email: 'foo@bar.com'
+        email: data.user_customer_02.email,
+        password: data.user_customer_02.password
       })
-      .end(function(err2, res2) {
-        idToUpdate = res2.body[0].id;
-        done();
-      });
+      .end(done);
     });
     //log out after the test
     after(function(done) {
@@ -243,7 +236,7 @@ describe('UsersController', function() {
     //test
     it('should respond with a 401 status because only managers can update an user\'s credit', function (done) {
       agent
-      .patch('/user/'+idToUpdate)
+      .patch('/user/'+data.user_customer_02.id)
       .send({
         credit: 9999
       })
@@ -252,26 +245,15 @@ describe('UsersController', function() {
   });
 
   describe('#update() as admin', function() {
-    //sign up as administrator before test
+    //sign in as administrator before test
     before(function(done) {
       agent
-      .post('/user')
+      .put('/user/login')
       .send({
-        firstname:  'the',
-        name:       'admin',
-        email:      'the@admin.com',
-        sex:        true,
-        role:       'ADMINISTRATOR',
-        password:   'pwd'
+        email: data.user_admin_01.email,
+        password: data.user_admin_01.password
       })
-      .end(function(err, res) {
-        agent
-        .post('/user/search')
-        .send({
-          email: 'the@manager.com'
-        });
-        done();
-      });
+      .end(done);
     });
     //log out after the test
     after(function(done) {
@@ -284,7 +266,7 @@ describe('UsersController', function() {
     //test
     it('should update the manager', function (done) {
       agent
-      .patch('/user/3')
+      .patch('/user/'+data.user_customer_03.id)
       .send({
         name:     'John',
         password: 'helloworld'
@@ -294,13 +276,13 @@ describe('UsersController', function() {
   });
 
   describe('#delete() as admin', function() {
-    //sign up as administrator before test
+    //sign in as administrator before test
     before(function(done) {
       agent
       .put('/user/login')
       .send({
-        email:      'the@admin.com',
-        password:   'pwd'
+        email: data.user_admin_01.email,
+        password: data.user_admin_01.password
       })
       .end(done);
     });
@@ -313,18 +295,11 @@ describe('UsersController', function() {
       });
     });
     //test
-    it('should delete the manager', function (done) {
+    it('should delete the user', function (done) {
       agent
-      .post('/user/search')
-      .send({
-        email: 'the@manager.com'
-      })
-      .end(function(err, userToDelete) {
-        agent
-        .delete('/user/'+userToDelete.body.id)
-        .send()
-        .expect(200, done);
-      });
+      .delete('/user/'+data.user_customer_03.id)
+      .send()
+      .expect(200, done);
     });
   });
 
@@ -334,11 +309,11 @@ describe('UsersController', function() {
       agent
       .put('/user/login')
       .send({
-        email:      'the@admin.com',
-        password:   'pwd'
+        email: data.user_admin_01.email,
+        password: data.user_admin_01.password
       })
       .end(done);
-    });
+    });;
     //log out after the test
     after(function(done) {
       agent
@@ -349,13 +324,13 @@ describe('UsersController', function() {
     });
     //test
     it('should increase the credit\'s user', function (done) {
-      User.findOne({id:2}, function(err,userBefore){
+      User.findOne({id:data.user_customer_02.id}, function(err,userBefore){
         agent
-        .patch('/user/2/credit')
+        .patch('/user/'+data.user_customer_02.id+'/credit')
         .send({credit: 10})
         .expect(200)
         .end(function(){
-          User.findOne({id:2}, function(err,userAfter){
+          User.findOne({id:data.user_customer_02.id}, function(err,userAfter){
             assert.equal(userBefore.credit + 10, userAfter.credit, 'New credit is wrong.');
             done();
           });
@@ -365,13 +340,13 @@ describe('UsersController', function() {
   });
 
   describe('#credit() as user Manager', function() {
-    //sign up as administrator before test
+    //sign up as manager before test
     before(function(done) {
       agent
       .put('/user/login')
       .send({
-        email:      'manager@pro.com',
-        password:   'sale'
+        email:      data.user_manager_01.email,
+        password:   data.user_manager_01.password
       })
       .end(done);
     });
@@ -385,13 +360,13 @@ describe('UsersController', function() {
     });
     //test
     it('should increase the credit\'s user', function (done) {
-      User.findOne({id:2}, function(err,userBefore){
+      User.findOne({id:data.user_customer_02.id}, function(err,userBefore){
         agent
-        .patch('/user/2/credit')
+        .patch('/user/'+data.user_customer_02.id+'/credit')
         .send({credit: 20})
         .expect(200)
         .end(function(){
-          User.findOne({id:2}, function(err,userAfter){
+          User.findOne({id:data.user_customer_02.id}, function(err,userAfter){
             assert.equal(userBefore.credit + 20, userAfter.credit, 'New credit is wrong.');
             done();
           });
@@ -406,8 +381,8 @@ describe('UsersController', function() {
       agent
       .put('/user/login')
       .send({
-        email:      'lucie@customer.fr',
-        password:   'catword'
+        email:      data.user_customer_01.email,
+        password:   data.user_customer_01.password
       })
       .end(done);
     });
@@ -421,13 +396,13 @@ describe('UsersController', function() {
     });
     //test
     it('shouldn\'t increase the credit\'s user because a regular user hasn\'t the right', function (done) {
-      User.findOne({id:2}, function(err,userBefore){
+      User.findOne({id:data.user_customer_02.id}, function(err,userBefore){
         agent
-        .patch('/user/2/credit')
+        .patch('/user/'+data.user_customer_02.id+'/credit')
         .send({credit: 1000})
         .expect(401)
         .end(function(){
-          User.findOne({id:2}, function(err,userAfter){
+          User.findOne({id:data.user_customer_02.id}, function(err,userAfter){
             assert.equal(userBefore.credit, userAfter.credit, 'New credit is wrong.');
             done();
           });

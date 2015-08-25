@@ -1,5 +1,6 @@
 'use strict';
 
+var data = require('../../datatest.js');
 var request = require('supertest');
 var agent;
 
@@ -12,21 +13,24 @@ describe('ProductController', function() {
 
   describe('#add() as manager', function() {
 
-    //sign up as manager before test
-    before(function(done) {
+    // Before: Log in as a manager User
+    before(function(done){
       agent
-      .post('/user')
+      .put('/user/login')
       .send({
-        firstname:  'man',
-        name:       'ager',
-        email:      'mana@ger.com',
-        sex:        true,
-        role:       'MANAGER',
-        password:   'pwd'
+        email: data.user_manager_01.email,
+        password: data.user_manager_01.password
       })
-      .end(function(err, res) {
-        done(err);
-      });
+      .expect(200)
+      .end(done);
+    });
+
+    // After: Log out
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .expect(200)
+      .end(done);
     });
 
     //test
@@ -34,18 +38,40 @@ describe('ProductController', function() {
       agent
       .post('/product')
       .send({
-        name:      'coca cola',
-        shortName: 'COCA1',
-        price:      0.50,
-        urlImage:  '',
-        minimum:   10,
-        category:  'DRINK'
+        id:        data.product_08.id,
+        name:      data.product_08.name,
+        shortName: data.product_08.shortName,
+        quantity:  data.product_08.quantity,
+        price:     data.product_08.price,
+        urlImage:  data.product_08.urlImage,
+        minimum:   data.product_08.minimum,
+        category:  data.product_08.category
       })
       .expect(200, done)
     });
   });
 
   describe('#add() as manager but with a wrong category', function() {
+
+    // Before: Log in as a manager User
+    before(function(done){
+      agent
+      .put('/user/login')
+      .send({
+        email: data.user_manager_01.email,
+        password: data.user_manager_01.password
+      })
+      .expect(200)
+      .end(done);
+    });
+
+    // After: Log out
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .expect(200)
+      .end(done);
+    });
 
     //test
     it('should respond with a 400 status because the category doesn\'t exist', function (done) {
@@ -55,6 +81,7 @@ describe('ProductController', function() {
         name:      'black cat',
         shortName: 'meiko',
         price:      6000,
+        quantity:  1,
         urlImage:  '',
         minimum:   1,
         category:  'ANIMAL'
@@ -65,25 +92,37 @@ describe('ProductController', function() {
 
   describe('#add() as manager but with an existant product', function() {
 
-    //log out after the test
+    // Before: Log in as a manager User
+    before(function(done){
+      agent
+      .put('/user/login')
+      .send({
+        email: data.user_manager_01.email,
+        password: data.user_manager_01.password
+      })
+      .expect(200)
+      .end(done);
+    });
+
+    // After: Log out
     after(function(done) {
       agent
       .put('/user/logout')
-      .end(function(err, res) {
-        done(err);
-      });
+      .expect(200)
+      .end(done);
     });
 
     it('should respond with a 400 status because the name is already used', function (done) {
       agent
       .post('/product')
       .send({
-        name:      'coca cola',
-        shortName: 'COCA2',
-        price:      0.50,
-        urlImage:  '',
-        minimum:   5,
-        category:  'DRINK'
+        name:      data.product_02.name,
+        shortName: data.product_02.shortName,
+        quantity:  data.product_02.quantity,
+        price:     data.product_02.price,
+        urlImage:  data.product_02.urlImage,
+        minimum:   data.product_02.minimum,
+        category:  data.product_02.category
       })
       .expect(400, done)
     });
@@ -91,22 +130,16 @@ describe('ProductController', function() {
 
   describe('#add() as simple user', function() {
 
-    //sign up as simple user before test
-    before(function(done) {
+    // Before: Log in as a manager User
+    before(function(done){
       agent
-      .post('/user')
+      .put('/user/login')
       .send({
-        firstname:  'simple',
-        name:       'girl',
-        email:      'simple@girl.com',
-        sex:        false,
-        role:       'USER',
-        password:   'simple'
+        email: data.user_customer_03.email,
+        password: data.user_customer_03.password
       })
-      .end(function(err, res) {
-        done(err);
-      });
-    });
+      .end(done);
+    })
 
     //log out after the test
     after(function(done) {

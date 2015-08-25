@@ -31,7 +31,7 @@
   "scripts": {
     "start": "node app.js",
     "debug": "node debug app.js",
-    "test": "mocha test/bootstrap.test.js test/unit/**/*.test.js",
+    "test": "mocha test/bootstrap.test.js test/unit/**/*.test.js -t 5000",
     "preinstall": "npm install bower -g",
     "install": "bower install"
   },
