@@ -28,6 +28,8 @@ angular.module('stofmaApp.auth')
             UserService.getCurrentSession().then(function(session){
               defer.resolve();
             });
+          }).catch(function(err){
+            defer.reject(err);
           });
 
           return defer.promise;
@@ -36,6 +38,8 @@ angular.module('stofmaApp.auth')
           var defer = $q.defer();
           UserService.update(userId, formData).then(function(user){
             defer.resolve(user);
+          }).catch(function(err){
+            defer.reject(err);
           });
 
           return defer.promise;
@@ -44,6 +48,8 @@ angular.module('stofmaApp.auth')
           var defer = $q.defer();
           UserService.credit(userId, formData).then(function(user){
             defer.resolve(user);
+          }).catch(function(err){
+            defer.reject(err);
           });
 
           return defer.promise;
@@ -53,6 +59,8 @@ angular.module('stofmaApp.auth')
 
           UserService.setRole(userId, formData).then(function(user){
             defer.resolve(user);
+          }).catch(function(err){
+            defer.reject(err);
           });
 
           return defer.promise;

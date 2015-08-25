@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('stofmaApp.controllers')
-    .controller('RegisterCtrl', ['$scope', 'Auth', '$state', function ($scope, Auth, $state) {
+    .controller('RegisterCtrl', ['$scope', 'Auth', '$state', '$mdDialog', function ($scope, Auth, $state, $mdDialog) {
       $scope.register = function ($event) {
         var form = $scope.registerUser,
             sex = form.userSex.$modelValue == 0,
@@ -35,17 +35,19 @@ angular.module('stofmaApp.controllers')
           }).catch(function (err) {
             switch (err.status) {
               case 400:
-                var alert = $mdDialog.alert({
-                  title: 'Inscription échouée',
-                  content: 'Utilisateur déjà existant !',
-                  ok: 'Fermer',
-                  targetEvent: $event
-                });
-                $mdDialog
-                    .show(alert)
-                    .finally(function () {
-                      alert = undefined;
-                    });
+                if(angular.isDefined(err.invalidAttributes.email) && err.invalidAttributes.email[0].rule == 'unique') {
+                  var alert = $mdDialog.alert({
+                    title: 'Inscription échouée',
+                    content: 'Utilisateur déjà existant !',
+                    ok: 'Fermer',
+                    targetEvent: $event
+                  });
+                  $mdDialog
+                      .show(alert)
+                      .finally(function () {
+                        alert = undefined;
+                      });
+                }
                 break;
             }
           });
