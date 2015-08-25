@@ -55,15 +55,14 @@ module.exports = {
   signup: function (req, res) {
     // Creating new User
     User.create({
+      id:          req.param('id'),
       firstname:   req.param('firstname'),
       name:        req.param('name'),
       birthdate:   req.param('birthdate'),
       sex:         req.param('sex'),
       password:    req.param('password'),
       email:       req.param('email'),
-      phoneNumber: req.param('phoneNumber'),
-      role:        req.param('role'),
-      credit:      req.param('credit')
+      phoneNumber: req.param('phoneNumber')
     }, function (err, newUser) {
       if (err) {
         return res.negotiate(err);
@@ -85,14 +84,14 @@ module.exports = {
       return res.send(401, 'You do not have sufficient privileges to update other users.');
     }
 
-    // only admin can update user's role
-    if(!req.session.user.isAdmin && req.param('role')) {
-      return res.send(401, 'You do not have sufficient privileges to update user\'s role.');
-    }
+    delete req.allParams().credit;    // to update credit, use the credit function
+    delete req.allParams().role;      // to update role, use the setRole function
 
-    // only admin can update user's credit
-    if(!req.session.user.isManager && req.param('credit')) {
-      return res.send(401, 'You do not have sufficient privileges to update user\'s credit.');
+    if(updateHimSelf) {
+      delete req.allParams().name;
+      delete req.allParams().firstname;
+      delete req.allParams().birthdate;
+      delete req.allParams().sex;  
     }
 
     // Updating an User
@@ -109,12 +108,23 @@ module.exports = {
     });
   },
 
-  credit: function(req,res) {
-    if(!req.session.user.isManager) {
-      return res.send(401, 'You do not have sufficient privileges to credit user\'s account.');
-    }
+  setRole: function(req, res) {
 
-    User.findOne({id: req.param('id')}, function foundUsr(err, user) {
+    User.findOne({id: req.param('id')}, function(err, user) {
+      User.update(user, {role: req.param('role')}, function(err,user){
+        if (err) {
+          return res.negotiate(err);
+        }
+        else {
+          return res.send(user);
+        }
+      });
+    });
+  },
+
+  credit: function(req,res) {
+
+    User.findOne({id: req.param('id')}, function(err, user) {
       User.update(user, {credit: Number(user.credit)+Number(req.param('credit'))}, function(err,user){
         if (err) {
           return res.negotiate(err);

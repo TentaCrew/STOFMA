@@ -80,6 +80,11 @@ module.exports.routes = {
     controller: 'UserController',
     action: 'credit'
   },
+  // Change user's role
+  'PATCH /user/:id/role': {
+    controller: 'UserController',
+    action: 'setRole'
+  },
   // Log in user
   'PUT /user/login': {
     controller: 'UserController',

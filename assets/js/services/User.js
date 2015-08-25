@@ -155,7 +155,7 @@ angular.module('stofmaApp.services')
         var defer = $q.defer();
 
         that.users = [];
-        $http.patch('/user/'+userId, formData).success(function (result) {
+        $http.patch('/user/'+userId+'/role', formData).success(function (result) {
           defer.resolve(result);
         }).error(function (err) {
           defer.reject(err);

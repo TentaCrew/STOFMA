@@ -64,8 +64,8 @@ module.exports = {
       name:       'Girl',
       email:      'simple@customer.fr',
       sex:        false,
-      role:       'USER',
-      credit:     0,
+      role:       'MANAGER',  //won't be considered during sign up
+      credit:     1000,       //won't be considered during sign up
       password:   'simplegirl'
     },
     product_01: {

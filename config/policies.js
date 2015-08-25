@@ -29,15 +29,16 @@ module.exports.policies = {
   '*': false,
 
   'UserController': {
-    '*':      false,
-    'signup': 'unauthenticated',
-    'login':  'unauthenticated',
-    'logout': 'authenticated',
-    'update': 'authenticated',
-    'credit': 'isManager',
-    'delete': 'isAdmin',
-    'getAll': 'authenticated',
-    'get':    'authenticated'
+    '*':       false,
+    'signup':  'unauthenticated',
+    'login':   'unauthenticated',
+    'logout':  'authenticated',
+    'update':  'authenticated',
+    'setRole': 'isAdmin',
+    'credit':  'isManager',
+    'delete':  'isAdmin',
+    'getAll':  'authenticated',
+    'get':     'authenticated'
   },
 
   'ProductController': {

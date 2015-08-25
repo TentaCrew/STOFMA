@@ -30,9 +30,18 @@ describe('UsersController', function() {
         name:        data.user_customer_04.name,
         email:       data.user_customer_04.email,
         sex:         data.user_customer_04.sex,
-        password:    data.user_customer_04.password
+        password:    data.user_customer_04.password,
+        credit:      data.user_customer_04.credit,  //won't be considered
+        role:        data.user_customer_04.role     //won't be considered
       })
-      .expect(200, done)
+      .expect(200)
+      .end(function(err, res){
+        User.findOne({id: data.user_customer_04.id}, function(err,user){
+          assert.equal(user.credit, 0, 'The initial account should be equal to 0');
+          assert.equal(user.role, 'USER', 'Before a sign up, the role should be USER');
+          done();
+        });
+      });
     });
   });
 
@@ -95,6 +104,7 @@ describe('UsersController', function() {
       agent
       .post('/user')
       .send({
+        id:         data.user_manager_02.id,
         firstname:  data.user_manager_02.firstname,
         name:       data.user_manager_02.name,
         email:      data.user_manager_02.email,
@@ -146,6 +156,7 @@ describe('UsersController', function() {
       .patch('/user/'+data.user_customer_03.id)
       .send({
         name:     'newfoo',
+        credit:   100,
         password: 'pass'
       })
       .expect(401, done);
@@ -208,14 +219,17 @@ describe('UsersController', function() {
       .patch('/user/'+data.user_customer_03.id)
       .send({
         name:     'mynewname',
+        credit:   1000,
         password: 'passup'
       })
       .expect(200, done);
     });
   });
 
-  describe('#update() as user with credit parameter (update himself)', function() {
+  describe('#update() as user with credit and role parameters (update himself)', function() {
     //sign up as user before test
+    var creditBefore;
+    var roleBefore;
     before(function(done) {
       agent
       .put('/user/login')
@@ -223,7 +237,13 @@ describe('UsersController', function() {
         email: data.user_customer_02.email,
         password: data.user_customer_02.password
       })
-      .end(done);
+      .end(function(){
+        User.findOne({id:data.user_customer_02.id}, function(err,user){
+          creditBefore = user.credit;
+          roleBefore = user.role;
+          done();
+        });
+      });
     });
     //log out after the test
     after(function(done) {
@@ -234,13 +254,21 @@ describe('UsersController', function() {
       });
     });
     //test
-    it('should respond with a 401 status because only managers can update an user\'s credit', function (done) {
+    it('should respond with a 200 status but no change the credit account', function (done) {
       agent
       .patch('/user/'+data.user_customer_02.id)
       .send({
-        credit: 9999
+        credit: 9999,
+        role: 'MANAGER'
       })
-      .expect(401, done);
+      .expect(200)
+      .end(function(){
+        User.findOne({id:data.user_customer_02.id}, function(err,userAfter){
+          assert.equal(creditBefore, userAfter.credit, 'Should be the same as before the request.')
+          assert.equal(roleBefore, userAfter.role, 'Should be the same as before the request.')
+          done();
+        });
+      });
     });
   });
 
