@@ -38,7 +38,7 @@ angular.module('stofmaApp.services')
           var p = {};
           p.productId = o.id;
           p.quantity = o.quantity;
-          p.unitPrice = o.price / o.quantity;
+          p.unitPrice = o.price;
           return p;
         }
       }

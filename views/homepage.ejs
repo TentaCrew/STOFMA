@@ -39,9 +39,9 @@
     <h2 ng-bind="pageTitle" class="page-title"></h2>
   </md-toolbar>
 
-  <md-content layout-padding layout-align="center start">
-    <div ui-view class="stofma-content"></div>
-  </md-content>
+  <div layout-align="center start" role="main">
+    <md-whiteframe ui-view class="stofma-content md-whiteframe-z1" layout layout-padding></md-whiteframe>
+  </div>
 
   <md-button ng-if="fabbutton != null" class="md-fab md-fab-top-right md-accent" ng-click="fabbutton.handler()">
     <md-icon class="material-icons">{{fabbutton.icon}}</md-icon>

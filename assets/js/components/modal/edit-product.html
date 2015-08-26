@@ -1,0 +1,60 @@
+<md-dialog aria-label="Edit of the product {{name}}">
+  <form name="editProduct">
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Modification du produit {{name}}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel('not applicable')">
+          <md-icon class="material-icons" aria-label="Close dialog">clear</md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content style="min-width:400px;max-width:800px;max-height:810px;">
+      <div>
+        <md-input-container>
+          <label>Catégorie du produit</label>
+          <md-select ng-model="category" name="category" required>
+            <md-option ng-repeat="cat in categories" ng-value="cat.id">{{cat.name}}</md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container>
+          <label>Nom du produit</label>
+          <input type="text" ng-model="name" name="name" required>
+        </md-input-container>
+        <md-input-container>
+          <label>Nom court du produit</label>
+          <input type="text" ng-model="shortname" name="shortname" ng-maxlength="8" required>
+          <div ng-messages="editProduct.shortname.$error" ng-show="editProduct.shortname.$dirty">
+            <div ng-message="maxlength">La taille du nom court doit est inférieur à 8 caractères</div>
+          </div>
+        </md-input-container>
+        <md-input-container>
+          <label>Prix unitaire de vente</label>
+          <input type="text" ng-model="unitPrice" name="unitPrice" required>
+          <div ng-messages="editProduct.unitPrice.$error" ng-show="editProduct.unitPrice.$dirty">
+            <div ng-message="notaprice">Le prix doit respecter le format monétaire et doit être positif.</div>
+          </div>
+        </md-input-container>
+        <md-input-container>
+          <label>Niveau minimum acceptable</label>
+          <input type="number" ng-model="minimum" name="minimum" required>
+          <div ng-messages="editProduct.minimum.$error" ng-show="editProduct.minimum.$dirty">
+            <div ng-message="notanumber">Le nombre minimum doit être un entier positif.</div>
+          </div>
+        </md-input-container>
+        <md-input-container>
+          <label>Url du produit</label>
+          <input type="text" ng-model="urlImage" name="urlImage">
+        </md-input-container>
+      </div>
+    </md-dialog-content>
+    <div class="md-actions" layout="row" layout-margin>
+      <md-button class="md-accent" ng-click="cancel()" flex>
+        Annuler
+      </md-button>
+      <md-button class="md-raised md-primary" ng-click="submit()" flex>
+        Enregistrer
+      </md-button>
+    </div>
+  </form>
+</md-dialog>

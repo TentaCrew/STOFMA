@@ -1,0 +1,43 @@
+<form name="createProduct">
+  <h1 class="md-title">Création d'un produit</h1>
+
+  <md-input-container>
+    <label>Catégorie du produit</label>
+    <md-select ng-model="category" name="category" required>
+      <md-option ng-repeat="cat in categories" ng-value="cat.id">{{cat.name}}</md-option>
+    </md-select>
+  </md-input-container>
+  <md-input-container>
+    <label>Nom du produit</label>
+    <input type="text" ng-model="name" name="name" required>
+  </md-input-container>
+  <md-input-container>
+    <label>Nom court du produit</label>
+    <input type="text" ng-model="shortname" name="shortname" ng-maxlength="8" required>
+    <div ng-messages="createProduct.shortname.$error" ng-show="createProduct.shortname.$dirty">
+      <div ng-message="maxlength">La taille du nom court doit est inférieur à 8 caractères</div>
+    </div>
+  </md-input-container>
+  <md-input-container>
+    <label>Prix unitaire de vente</label>
+    <input type="text" ng-model="unitPrice" name="unitPrice" required>
+    <div ng-messages="createProduct.unitPrice.$error" ng-show="createProduct.unitPrice.$dirty">
+      <div ng-message="notaprice">Le prix doit respecter le format monétaire et doit être positif.</div>
+    </div>
+  </md-input-container>
+  <md-input-container>
+    <label>Niveau minimum acceptable</label>
+    <input type="number" ng-model="minimum" name="minimum" required>
+    <div ng-messages="createProduct.minimum.$error" ng-show="createProduct.minimum.$dirty">
+      <div ng-message="notanumber">Le nombre minimum doit être un entier positif.</div>
+    </div>
+  </md-input-container>
+  <md-input-container>
+    <label>Url du produit</label>
+    <input type="text" ng-model="urlImage" name="urlImage">
+  </md-input-container>
+  <md-button class="md-button md-primary md-raised" ng-click="addProduct()">
+    <md-icon class="material-icons">done</md-icon>
+    Créer le nouveau produit
+  </md-button>
+</form>

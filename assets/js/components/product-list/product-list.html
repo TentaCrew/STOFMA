@@ -9,6 +9,8 @@
   </md-tab>
 </md-tabs>
 
+<h2 class="text-center" ng-if="products.length == 0">Aucun produit enregistré pour le moment.</h2>
+
 <md-toolbar ng-if="isSellingMode">
   <div class="md-toolbar-tools md-toolbar-tools-bottom">
     <span class="md-flex">Total à payer : {{sum|currency:''}} €</span>

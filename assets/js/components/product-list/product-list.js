@@ -3,9 +3,10 @@ angular.module('stofmaApp.components')
       return {
         restrict: 'A',
         scope: {
-          categories: "=",
           products: "=",
-          usage: "@"
+          usage: "@",
+          removeHandler : "=remove", // Must be an function returning a promise.
+          editHandler : "=edit" // Must be an function returning a promise.
         },
         controller: ['$scope', function ($scope) {
           $scope.sum = 0.0;
@@ -15,27 +16,22 @@ angular.module('stofmaApp.components')
           $scope.isSelectingMode = false;
           $scope.tabSelected = 0;
 
-          $scope.categories = [
-            {
-              id: 'DRINK',
-              name: 'Boissons'
-            },
-            {
-              id: 'FOOD',
-              name: 'Nourritures'
-            },
-            {
-              id: 'OTHER',
-              name: 'Autres'
-            }
-          ];
+          ProductService.getCategories().then(function(cats){
+            $scope.categories = cats;
+          });
 
           $scope.selectProduct = function (id, c) {
             angular.forEach($scope.products, function (v, k) {
               if (v.id == id) {
                 if (c == 0){
                   if($scope.isSelectingMode){
-                    $scope.products.splice(k, 1);
+                    if(angular.isDefined($scope.removeHandler)){
+                      $scope.removeHandler(id).then(function(){
+                        $scope.products.splice(k, 1);
+                      })
+                    } else {
+                      $scope.products.splice(k, 1);
+                    }
                   } else {
                     $scope.products[k].selected = 0;
                   }
@@ -50,10 +46,27 @@ angular.module('stofmaApp.components')
             $scope.$parent.refreshProduct();
           };
 
+          $scope.edit = function (product) {
+            if($scope.canBeEdit) {
+              $scope.editHandler(product).then(function(productEdited){
+                // SEARCH PRODUCT AND EDIT IT
+                for(var i = 0; i < $scope.products.length; i++){
+                  if($scope.products[i].id == product.id){
+                    $scope.products[i] = productEdited;
+                  }
+                }
+              });
+            }
+          };
+
           $scope.$watch("usage", function (nv, ov) {
             $scope.isSellingMode = nv == 'selling';
             $scope.isListingMode = nv == 'listing';
             $scope.isSelectingMode = nv == 'selecting';
+          });
+
+          $scope.$watch("editHandler", function (nv, ov) {
+            $scope.canBeEdit = angular.isDefined(nv) && angular.isFunction(nv);
           });
 
           $scope.$watch("products", function (nv, ov) {

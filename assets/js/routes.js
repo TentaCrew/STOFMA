@@ -79,9 +79,9 @@ angular.module('stofmaApp')
             }
           })
           .state('user.products', {
-            url: '/products',
-            controller: 'ProductCtrl',
-            templateUrl: 'assets/templates/products.html',
+            url: '/stall',
+            controller: 'StallProductCtrl',
+            templateUrl: 'assets/templates/stallproducts.html',
             data: {
               name: 'La cafet\'',
               icon: 'list'
@@ -140,21 +140,6 @@ angular.module('stofmaApp')
               }
             }
           })
-          .state('manager.credit', {
-            url: '/credit',
-            controller: 'CreditCtrl',
-            templateUrl: 'assets/templates/credit.html',
-            data: {
-              name: 'Paiements et soldes',
-              icon: 'attach_money'
-            },
-            resolve: {
-              userProvider: 'UserService',
-              usersData: function (userProvider) {
-                return userProvider.getAll();
-              }
-            }
-          })
           .state('manager.sales', {
             url: '/sales',
             controller: 'SalesCtrl',
@@ -204,26 +189,54 @@ angular.module('stofmaApp')
               }
             }
           })
-          .state('manager.stock', {
-            url: '/stock',
+          .state('manager.credit', {
+            url: '/credit',
+            controller: 'CreditCtrl',
+            templateUrl: 'assets/templates/credit.html',
+            data: {
+              name: 'Paiements et soldes',
+              icon: 'attach_money'
+            },
+            resolve: {
+              userProvider: 'UserService',
+              usersData: function (userProvider) {
+                return userProvider.getAll();
+              }
+            }
+          })
+          .state('manager.products', {
+            url: '/products',
             controller: 'ProductCtrl',
             templateUrl: 'assets/templates/products.html',
             data: {
-              name: 'Les stocks',
+              name: 'Les produits',
               icon: 'layers'
             },
             resolve: {
-              produtsProvider: 'ProductService',
+              productsProvider: 'ProductService',
 
-              productsData: function (produtsProvider) {
-                return produtsProvider.getProducts();
+              productsData: function (productsProvider) {
+                return productsProvider.getProducts();
+              },
+
+              categoriesData: function (productsProvider) {
+                return productsProvider.getCategories();
               }
+            }
+          })
+          .state('manager.products.add', {
+            url: '/add',
+            controller: 'AddProductCtrl',
+            templateUrl: 'assets/templates/products.add.html',
+            data: {
+              name: 'Ajout d\'un produit',
+              hidden: true
             }
           })
           .state('manager.addpurchase', {
             url: '/purchase/add',
             controller: 'AddPurchaseCtrl',
-            templateUrl: 'assets/templates/addpurchase.html',
+            templateUrl: 'assets/templates/purchases.add.html',
             data: {
               name: 'Ajout d\'un achat',
               hidden: true

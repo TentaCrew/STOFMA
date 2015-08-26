@@ -19,7 +19,7 @@ angular.module('stofmaApp.controllers')
         $scope.sum = 0;
         if (angular.isArray(n)) {
           angular.forEach(n, function (v) {
-            $scope.sum += v.price;
+            $scope.sum += v.price * v.quantity;
           });
         }
       }, true);
@@ -32,13 +32,13 @@ angular.module('stofmaApp.controllers')
         if ($scope.selectProduct.$valid) {
           if ($scope.productSelected !== null) {
             $scope.productSelected.quantity = $scope.number;
-            $scope.productSelected.price = parseFloat($scope.totalprice);
+            $scope.productSelected.price = parseFloat($scope.totalprice) / $scope.number;
 
             var amended = false;
             for (var i = 0; i < $scope.productsOnSale.length; i++) {
               if ($scope.productsOnSale[i].id == $scope.productSelected.id) {
                 $scope.productsOnSale[i].quantity += $scope.number;
-                $scope.productsOnSale[i].price += parseFloat($scope.totalprice);
+                $scope.productsOnSale[i].price += parseFloat($scope.totalprice) / $scope.number;
                 amended = true;
                 break;
               }

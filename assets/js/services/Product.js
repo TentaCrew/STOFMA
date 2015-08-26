@@ -5,6 +5,10 @@ angular.module('stofmaApp.services');
 angular.module('stofmaApp.services')
     .service('ProductService', ['$q', '$http', function ($q, $http) {
       this.getProducts = getProducts;
+      this.getCategories = getCategories;
+      this.createProduct = createProduct;
+      this.deleteProduct = deleteProduct;
+      this.editProduct = editProduct;
 
       function getProducts(forSelling) {
         var defer = $q.defer();
@@ -32,6 +36,57 @@ angular.module('stofmaApp.services')
           defer.reject();
         });
 
+        return defer.promise;
+      }
+
+      function getCategories() {
+        var defer = $q.defer();
+
+        defer.resolve([
+          {
+            id: 'DRINK',
+            name: 'Boissons'
+          },
+          {
+            id: 'FOOD',
+            name: 'Nourritures'
+          },
+          {
+            id: 'OTHER',
+            name: 'Autres'
+          }
+        ]);
+
+        return defer.promise;
+      }
+
+      function createProduct(productForm) {
+        var defer = $q.defer();
+        $http.post('/product', productForm).success(function (np) {
+          defer.resolve(np);
+        }).error(function (err) {
+          defer.reject();
+        });
+        return defer.promise;
+      }
+
+      function deleteProduct(id) {
+        var defer = $q.defer();
+        $http.delete('/product/' + id).success(function (data) {
+          defer.resolve(true);
+        }).error(function (err) {
+          defer.reject(false);
+        });
+        return defer.promise;
+      }
+
+      function editProduct(id, productForm) {
+        var defer = $q.defer();
+        $http.patch('/product/' + id, productForm).success(function (np) {
+          defer.resolve(np[0]);
+        }).error(function (err) {
+          defer.reject();
+        });
         return defer.promise;
       }
     }])

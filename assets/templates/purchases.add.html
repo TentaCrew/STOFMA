@@ -1,13 +1,12 @@
 <md-list ng-if="!listingDisplayMode">
-  <div data-product-list data-categories="categories" data-products="productsOnSale" data-usage="selecting"
-       class="product-list"></div>
+  <div data-product-list data-products="productsOnSale" data-usage="selecting" class="product-list"></div>
 </md-list>
 <md-list ng-if="listingDisplayMode" class="padding">
   <md-list-item class="md-2-line" ng-repeat="product in productsOnSale">
     <img ng-src="{{product.urlImage}}" alt="image of {{product.name}}" class="md-avatar"/>
     <div class="md-list-item-text">
       <h3>{{product.name}}</h3>
-      <h4><em>{{product.quantity}}x – </em><strong>{{product.price | currency:''}} €</strong><em> ({{product.price / product.quantity | currency:''}} € / ptc)</em></h4>
+      <h4><em>{{product.quantity}} x </em><strong>{{product.price | currency:''}} €</strong><em> – {{product.price * product.quantity | currency:''}} €</em></h4>
     </div>
     <div layout="row" layout-align="end center">
       <md-button class="md-button md-accent md-icon-button" ng-click="remove($index)">
