@@ -5,7 +5,7 @@ angular.module('stofmaApp.components')
         scope: {
           products: "=",
           usage: "@",
-          removeHandler : "=remove", // Must be an function returning a promise.
+          activateHandler : "=activate", // Must be an function returning a promise.
           editHandler : "=edit" // Must be an function returning a promise.
         },
         controller: ['$scope', function ($scope) {
@@ -25,19 +25,33 @@ angular.module('stofmaApp.components')
               if (v.id == id) {
                 if (c == 0){
                   if($scope.isSelectingMode){
-                    if(angular.isDefined($scope.removeHandler)){
-                      $scope.removeHandler(id).then(function(){
-                        $scope.products.splice(k, 1);
+                    if(angular.isDefined($scope.activateHandler)){
+                      $scope.activateHandler(id,false).then(function(){
+                        v.isActive = false;
                       })
                     } else {
-                      $scope.products.splice(k, 1);
+                      v.isActive = false;
                     }
                   } else {
                     $scope.products[k].selected = 0;
                   }
                 }
-                else
+                else if(c == 2){
+                  if($scope.isSelectingMode){
+                    if(angular.isDefined($scope.activateHandler)){
+                      $scope.activateHandler(id,true).then(function(){
+                        v.isActive = true;
+                      })
+                    } else {
+                      v.isActive = true;
+                    }
+                  } else {
+                    $scope.products[k].selected = 0;
+                  }
+                }
+                else {
                   $scope.products[k].selected = v.selected + c > 0 ? (v.selected + c > v.quantity ? v.quantity : v.selected += c) : 0;
+                }
               }
             });
           };
@@ -115,4 +129,3 @@ angular.module('stofmaApp.components')
         templateUrl: '/js/components/product-list/product-list.html'
       };
     }]);
-

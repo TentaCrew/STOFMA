@@ -8,18 +8,18 @@ angular.module('stofmaApp.controllers')
         $state.go('manager.products.add');
       });
 
-      $scope.onRemove = function (id) {
+      $scope.onSetEnable = function (id, isEnable) {
         var defer = $q.defer();
 
         $mdBottomSheet.show({
-          templateUrl: '/js/components/bottom-sheet/bottom-sheet-confirm-remove-product.html',
-          controller: 'BottomSheetConfirmCtrl'
+            templateUrl: '/js/components/bottom-sheet/bottom-sheet-confirm-'+(isEnable ? 'enable' : 'disable')+'-product.html',
+            controller: 'BottomSheetConfirmCtrl'
         }).then(function (done) {
           if (done) {
-            ProductService.deleteProduct(id).then(function () {
+            ProductService.setProductEnable(id, isEnable).then(function () {
               $mdToast.show(
                   $mdToast.simple()
-                      .content('Produit supprimé.')
+                      .content('Produit ' + (isEnable ? 'réactivé' : 'désactivé'))
                       .position("bottom right")
                       .hideDelay(3000)
               );
@@ -27,7 +27,7 @@ angular.module('stofmaApp.controllers')
             }).catch(function (err) {
               $mdToast.show(
                   $mdToast.simple()
-                      .content('Le produit n\'a pas été supprimé.')
+                      .content('Le produit n\'a pas été ' + (isEnable ? 'réactivé' : 'désactivé'))
                       .position("bottom right")
                       .hideDelay(5000)
               );

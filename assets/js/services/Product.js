@@ -7,7 +7,7 @@ angular.module('stofmaApp.services')
       this.getProducts = getProducts;
       this.getCategories = getCategories;
       this.createProduct = createProduct;
-      this.deleteProduct = deleteProduct;
+      this.setProductEnable = setProductEnable;
       this.editProduct = editProduct;
 
       function getProducts(forSelling) {
@@ -70,9 +70,9 @@ angular.module('stofmaApp.services')
         return defer.promise;
       }
 
-      function deleteProduct(id) {
+      function setProductEnable(id, isEnable) {
         var defer = $q.defer();
-        $http.delete('/product/' + id).success(function (data) {
+        $http.patch('/product/' + id, {isActive: isEnable}).success(function (data) {
           defer.resolve(true);
         }).error(function (err) {
           defer.reject(false);
@@ -100,4 +100,3 @@ angular.module('stofmaApp.services')
         }
       }
     }]);
-

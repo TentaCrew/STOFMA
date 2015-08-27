@@ -24,8 +24,11 @@
     <md-button class="md-icon-button md-primary" ng-if="$parent.$parent.canBeEdit" ng-click="edit(product)">
       <md-icon class="material-icons">edit</md-icon>
     </md-button>
-    <md-button class="md-icon-button md-accent" ng-click="clear(product.id)">
+    <md-button ng-if="product.isActive" class="md-icon-button md-accent" ng-click="disable(product.id)">
       <md-icon class="material-icons">clear</md-icon>
+    </md-button>
+    <md-button ng-if="!product.isActive" class="md-icon-button md-accent" ng-click="enable(product.id)">
+      <md-icon class="material-icons">cached</md-icon>
     </md-button>
   </div>
   <div ng-if="$parent.isListingMode && !product.isOut()">
@@ -33,4 +36,3 @@
   </div>
 </md-list-item>
 <md-divider ng-if="!$parent.$last"></md-divider>
-

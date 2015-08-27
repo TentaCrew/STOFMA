@@ -39,7 +39,11 @@ module.exports = {
       in: ['DRINK','FOOD','OTHER'],
       required: true
     },
-    isActive: { // false : No longer follow for restocking
+    isActive: {
+      type: 'BOOLEAN',
+      defaultsTo: true
+    },
+    notifyForRestocking: {
       type: 'BOOLEAN',
       defaultsTo: true
     }

@@ -10,8 +10,12 @@ angular.module('stofmaApp.components')
           $scope.$parent.selectProduct(id, -1);
         };
 
-        $scope.clear = function (id) {
+        $scope.disable = function (id) {
           $scope.$parent.selectProduct(id, 0);
+        };
+
+        $scope.enable = function (id) {
+          $scope.$parent.selectProduct(id, 2);
         };
 
         $scope.add = function (id) {
@@ -28,4 +32,3 @@ angular.module('stofmaApp.components')
       templateUrl: '/js/components/product-list/product-line/product-line.html'
     };
   });
-
