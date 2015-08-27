@@ -23,21 +23,21 @@
     </md-list-item>
   </md-list>
 </form>
-<h3 ng-if="payments.length > 0">Liste des paiements</h3>
+<h3 ng-if="payments.length > 0">Liste des opérations</h3>
 <md-list>
   <section ng-repeat="payment in payments">
-    <md-list-item class="md-2-line">
-      <div class="md-list-item-text" layout="row" layout-sm="column">
-        <h3>
-          <strong>{{payment.customer.firstname}} {{payment.customer.name}} </strong>
-          a été crédité{{payment.customer.sex ? '' : 'e'}} de <strong>{{payment.amount}}€ </strong>
-          ({{payment.manager.name}}) le <em>{{payment.paymentDate | amDateFormat:'DD/MM/YYYY'}}</em>
-          à {{payment.paymentDate | amDateFormat:'HH:mm'}}
-        </h3>
+    <md-list-item class="md-3-line md-no-proxy" role="listitem">
+      <div class="md-list-item-text">
+        <h3><strong>{{payment.customer.firstname}} {{payment.customer.name}}</strong></h3>
+        <h4 ng-if="payment.amount >= 0">Crédité le <em>{{payment.paymentDate | amDateFormat:'DD/MM/YYYY'}}</em>
+          à <em>{{payment.paymentDate | amDateFormat:'HH:mm'}}</em> par {{ payment.manager.name }}</h4>
+        <h4 ng-if="payment.amount < 0">Débité le <em>{{payment.paymentDate | amDateFormat:'DD/MM/YYYY'}}</em>
+          à <em>{{payment.paymentDate | amDateFormat:'HH:mm'}}</em> par {{ payment.manager.name }}</h4>
+        <p>Montant : <strong>{{payment.amount}} €</strong></p>
       </div>
     </md-list-item>
+    <md-divider ng-if="!$last"></md-divider>
   </section>
 </md-list>
 <h3 class="text-center" ng-if="payments.length == 0">Aucun paiement réalisé.</h3>
 <h1>{{chat}}</h1>
-</div>
