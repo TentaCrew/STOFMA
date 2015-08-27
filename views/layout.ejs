@@ -69,9 +69,15 @@
     <!--STYLES END-->
   </head>
 
-  <body layout="row" ng-cloak ng-controller="MainCtrl as main">
-    <%- body %>
-
+  <body ng-controller="MainCtrl as main">
+    <div class="screen-intro" layout="column" layout-align="center center" ng-hide="appLoaded">
+      <h1 class="md-display-1">Student Office Manager</h1>
+      <img src="/images/logo_stofma.png" alt="Logo for intro" class="text-center">
+      <md-progress-circular class="md-warn" md-diameter="32" md-mode="indeterminate"></md-progress-circular>
+    </div>
+    <div class="wrap" layout="row" ng-cloak>
+      <%- body %>
+    </div>
     <!--
         Client-side Templates
         ========================

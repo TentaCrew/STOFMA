@@ -8,6 +8,10 @@
   margin: 0 auto;
 }
 
+.wrap {
+    height: 100%;
+}
+
 .product-list-line .md-button.md-icon-button {
   line-height: 32px;
   min-height: 32px;
@@ -63,4 +67,25 @@ md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
 
 [ui-view] {
   width: 100%;
+}
+
+.screen-intro {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgb(21,101,192);
+  z-index: 1000;
+  color: white;
+  transition: 0.5s linear opacity;
+  
+  img {
+    width: 100%;
+    max-width: 350px;
+  }
+  
+  &.ng-hide-add-active {
+    opacity: 0;
+  }
 }

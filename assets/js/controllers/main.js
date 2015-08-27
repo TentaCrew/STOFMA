@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('stofmaApp.controllers')
-    .controller('MainCtrl', ['$scope', '$rootScope', '$state', '$q', '$mdBottomSheet', '$mdSidenav', 'UserService', function ($scope, $rootScope, $state, $q, $mdBottomSheet, $mdSidenav, UserService) {
+    .controller('MainCtrl', ['$scope', '$rootScope', '$state', '$q', '$mdBottomSheet', '$mdSidenav', '$timeout', 'UserService', function ($scope, $rootScope, $state, $q, $mdBottomSheet, $mdSidenav, $timeout, UserService) {
       var that = this;
       $scope.pageTitle = "";
 
@@ -24,6 +24,18 @@ angular.module('stofmaApp.controllers')
         if (fromState.data)
           $scope.pageTitle = fromState.data.name;
       });
+      
+      var timeoutAppLoaded = null;
+      $scope.$on("$viewContentLoaded", function(){
+          console.log(timeoutAppLoaded);
+        if(timeoutAppLoaded !== null)
+          $timeout.cancel(timeoutAppLoaded);
+          
+        timeoutAppLoaded = $timeout(function(){
+          $scope.appLoaded = true;
+          console.log('LOADED');
+        }, 2000);
+      })
 
 
       this.toggleMenu = function () {
