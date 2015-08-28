@@ -59,8 +59,8 @@ angular.module('stofmaApp.controllers')
         $mdBottomSheet.show({
           templateUrl: '/js/components/bottom-sheet/bottom-sheet-confirm-remove-sale.html',
           controller: 'BottomSheetConfirmCtrl'
-        }).then(function (done) {
-          if (done) {
+        }).then(function (response) {
+          if (response.confirm) {
             SaleService.deleteSale(id).then(function () {
               $mdToast.show(
                   $mdToast.simple()
@@ -76,7 +76,7 @@ angular.module('stofmaApp.controllers')
                       .position("bottom right")
                       .hideDelay(5000)
               );
-            })
+            });
           }
         });
       };
