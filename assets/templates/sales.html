@@ -1,37 +1,30 @@
 <md-list>
   <section ng-repeat="sale in sales">
-    <md-list-item class="md-2-line" ng-if="sale.type != 'header'">
-      <div class="md-list-item-text" layout="row" layout-sm="column">
-        <h3 title="{{sale.saleDate | amDateFormat:'LLLL'}}">{{sale.saleDate | amDateFormat:'HH:mm'}}&nbsp;</h3>
-
-        <h3><strong>{{sale.manager.firstname}} {{sale.manager.name}}</strong> a vendu à <strong>{{sale.customer.firstname || "un"}}
-          {{sale.customer.name || "invité"}}</strong> pour {{
-          sale.totalPrice | currency:''}} €<br><br>
-        <em class="ng-hide" ng-show="seeMore">
-          {{sale.saleDate | amDateFormat:'DD/MM/YYYY HH:mm'}}
-        </em>
-        </h3>
-      </div>
-      <ul class="ng-hide" ng-show="seeMore">
-        <li ng-repeat="pair in sale.pairs">
-          {{pair.quantity}} x <em><strong>{{pair.name}}</strong></em> : <strong>{{pair.price|currency:''}} €</strong>
-        </li>
-      </ul>
-      <div layout="row" layout-align="end center">
-        <md-button class="md-button md-icon-button" ng-click="seeMore=!seeMore">
-          <md-icon class="material-icons">add</md-icon>
-        </md-button>
-        <md-button class="md-button md-primary md-icon-button" ng-click="amend(sale.id, $index)">
-          <md-icon class="material-icons">create</md-icon>
-        </md-button>
-        <md-button class="md-button md-accent md-icon-button" ng-click="remove(sale.id, $index)">
-          <md-icon class="material-icons">clear</md-icon>
-        </md-button>
-      </div>
-    </md-list-item>
     <div ng-if="sale.type == 'header'">
       <md-subheader>{{sale.title}}</md-subheader>
     </div>
+    <md-list-item class="md-3-line md-no-proxy" role="listitem" ng-if="sale.type != 'header'">
+      <div class="md-list-item-text">
+        <h3 title="{{sale.saleDate | amDateFormat:'LLLL'}}"><strong>{{sale.customer.firstname}} {{sale.customer.name}}</strong></h3>
+        <h4>Vendu <span class="ng-hide" ng-show="seeMore">le <em>{{sale.saleDate | amDateFormat:'DD/MM/YYYY à HH:mm'}} </em>
+        </span>par <strong>{{sale.manager.firstname}} {{sale.manager.name}}</strong></h4>
+        <p>Montant : <strong>{{ sale.totalPrice | currency:''}} €</strong></p>
+        <md-button class="md-fab md-mini" ng-click="seeMore=!seeMore">
+          <md-icon>add</md-icon>
+        </md-button>
+        <md-button class="md-fab md-mini md-primary" ng-click="amend(sale.id, $index)">
+          <md-icon>create</md-icon>
+        </md-button>
+        <md-button class="md-fab md-mini md-warn" ng-click="remove(sale.id, $index)">
+          <md-icon>clear</md-icon>
+        </md-button>
+        <ul class="ng-hide" ng-show="seeMore">
+          <li ng-repeat="pair in sale.pairs">
+            {{pair.quantity}} x <em><strong>{{pair.name}}</strong></em> : <strong>{{pair.price|currency:''}} €</strong>
+          </li>
+        </ul>
+      </div>
+    </md-list-item>
     <md-divider ng-if="!$last"></md-divider>
   </section>
 </md-list>
