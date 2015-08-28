@@ -160,18 +160,6 @@ module.exports = {
     });
   },
 
-  getAll: function (req, res) {
-    // Getting all users
-    User.find(function(err, users) {
-      if (err) {
-        return res.negotiate(err);
-      }
-      else {
-        return res.send(200, users);
-      }
-    });
-  },
-
   get: function (req, res) {
     // Getting users from some parameters
     User.find(req.allParams(), function(err, user) {

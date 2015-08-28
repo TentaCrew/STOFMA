@@ -100,18 +100,13 @@ module.exports.routes = {
     controller: 'UserController',
     action: 'delete'
   },
-  // Get all users
+  /// Get some users
   'GET /user': {
-    controller: 'UserController',
-    action: 'getAll'
-  },
-  // Get one user
-  'GET /user/:id': {
     controller: 'UserController',
     action: 'get'
   },
-  // Get some users
-  'POST /user/search': {
+  // Get one user
+  'GET /user/:id': {
     controller: 'UserController',
     action: 'get'
   },
@@ -141,7 +136,7 @@ module.exports.routes = {
     action: 'get'
   },
   // Get some products
-  'POST /product/search': {
+  'GET /product': {
     controller: 'ProductController',
     action: 'get'
   },
@@ -166,11 +161,6 @@ module.exports.routes = {
     action: 'delete'
   },
   // Get some sales
-  'POST /sale/search': {
-    controller: 'SaleController',
-    action: 'get'
-  },
-  // Get all sales
   'GET /sale': {
     controller: 'SaleController',
     action: 'get'
@@ -201,11 +191,6 @@ module.exports.routes = {
     action: 'delete'
   },
   // Get some purchases
-  'POST /purchase/search': {
-    controller: 'PurchaseController',
-    action: 'get'
-  },
-  // Get all purchases
   'GET /purchase': {
     controller: 'PurchaseController',
     action: 'get'

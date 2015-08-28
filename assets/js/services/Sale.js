@@ -9,7 +9,7 @@ angular.module('stofmaApp.services')
       function getSales() {
         var defer = $q.defer();
 
-        $http.post('/sale/search').success(function (data) {
+        $http.get('/sale').success(function (data) {
           defer.resolve(data.map(SaleFactory.remap));
         }).error(function (err) {
           defer.reject([]);

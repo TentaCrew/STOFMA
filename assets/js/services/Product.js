@@ -13,7 +13,7 @@ angular.module('stofmaApp.services')
       function getProducts(forSelling) {
         var defer = $q.defer();
 
-        $http.post('/product/search').success(function (data) {
+        $http.get('/product').success(function (data) {
           var r = data;
 
           r = r.map(function (o) {
