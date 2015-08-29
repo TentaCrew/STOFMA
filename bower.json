@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "homepage": "https://github.com/ciaa-cnam/STOFMA",
   "dependencies": {
-    "angular": "~1.4.0",
+    "angular": "1.4.4",
     "angular-ui-router": "~0.2.15",
     "angular-material": "~0.10.1",
     "angular-sweetalert": "~1.1.0",
@@ -12,6 +12,6 @@
     "angular-moment": "~0.10.2"
   },
   "resolutions": {
-    "angular": "1.4.4"
+    "angular": "1.4.5"
   }
 }
