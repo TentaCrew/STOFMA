@@ -1,4 +1,4 @@
-<md-list>
+<md-list ng-hide="sales.length == 0">
   <section ng-repeat="sale in sales">
     <div ng-if="sale.type == 'header'">
       <md-subheader>{{sale.title}}</md-subheader>
@@ -34,4 +34,4 @@
     <md-divider ng-if="!$last"></md-divider>
   </section>
 </md-list>
-<h2 class="text-center" ng-if="sales.length == 0">Aucune vente n'a été enregistrée pour le moment.</h2>
+<h2 class="text-center" ng-show="sales.length == 0">Aucune vente n'a été enregistrée pour le moment.</h2>

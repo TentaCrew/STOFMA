@@ -2,8 +2,11 @@
 
 angular.module('stofmaApp.controllers')
 
-    .controller('SellCtrl', ['$scope', 'productsData', 'ProductService', 'SaleService', '$mdBottomSheet', 'SweetAlert', function ($scope, productsData, ProductService, SaleService, $mdBottomSheet, SweetAlert) {
+    .controller('SellCtrl', ['$scope', '$q', 'productsData', 'usersData', 'ProductService', 'SaleService', '$mdBottomSheet', 'SweetAlert', 'PaymentService', 'PaymentFactory', function ($scope, $q, productsData, usersData, ProductService, SaleService, $mdBottomSheet, SweetAlert, PaymentService, PaymentFactory) {
       $scope.products = productsData;
+      $scope.users = usersData;
+
+      $scope.customer = null;
 
       $scope.refreshProduct = function () {
         ProductService.getProducts(true).then(function (data) {
@@ -12,6 +15,10 @@ angular.module('stofmaApp.controllers')
       };
 
       $scope.confirmSelling = function ($event) {
+        if ($scope.customer === null) {
+          return;
+        }
+
         var products = $scope.products.filter(function (o) {
           return o.selected > 0;
         });
@@ -28,22 +35,17 @@ angular.module('stofmaApp.controllers')
           locals: {
             productsToSell: products,
             sum: sum
-          },
-          resolve: {
-            userProvider: 'UserService',
-            usersData: function (UserService) {
-              return UserService.getAll();
-            }
           }
-        }).then(function (r) {
-          if (r.ok) {
-            SaleService.doSale(r.user.id, products).then(function () {
+        }).then(function (response) {
+          if (response.confirm) {
+            SaleService.doSale($scope.customer.id, products, response.paymentMode).then(function (newSale) {
               SweetAlert.swal({
-                title: 'Vente terminée pour ' + r.user.getName() + '!',
+                title: 'Vente terminée pour ' + $scope.customer.getName() + '!',
                 type: 'success'
               }, function (ok) {
                 if (ok) {
                   $scope.refreshProduct();
+                  $scope.customer = null;
                 }
               });
             }).catch(function () {

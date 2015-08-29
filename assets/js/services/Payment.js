@@ -3,9 +3,26 @@
 angular.module('stofmaApp.services')
     .service('PaymentService', ['$q', '$http', 'PaymentFactory', function ($q, $http, PaymentFactory) {
       var that = this;
+      this.payments = [];
+
+      this.paymentModes = [{
+        'id': 'IN_CASH',
+        'name': 'Liquide'
+      }, {
+        'id': 'IN_CREDIT',
+        'name': 'Crédit'
+      }, {
+        'id': 'IN_TRANSFER',
+        'name': 'Virement'
+      }, {
+        'id': 'IN_CHECK',
+        'name': 'Chèque'
+      }];
 
       this.getAll = getAll;
       this.get = get;
+      this.getPaymentModes = getPaymentModes;
+      this.doPayment = doPayment;
 
       function getAll() {
         var defer = $q.defer();
@@ -38,14 +55,53 @@ angular.module('stofmaApp.services')
 
         return defer.promise;
       }
+
+      function doPayment(customer, type, amount) {
+        var defer = $q.defer();
+
+        var isTypeCorrect = that.paymentModes.filter(function (p) {
+              return p.id == type;
+            }).length == 1;
+
+        if (isTypeCorrect) {
+          $http.post('/payment', {
+            customerId: customer,
+            type: type,
+            amount: amount
+          }).success(function (data) {
+            defer.resolve(data);
+          }).error(function (err) {
+            defer.reject(err);
+          });
+        } else {
+          defer.reject();
+        }
+
+
+        return defer.promise;
+      }
+
+      function getPaymentModes() {
+        var defer = $q.defer();
+
+        defer.resolve(that.paymentModes);
+
+        return defer.promise;
+      }
     }])
-    .factory('PaymentFactory', function(){
+    .factory('PaymentFactory', function () {
       return {
-        remap : function(o){
-          o.getPayment = function(){
+        remap: function (o) {
+          o.getPayment = function () {
             return o.manager.name + ' ' + o.customer.name + ' ' + o.amount;
           };
           return o;
+        },
+        isCredit: function (o) {
+          var i = o.id;
+          if(angular.isUndefined(i))
+            i = o;
+          return i.indexOf('CREDIT') >= 0;
         }
       }
     });

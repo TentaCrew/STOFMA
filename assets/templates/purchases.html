@@ -1,4 +1,4 @@
-<md-list>
+<md-list ng-hide="purchases.length == 0">
   <section ng-repeat="purchase in purchases">
     <div ng-if="purchase.type == 'header'">
       <md-subheader>{{purchase.title}}</md-subheader>
@@ -32,4 +32,4 @@
     <md-divider ng-if="!$last"></md-divider>
   </section>
 </md-list>
-<h2 class="text-center" ng-if="purchases.length == 0">Aucun achat n'a été enregistré pour le moment.</h2>
+<h2 class="text-center" ng-show="purchases.length == 0">Aucun achat n'a été enregistré pour le moment.</h2>

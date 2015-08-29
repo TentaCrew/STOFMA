@@ -1,1 +1,13 @@
-<div data-product-list data-products="products" data-usage="selling" class="product-list"></div>
+<div ng-hide="products.length == 0">
+  <form>
+    <md-input-container>
+      <label>Personne à servir</label>
+      <md-select ng-model="customer">
+        <md-option ng-repeat="u in users" ng-value="u">{{u.getName()}}</md-option>
+      </md-select>
+    </md-input-container>
+  </form>
+
+  <div data-product-list data-products="products" data-usage="selling" class="product-list" data-sell="confirmSelling"></div>
+</div>
+<h2 class="text-center" ng-show="products.length == 0">Aucun produit enregistré pour le moment.</h2>

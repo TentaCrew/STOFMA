@@ -1,15 +1,15 @@
 'use strict';
 
 angular.module('stofmaApp.controllers')
-    .controller('AddProductCtrl', ['$scope', '$state', 'ProductService', function ($scope, $state, ProductService) {
-      $scope.setFabButton('clear', function(){
+    .controller('AddProductCtrl', ['$scope', '$state', 'ProductService', 'SweetAlert',  function ($scope, $state, ProductService, SweetAlert) {
+      $scope.setFabButton('clear', function () {
         $state.go('^');
         $scope.setFabButton('add', function () {
           $state.go('manager.products.add');
         });
       });
 
-      $scope.addProduct = function(){
+      $scope.addProduct = function () {
         var form = $scope.createProduct,
             category = form.category.$modelValue,
             name = form.name.$modelValue,
@@ -18,28 +18,32 @@ angular.module('stofmaApp.controllers')
             minimum = parseInt(form.minimum.$modelValue),
             urlImage = form.urlImage.$modelValue;
 
-        if(isNaN(price) || price <= 0)
+        if (isNaN(price) || price <= 0)
           form.unitPrice.$setValidity('notaprice');
 
-        if(isNaN(minimum) || minimum <= 0)
+        if (isNaN(minimum) || minimum <= 0)
           form.minimum.$setValidity('notanumber');
 
-        if(form.$valid){
+        if (form.$valid) {
           ProductService.createProduct({
-            category : category,
+            category: category,
             name: name,
-            shortName : shortName,
-            price : price,
-            minimum : minimum,
-            urlImage : urlImage
-          }).then(function(newProduct){
+            shortName: shortName,
+            price: price,
+            minimum: minimum,
+            urlImage: urlImage
+          }).then(function (newProduct) {
             $scope.products.push(newProduct);
             $state.go('^');
             $scope.setFabButton('add', function () {
               $state.go('manager.products.add');
             });
-          }).catch(function(err){
-            // TODO Handle err.
+          }).catch(function (err) {
+            SweetAlert.swal({
+              title: 'La vente n\'a pas réussi.',
+              text: 'Merci de recréditer votre solde.',
+              type: 'error'
+            });
           });
         }
       }

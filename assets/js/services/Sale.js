@@ -18,7 +18,7 @@ angular.module('stofmaApp.services')
         return defer.promise;
       }
 
-      function doSale(customerId, products) {
+      function doSale(customerId, products, type) {
         var defer = $q.defer();
         // Remapping objects.
         products = products.map(function (o) {
@@ -30,9 +30,10 @@ angular.module('stofmaApp.services')
 
         $http.post('/sale', {
           customerId: customerId,
-          products: products
+          products: products,
+          typePayment: type
         }).success(function (data) {
-          defer.resolve(true);
+          defer.resolve(data);
         }).error(function (err) {
           defer.reject(false);
         });

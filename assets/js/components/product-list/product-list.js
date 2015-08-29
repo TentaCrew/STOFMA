@@ -5,6 +5,7 @@ angular.module('stofmaApp.components')
         scope: {
           products: "=",
           usage: "@",
+          sellHandler: "=sell", // Must be an function.
           activateHandler: "=activate", // Must be an function returning a promise.
           editHandler: "=edit" // Must be an function returning a promise.
         },
@@ -94,8 +95,11 @@ angular.module('stofmaApp.components')
             $scope.sum = sum;
             $scope.isSellable = sum > 0;
 
-            if (typeof $scope.$parent.setFabButton == 'function' && $scope.isSellable) {
-              $scope.$parent.setFabButton('done', $scope.check);
+            if (typeof $scope.$parent.setFabButton == 'function') {
+              if($scope.isSellable)
+                $scope.$parent.setFabButton('done', $scope.check);
+              else if($scope.isSellingMode)
+                $scope.$parent.setFabButton(false);
             }
 
             if ($scope.isSelectingMode && angular.isArray(nv) && angular.isArray(ov) && nv.length != ov.length) {
@@ -126,7 +130,7 @@ angular.module('stofmaApp.components')
 
           $scope.check = function ($event) {
             if ($scope.isSellable) {
-              $scope.$parent.confirmSelling($event);
+              $scope.sellHandler();
             }
           }
         }],

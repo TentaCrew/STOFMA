@@ -34,17 +34,22 @@ angular.module('stofmaApp.controllers')
             $scope.productSelected.quantity = $scope.number;
             $scope.productSelected.price = parseFloat($scope.totalprice) / $scope.number;
 
-            var amended = false;
+            var productIsPresent = false;
             for (var i = 0; i < $scope.productsOnSale.length; i++) {
               if ($scope.productsOnSale[i].id == $scope.productSelected.id) {
-                $scope.productsOnSale[i].quantity += $scope.number;
-                $scope.productsOnSale[i].price += parseFloat($scope.totalprice) / $scope.number;
-                amended = true;
+                if($scope.productsOnSale[i].price != $scope.productSelected.price){
+                  // Different price : creating of an other product with the new price
+                  $scope.productsOnSale.push(angular.copy($scope.productSelected));
+                } else {
+                  // Product added's price equals to present product
+                  $scope.productsOnSale[i].quantity += $scope.productSelected.quantity;
+                }
+                productIsPresent = true;
                 break;
               }
             }
-            if (!amended)
-              $scope.productsOnSale.push($scope.productSelected);
+            if (!productIsPresent)
+              $scope.productsOnSale.push(angular.copy($scope.productSelected));
 
             $scope.productSelected = null;
             $scope.totalprice = '';
@@ -81,6 +86,9 @@ angular.module('stofmaApp.controllers')
       };
 
       $scope.$watch('listingDisplayMode', function (v) {
+        if($scope.availableProducts.length == 0 && false)
+          return;
+
         if (v === true) {
           $scope.setFabButton('view_week', function () {
             $scope.listingDisplayMode = !$scope.listingDisplayMode;

@@ -137,6 +137,11 @@ angular.module('stofmaApp')
 
               productsData: function (productProvider) {
                 return productProvider.getProducts(true);
+              },
+              usersProvider: 'UserService',
+
+              usersData: function (usersProvider) {
+                return usersProvider.getAll();
               }
             }
           })

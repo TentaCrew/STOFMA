@@ -1,44 +1,32 @@
 angular.module('stofmaApp.components')
-    .controller('BottomSheetConfirmSellCtrl', ['$scope', '$mdBottomSheet', 'usersData', 'UserService', 'productsToSell', 'sum', function ($scope, $mdBottomSheet, usersData, UserService, productsToSell, sum) {
-      $scope.users = usersData;
-
+    .controller('BottomSheetConfirmSellCtrl', ['$scope', '$mdBottomSheet', 'productsToSell', 'sum', 'PaymentService', function ($scope, $mdBottomSheet, productsToSell, sum, PaymentService) {
       $scope.sum = sum;
       $scope.productsOnSale = productsToSell;
+      PaymentService.getPaymentModes().then(function (pm) {
+        $scope.paymentModes = pm;
+      });
+      $scope.payment = null;
 
       $scope.isConfirmable = function () {
-        return $scope.confirmSale.invitedUser.$modelValue === true || $scope.confirmSale.selectedUser.$modelValue != undefined
+        return $scope.payment != null;
+      };
+
+      $scope.setPayment = function (paymentMode) {
+        $scope.payment = paymentMode;
       };
 
       $scope.confirm = function () {
         if ($scope.isConfirmable()) {
-          var su = $scope.confirmSale.invitedUser.$modelValue ? -1 : $scope.confirmSale.selectedUser.$modelValue;
-          var user = {
-            id: -1,
-            getName: function () {
-              return 'l\'invité';
-            }
-          };
-          if (su >= 0) {
-            UserService.get(su).then(function (u) {
-              user = u;
-              $mdBottomSheet.hide({
-                ok: true,
-                user: user
-              });
-            });
-          } else {
-            $mdBottomSheet.hide({
-              ok: true,
-              user: user
-            });
-          }
-
+          $mdBottomSheet.hide({
+            confirm: true,
+            paymentMode: $scope.payment
+          });
         }
       };
 
       $scope.cancel = function () {
         $mdBottomSheet.hide({
-          ok: false
+          confirm: false
         });
       };
     }]);

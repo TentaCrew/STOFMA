@@ -115,7 +115,7 @@ angular.module('stofmaApp.controllers')
             }).then(function (newProduct) {
               $mdDialog.hide(newProduct);
             }).catch(function (err) {
-              // TODO Handle err.
+              $mdDialog.cancel();
             });
           }
         };
