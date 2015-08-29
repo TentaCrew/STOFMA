@@ -49,6 +49,10 @@ module.exports = {
     credit: {
       type: 'FLOAT',
       defaultsTo: 0
+    },
+    isMember: {
+      type: 'BOOLEAN',
+      defaultsTo: false
     }
 
   },
