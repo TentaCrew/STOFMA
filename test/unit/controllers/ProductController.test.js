@@ -166,4 +166,59 @@ describe('ProductController', function() {
     });
   });
 
+  describe('handling member prices', function() {
+
+    it('should automatically set the memberPrice to the price when not provided', function(done) {
+
+      Product
+        .create({
+          name:       'Fake product',
+          shortName:  'Fke Prdct',
+          price:      1.0,
+          urlImage:   '',
+          minimum:    0,
+          category:   'OTHER'
+        })
+        .exec(function(err, newProduct) {
+          if(err) {
+            done(err);
+          }
+          else if(newProduct.price !== newProduct.memberPrice) {
+            done(new Error("memberPrice not equal to price"));
+          }
+          else {
+            done();
+          }
+        })
+
+    });
+
+    it('should not automatically set the memberPrice to the price since when provided', function(done) {
+
+      Product
+        .create({
+          name:       'Fake product2',
+          shortName:  'Fke Prdct2',
+          price:      1.0,
+          memberPrice: 2.0,
+          urlImage:   '',
+          minimum:    0,
+          category:   'OTHER'
+        })
+        .exec(function(err, newProduct) {
+          if(err) {
+            done(err);
+          }
+          else if(newProduct.price === newProduct.memberPrice) {
+            done(new Error("memberPrice equal to price"));
+          }
+          else {
+            done();
+          }
+        })
+
+    });
+
+  });
+
 });

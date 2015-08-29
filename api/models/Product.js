@@ -23,6 +23,10 @@ module.exports = {
       type: 'FLOAT',
       required: true
     },
+    memberPrice: {
+      type: 'FLOAT',
+      required: true
+    },
     quantity: {
       type: 'INTEGER',
       required: true,
@@ -47,5 +51,13 @@ module.exports = {
       type: 'BOOLEAN',
       defaultsTo: true
     }
+  },
+
+  beforeValidate: function(values, next) {
+    if(!values.memberPrice) {
+      values.memberPrice = values.price;
+    }
+    next();
   }
+
 };
