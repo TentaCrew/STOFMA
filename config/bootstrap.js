@@ -13,6 +13,16 @@ module.exports.bootstrap = function(cb) {
 
   sails.on('lifted', function() {
 
+    guestUser()
+      .then(function(guestUser) {
+        if(guestUser) {
+          console.log("Guest user created.");
+        }
+      })
+      .catch(function(err) {
+        sails.log.error("Error while creating guest user:\n" + err);
+      });
+
     defaultAdmin()
       .then(function(newAdmin) {
         if(newAdmin) {
