@@ -12,10 +12,10 @@ angular.module('stofmaApp.controllers')
         var defer = $q.defer();
 
         $mdBottomSheet.show({
-            templateUrl: '/js/components/bottom-sheet/bottom-sheet-confirm-'+(isEnable ? 'enable' : 'disable')+'-product.html',
-            controller: 'BottomSheetConfirmCtrl'
-        }).then(function (done) {
-          if (done) {
+          templateUrl: '/js/components/bottom-sheet/bottom-sheet-confirm-' + (isEnable ? 'enable' : 'disable') + '-product.html',
+          controller: 'BottomSheetConfirmCtrl'
+        }).then(function (response) {
+          if (response.confirm) {
             ProductService.setProductEnable(id, isEnable).then(function () {
               $mdToast.show(
                   $mdToast.simple()

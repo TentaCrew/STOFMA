@@ -6,13 +6,13 @@
       <th>Solde</th>
       <th>E-mail</th>
     </thead>
-    <tr ng-repeat="user in users">
-      <td width="30%"><strong>{{user.name}} {{user.firstname}}</strong></td>
-      <td width="20%">{{user.role}}</td>
-      <td class="text-center" width="15%">{{user.credit}}</td>
-      <td width="30%">{{user.email}}</td>
+    <tr ng-repeat="u in users">
+      <td width="30%"><strong>{{u.name}} {{u.firstname}}</strong></td>
+      <td width="20%">{{u.role}}</td>
+      <td class="text-center" width="15%">{{u.credit | currency:''}} €</td>
+      <td width="30%">{{u.email}}</td>
       <td width="5%">
-        <md-button class="md-button md-primary md-icon-button" ng-click="goProfileEditor(user.id)">
+        <md-button class="md-button md-primary md-icon-button" ng-click="goProfileEditor(u.id)">
           <md-icon class="material-icons">create</md-icon>
         </md-button>
       </td>

@@ -69,7 +69,7 @@ angular.module('stofmaApp')
             },
             resolve: {
               userProvider: 'UserService',
-              updateHimSelf: function(){
+              updateHimSelf: function () {
                 return true;
               },
 
@@ -274,13 +274,12 @@ angular.module('stofmaApp')
             controller: 'ProfileCtrl',
             templateUrl: 'assets/templates/profile.html',
             data: {
-              name: 'Édition du profile',
-              icon: 'person',
-              hidden : true
+              name: 'Édition du profil',
+              hidden: true
             },
             resolve: {
               userProvider: 'UserService',
-              updateHimSelf: function(){
+              updateHimSelf: function () {
                 return false;
               },
 

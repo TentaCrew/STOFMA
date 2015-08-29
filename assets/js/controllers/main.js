@@ -24,19 +24,16 @@ angular.module('stofmaApp.controllers')
         if (fromState.data)
           $scope.pageTitle = fromState.data.name;
       });
-      
-      var timeoutAppLoaded = null;
-      $scope.$on("$viewContentLoaded", function(){
-          console.log(timeoutAppLoaded);
-        if(timeoutAppLoaded !== null)
-          $timeout.cancel(timeoutAppLoaded);
-          
-        timeoutAppLoaded = $timeout(function(){
-          $scope.appLoaded = true;
-          console.log('LOADED');
-        }, 2000);
-      })
 
+      var timeoutAppLoaded = null;
+      $scope.$on("$viewContentLoaded", function () {
+        if (timeoutAppLoaded !== null)
+          $timeout.cancel(timeoutAppLoaded);
+
+        timeoutAppLoaded = $timeout(function () {
+          $scope.appLoaded = true;
+        }, 500);
+      });
 
       this.toggleMenu = function () {
         var pending = $mdBottomSheet.hide() || $q.when(true);

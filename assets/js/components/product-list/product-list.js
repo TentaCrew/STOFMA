@@ -5,8 +5,8 @@ angular.module('stofmaApp.components')
         scope: {
           products: "=",
           usage: "@",
-          activateHandler : "=activate", // Must be an function returning a promise.
-          editHandler : "=edit" // Must be an function returning a promise.
+          activateHandler: "=activate", // Must be an function returning a promise.
+          editHandler: "=edit" // Must be an function returning a promise.
         },
         controller: ['$scope', function ($scope) {
           $scope.sum = 0.0;
@@ -16,17 +16,17 @@ angular.module('stofmaApp.components')
           $scope.isSelectingMode = false;
           $scope.tabSelected = 0;
 
-          ProductService.getCategories().then(function(cats){
+          ProductService.getCategories().then(function (cats) {
             $scope.categories = cats;
           });
 
           $scope.selectProduct = function (id, c) {
             angular.forEach($scope.products, function (v, k) {
               if (v.id == id) {
-                if (c == 0){
-                  if($scope.isSelectingMode){
-                    if(angular.isDefined($scope.activateHandler)){
-                      $scope.activateHandler(id,false).then(function(){
+                if (c == 0) {
+                  if ($scope.isSelectingMode) {
+                    if (angular.isDefined($scope.activateHandler)) {
+                      $scope.activateHandler(id, false).then(function () {
                         v.isActive = false;
                       })
                     } else {
@@ -36,10 +36,10 @@ angular.module('stofmaApp.components')
                     $scope.products[k].selected = 0;
                   }
                 }
-                else if(c == 2){
-                  if($scope.isSelectingMode){
-                    if(angular.isDefined($scope.activateHandler)){
-                      $scope.activateHandler(id,true).then(function(){
+                else if (c == 2) {
+                  if ($scope.isSelectingMode) {
+                    if (angular.isDefined($scope.activateHandler)) {
+                      $scope.activateHandler(id, true).then(function () {
                         v.isActive = true;
                       })
                     } else {
@@ -61,12 +61,12 @@ angular.module('stofmaApp.components')
           };
 
           $scope.edit = function (product) {
-            if($scope.canBeEdit) {
-              $scope.editHandler(product).then(function(productEdited){
-                // SEARCH PRODUCT AND EDIT IT
-                for(var i = 0; i < $scope.products.length; i++){
-                  if($scope.products[i].id == product.id){
+            if ($scope.canBeEdit) {
+              $scope.editHandler(product).then(function (productEdited) {
+                for (var i = 0; i < $scope.products.length; i++) {
+                  if ($scope.products[i].id == product.id) {
                     $scope.products[i] = productEdited;
+                    break;
                   }
                 }
               });
@@ -94,23 +94,29 @@ angular.module('stofmaApp.components')
             $scope.sum = sum;
             $scope.isSellable = sum > 0;
 
-            if(typeof $scope.$parent.setFabButton == 'function' && $scope.isSellable){
+            if (typeof $scope.$parent.setFabButton == 'function' && $scope.isSellable) {
               $scope.$parent.setFabButton('done', $scope.check);
             }
 
-            if($scope.isSelectingMode && angular.isArray(nv) && angular.isArray(ov) && nv.length != ov.length){
+            if ($scope.isSelectingMode && angular.isArray(nv) && angular.isArray(ov) && nv.length != ov.length) {
               var categoryToGo;
-              if(nv.length > ov.length){
+              if (nv.length > ov.length) {
                 // Adding a product
-                console.log(nv, ov);
-                categoryToGo = nv.filter(function(i) {return ov.map(function(e) { return e.id; }).indexOf(i.id) < 0;})[0].category;
+                categoryToGo = nv.filter(function (i) {
+                  return ov.map(function (e) {
+                        return e.id;
+                      }).indexOf(i.id) < 0;
+                })[0].category;
               } else {
                 // Removing a product
-                categoryToGo = ov.filter(function(i) {return nv.map(function(e) { return e.id; }).indexOf(i.id) < 0;})[0].category;
+                categoryToGo = ov.filter(function (i) {
+                  return nv.map(function (e) {
+                        return e.id;
+                      }).indexOf(i.id) < 0;
+                })[0].category;
               }
-              for(var i = 0; i < $scope.categories.length; i++){
-                if($scope.categories[i].id == categoryToGo)
-                {
+              for (var i = 0; i < $scope.categories.length; i++) {
+                if ($scope.categories[i].id == categoryToGo) {
                   $scope.tabSelected = i;
                   break;
                 }

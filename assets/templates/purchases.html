@@ -1,31 +1,34 @@
 <md-list>
   <section ng-repeat="purchase in purchases">
-    <md-list-item class="md-2-line" ng-if="purchase.type != 'header'">
-      <div class="md-list-item-text" layout="row" layout-sm="column">
-        <h3 title="{{purchase.purchaseDate | amDateFormat:'LLLL'}}">{{purchase.purchaseDate | amDateFormat:'HH:mm'}}&nbsp;</h3>
-
-        <h3><strong>{{purchase.manager.name}} a acheté pour un total de {{purchase.totalPrice | currency:''}} €</strong><br><br>
-          <em class="ng-hide" ng-show="seeMore">
-            {{purchase.purchaseDate | amDateFormat:'DD/MM/YYYY HH:mm'}}
-          </em>
-        </h3>
-      </div>
-      <ul class="ng-hide" ng-show="seeMore">
-        <li ng-repeat="ps in purchase.pairs">{{ps.quantity}} x <strong>{{ps.name}}</strong> : <strong>{{ps.price | currency:''}} €</strong>
-        </li>
-      </ul>
-      <div layout="row" layout-align="end center">
-        <md-button class="md-button md-icon-button" ng-click="seeMore=!seeMore">
-          <md-icon class="material-icons">add</md-icon>
-        </md-button>
-        <md-button class="md-button md-accent md-icon-button" ng-click="remove(purchase.id, $index)">
-          <md-icon class="material-icons">clear</md-icon>
-        </md-button>
-      </div>
-    </md-list-item>
     <div ng-if="purchase.type == 'header'">
       <md-subheader>{{purchase.title}}</md-subheader>
     </div>
+    <md-list-item class="md-3-line md-no-proxy" role="listitem" ng-if="purchase.type != 'header'">
+      <div class="md-list-item-text" layout="row" layout-align="space-between center">
+        <div layout="column">
+          <h3 title="{{purchase.purchaseDate | amDateFormat:'LLLL'}}"><strong>{{purchase.manager.firstname}} {{purchase.manager.name}}</strong></h3>
+          <h4>A effectué un achat <span class="ng-hide" ng-show="seeMore">le <em>{{purchase.purchaseDate | amDateFormat:'LLLL'}}</em> </span></h4>
+
+          <p>Montant : <strong>{{ purchase.totalPrice | currency:''}} €</strong></p>
+          <ul ng-show="seeMore">
+            <li ng-repeat="pair in purchase.pairs">
+              <em><strong>{{pair.name}}</strong></em> x{{pair.quantity}} – <strong>{{pair.price|currency:''}} €</strong>
+            </li>
+          </ul>
+        </div>
+        <div layout="row" layout-align="end center">
+          <md-button class="md-fab md-mini" ng-click="seeMore=!seeMore">
+            <md-icon>add</md-icon>
+          </md-button>
+          <md-button class="md-fab md-mini md-primary" ng-click="amend(purchase.id, $index)">
+            <md-icon>create</md-icon>
+          </md-button>
+          <md-button class="md-fab md-mini md-warn" ng-click="remove(purchase.id, $index)">
+            <md-icon>clear</md-icon>
+          </md-button>
+        </div>
+      </div>
+    </md-list-item>
     <md-divider ng-if="!$last"></md-divider>
   </section>
 </md-list>

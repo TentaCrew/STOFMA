@@ -28,7 +28,6 @@ angular.module('stofmaApp.services')
           return newo;
         });
 
-
         $http.post('/sale', {
           customerId: customerId,
           products: products

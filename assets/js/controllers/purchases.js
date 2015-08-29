@@ -2,7 +2,7 @@
 
 angular.module('stofmaApp.controllers')
 
-    .controller('PurchaseCtrl', ['$scope', 'purchasesData', 'PurchaseService', '$state', function ($scope, purchasesData, PurchaseService, $state) {
+    .controller('PurchaseCtrl', ['$scope', 'purchasesData', 'PurchaseService', '$state', '$mdBottomSheet', '$mdToast', function ($scope, purchasesData, PurchaseService, $state, $mdBottomSheet, $mdToast) {
       $scope.purchases = purchasesData;
 
       // Possible header title : today, yesterday, week, past
@@ -48,7 +48,33 @@ angular.module('stofmaApp.controllers')
         }
       }
 
-      $scope.setFabButton('add', function(){
+      $scope.setFabButton('add', function () {
         $state.go('manager.addpurchase');
       });
+
+      $scope.remove = function (id, index) {
+        $mdBottomSheet.show({
+          templateUrl: '/js/components/bottom-sheet/bottom-sheet-confirm-remove-purchase.html',
+          controller: 'BottomSheetConfirmCtrl'
+        }).then(function (response) {
+          if (response.confirm) {
+            PurchaseService.deletePurchase(id).then(function () {
+              $mdToast.show(
+                  $mdToast.simple()
+                      .content('Achat supprimé.')
+                      .position("bottom right")
+                      .hideDelay(3000)
+              );
+              $scope.purchases.splice(index, 1);
+            }).catch(function (err) {
+              $mdToast.show(
+                  $mdToast.simple()
+                      .content('L\'a n\'a pas été supprimé.')
+                      .position("bottom right")
+                      .hideDelay(5000)
+              );
+            });
+          }
+        });
+      };
     }]);

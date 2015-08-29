@@ -4,6 +4,12 @@
     <md-tab-body>
       <md-list>
         <product-line ng-repeat="product in products | filter :{ category:cat.id } track by product.id" product="product"></product-line>
+
+        <md-list-item class="md-2-line" ng-if="(products | filter :{ category:cat.id }).length == 0">
+          <div class="md-list-item-text text-center">
+            <h1 class="md-title">Aucun produit dans cette catégorie</h1>
+          </div>
+        </md-list-item>
       </md-list>
     </md-tab-body>
   </md-tab>

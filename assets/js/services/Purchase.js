@@ -4,6 +4,7 @@ angular.module('stofmaApp.services')
     .service('PurchaseService', ['$q', '$http', 'PurchaseFactory', function ($q, $http, PurchaseFactory) {
       this.getPurchases = getPurchases;
       this.doPurchase = doPurchase;
+      this.deletePurchase = deletePurchase;
 
       function getPurchases() {
         var defer = $q.defer();
@@ -29,6 +30,16 @@ angular.module('stofmaApp.services')
           defer.reject(err);
         });
 
+        return defer.promise;
+      }
+
+      function deletePurchase(id) {
+        var defer = $q.defer();
+        $http.delete('/purchase/' + id).success(function (data) {
+          defer.resolve(true);
+        }).error(function (err) {
+          defer.reject(false);
+        });
         return defer.promise;
       }
     }])
