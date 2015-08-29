@@ -18,7 +18,7 @@ angular.module('stofmaApp.controllers')
     });
 
     $scope.refreshPaymentsList = function(first){
-      PaymentService.getAll().then(function(payments){
+      PaymentService.get('IN_CREDIT').then(function(payments){
         $scope.payments = payments;
       });
     };
@@ -37,7 +37,7 @@ angular.module('stofmaApp.controllers')
           .then(function (res) {
             SweetAlert.swal({
               title: 'Le compte de '+user.firstname+' '+user.name+' a été crédité de '+Number(amount).toFixed(2)+'€',
-              text: 'Ancien solde : '+Number(user.credit)+'€\nNouveau solde : '+Number(Number(user.credit) + Number(amount)).toFixed(2)+'€',
+              text: 'Ancien solde : '+Number(user.credit).toFixed(2)+'€\nNouveau solde : '+Number(Number(user.credit) + Number(amount)).toFixed(2)+'€',
               type: 'success'
             }, function (ok) {
               if (ok) {

@@ -30,16 +30,11 @@ angular.module('stofmaApp.services')
 
       function getAll() {
         var defer = $q.defer();
-        if (that.users.length == 0) {
-          $http.get('/user').success(function (data) {
-            that.users = data.map(UserFactory.remap);
-            defer.resolve(that.users);
-          }).error(function (err) {
-            defer.reject(err.status);
-          });
-        } else {
-          defer.resolve(that.users);
-        }
+        $http.get('/user').success(function (data) {
+          defer.resolve(data.map(UserFactory.remap));
+        }).error(function (err) {
+          defer.reject(err.status);
+        });
 
         return defer.promise;
       }
@@ -128,7 +123,6 @@ angular.module('stofmaApp.services')
       function update(userId, formData) {
         var defer = $q.defer();
 
-        that.users = [];
         $http.patch('/user/'+userId, formData).success(function (result) {
           defer.resolve(result);
         }).error(function (err) {
@@ -141,7 +135,6 @@ angular.module('stofmaApp.services')
       function credit(userId, formData) {
         var defer = $q.defer();
 
-        that.users = [];
         $http.patch('/user/'+userId+'/credit', formData).success(function (result) {
           defer.resolve(result);
         }).error(function (err) {
@@ -154,7 +147,6 @@ angular.module('stofmaApp.services')
       function setRole(userId, formData) {
         var defer = $q.defer();
 
-        that.users = [];
         $http.patch('/user/'+userId+'/role', formData).success(function (result) {
           defer.resolve(result);
         }).error(function (err) {

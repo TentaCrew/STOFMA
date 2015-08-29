@@ -13,7 +13,8 @@ module.exports = {
       paymentDate : new Date(),
       customer    : req.param('customerId'),
       manager     : req.param('managerId') || req.session.user.id,
-      amount      : req.param('amount')
+      amount      : req.param('amount'),
+      type        : req.param('type')
     }, function (err, newPayment) {
       if (err) {
         return res.negotiate(err);

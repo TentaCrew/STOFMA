@@ -91,7 +91,7 @@ module.exports = {
       delete req.allParams().name;
       delete req.allParams().firstname;
       delete req.allParams().birthdate;
-      delete req.allParams().sex;  
+      delete req.allParams().sex;
     }
 
     // Updating an User
@@ -134,7 +134,8 @@ module.exports = {
             paymentDate : new Date(),
             customer    : req.param('id'),
             manager     : req.session.user.id,
-            amount      : req.param('credit')
+            amount      : req.param('credit'),
+            type        : 'IN_CREDIT'
           }, function (err, newPayment) {
             if (err) {
               return res.negotiate(err);
