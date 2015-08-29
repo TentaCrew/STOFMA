@@ -3,7 +3,7 @@ module.exports = {
     level: 'error'
   },
   models: {
-    connection: 'localDiskDb',
+    connection: 'memoryDb',
     migrate: 'drop'
   }
 }
