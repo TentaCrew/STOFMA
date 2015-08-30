@@ -102,10 +102,10 @@ describe('SaleController', function() {
 
                       // saleDate is optionnal
                       // manager is optionnal
-                      customerId: data.user_customer_03.id,
+                      customerId: data.user_customer_04.id,
                       typePayment: 'IN_CASH',
                       products: [
-                        {product: data.product_04.id, quantity: 1000},
+                        {product: data.product_04.id, quantity: 100},
                       ]
                     })
                     .end(function(err,res){
@@ -383,6 +383,7 @@ describe('SaleController', function() {
         .end(function(){
           Sale.findOne({id: data.sale_04.id}).populate('customer').populate('payment').exec(function(err,sale04After){
             assert.equal(sale04After.customer.credit,  sale04Before.customer.credit + sale04Before.totalPrice, 'Customer hasn\'t been reimbursed correctly.');
+            assert.equal(sale04Before.payment.type, 'IN_CREDIT', 'The old payment type is not good.');
             assert.equal(sale04After.payment.type, 'IN_CASH', 'The new payment type is not good.');
             done();
           });

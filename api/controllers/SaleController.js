@@ -74,7 +74,6 @@ module.exports = {
                   //update the amount of the Payment if the totalPrice of the Sale
                   newPayment.amount = Number(newSale.totalPrice);
                   newPayment.save(function(){
-
                     //update the user's credit
                     if(req.param('typePayment') === 'IN_CREDIT'){
                       customer.credit -= Number(newSale.totalPrice);
@@ -126,6 +125,9 @@ module.exports = {
                 cb();
               });
             });
+          }
+          else {
+            cb();
           }
         },
       },
@@ -245,7 +247,6 @@ module.exports = {
              (saleToUpdate.payment.type !== 'IN_CREDIT' && Number(customer.credit) < Number(totalPrice)))) {
 
               //destroy the new pairs if he hasn't
-              console.log('heellllloo');
               Pair.deletePairs(pairs,true)
               .then(function(){
                 return res.send(406, "You don't have enough credit.");
@@ -283,11 +284,15 @@ module.exports = {
                     manager     : updatedSale.manager,
                     type        : req.param('typePayment')
                   }, function (err, newPayment) {
+
                     Payment.destroy(saleToUpdate.payment, function(err,p){
+                      newPayment.amount = updatedSale.totalPrice;
                       updatedSale.payment = newPayment;
                       updatedSale.save(function(){
-                        customer.save(function(){
-                          return res.send(200, updatedSale);
+                        newPayment.save(function(){
+                          customer.save(function(){
+                            return res.send(200, updatedSale);
+                          });
                         });
                       });
                     });

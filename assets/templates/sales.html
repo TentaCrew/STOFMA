@@ -12,6 +12,8 @@
 
           <p>Montant : <strong>{{ sale.totalPrice | currency:''}} €</strong>
           </p>
+          <p>Paiement : <strong>{{ sale.payment.type }}</strong>
+          </p>
           <ul ng-show="seeMore">
             <li ng-repeat="pair in sale.pairs">
               {{pair.quantity}} x <em><strong>{{pair.name}}</strong></em> : <strong>{{pair.price|currency:''}} €</strong>

@@ -342,7 +342,7 @@ module.exports = {
     sale_04: {
       id:           4,
       manager:      1,
-      customer:     13,
+      customer:     15,
       payment:      4,
       products:     [16],
       saleDate:     '2015-08-18T21:38:52.750Z'

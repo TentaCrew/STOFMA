@@ -432,7 +432,8 @@ describe('UsersController', function() {
         .end(function(){
           User.findOne({id:data.user_customer_02.id}, function(err,userAfter){
             assert.equal(userBefore.credit, userAfter.credit, 'New credit is wrong.');
-            done();
+            //done();
+            agent.get('/sale').end(done);
           });
         });
       });
