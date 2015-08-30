@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('stofmaApp.services')
-    .service('SaleService', ['$q', '$http', 'SaleFactory', 'ProductFactory', function ($q, $http, SaleFactory, ProductFactory) {
+    .service('SaleService', ['$q', '$http', 'UserService', 'SaleFactory', 'ProductFactory', function ($q, $http, UserService, SaleFactory, ProductFactory) {
       this.getSales = getSales;
+      this.getOwnSales = getOwnSales;
       this.doSale = doSale;
       this.deleteSale = deleteSale;
 
@@ -13,6 +14,20 @@ angular.module('stofmaApp.services')
           defer.resolve(data.map(SaleFactory.remap));
         }).error(function (err) {
           defer.reject([]);
+        });
+
+        return defer.promise;
+      }
+
+      function getOwnSales() {
+        var defer = $q.defer();
+
+        UserService.getCurrentSession().then(function(session){
+          $http.get('/sale?customer='+session.id).success(function (data) {
+            defer.resolve(data.map(SaleFactory.remap));
+          }).error(function (err) {
+            defer.reject([]);
+          });
         });
 
         return defer.promise;

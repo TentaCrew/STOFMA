@@ -78,6 +78,22 @@ angular.module('stofmaApp')
               }
             }
           })
+          .state('user.sales', {
+            url: '/history',
+            controller: 'SalesCtrl',
+            templateUrl: 'assets/templates/sales.html',
+            data: {
+              name: 'Mes achats',
+              icon: 'shopping_cart'
+            },
+            resolve: {
+              salesProvider: 'SaleService',
+
+              salesData: function (salesProvider) {
+                return salesProvider.getOwnSales();
+              }
+            }
+          })
           .state('user.products', {
             url: '/stall',
             controller: 'StallProductCtrl',
