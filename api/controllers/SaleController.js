@@ -36,8 +36,7 @@ module.exports = {
         }
 
         //check if he has enough credit
-        if(customer.credit < totalPrice) {
-
+        if(req.param('typePayment') == 'IN_CREDIT' && customer.credit < totalPrice) {
           //destroy the new pairs if he hasn't
           Pair.deletePairs(pairs,true)
           .then(function(){
@@ -45,23 +44,49 @@ module.exports = {
           });
         }
         else {
-          //create the Sale
-          Sale.create({
-            saleDate: req.param('saleDate') || new Date(),
-            customer: req.param('customerId'),
-            manager:  req.param('managerId') || req.session.user.id,
-            products: pairs
-          }, function (err, newSale) {
 
+          //Create the Payment without amount (unknown at this moment)
+          Payment.create({
+            paymentDate : req.param('saleDate') || new Date(),
+            customer    : req.param('customerId'),
+            manager     : req.param('managerId') || req.session.user.id,
+            type        : req.param('typePayment')
+          }, function (err, newPayment) {
             if (err) {
               return res.negotiate(err);
             }
             else {
 
-              //update the user's credit
-              customer.credit -= Number(newSale.totalPrice);
-              customer.save(function(){
-                return res.send(200, newSale);
+              //create the Sale
+              Sale.create({
+                saleDate: req.param('saleDate') || new Date(),
+                customer: req.param('customerId'),
+                manager:  req.param('managerId') || req.session.user.id,
+                products: pairs,
+                payment: newPayment
+              }, function (err, newSale) {
+
+                if (err) {
+                  return res.negotiate(err);
+                }
+                else {
+
+                  //update the amount of the Payment if the totalPrice of the Sale
+                  newPayment.amount = Number(newSale.totalPrice);
+                  newPayment.save(function(){
+
+                    //update the user's credit
+                    if(req.param('typePayment') === 'IN_CREDIT'){
+                      customer.credit -= Number(newSale.totalPrice);
+                      customer.save(function(){
+                        return res.send(200, newSale);
+                      });
+                    }
+                    else{
+                      return res.send(200, newSale);
+                    }
+                  });
+                }
               });
             }
           });
@@ -80,7 +105,7 @@ module.exports = {
   delete: function (req, res) {
 
 
-    Sale.findOne(req.allParams()).populate('products').exec(function(err,sale){
+    Sale.findOne(req.allParams()).populate('products').populate('payment').exec(function(err,sale){
 
       async.parallel({
 
@@ -92,27 +117,27 @@ module.exports = {
           });
         },
 
-        //reimburse user
+        //reimburse user if he used his credit's account to pay
         recreditUser: function(cb){
-          User.findOne(sale.customer, function(err,customer){
-            customer.credit += Number(sale.totalPrice);
-            customer.save(function(){
-              cb();
+          if(sale.payment.type === 'IN_CREDIT'){
+            User.findOne(sale.customer, function(err,customer){
+              customer.credit += Number(sale.totalPrice);
+              customer.save(function(){
+                cb();
+              });
             });
-          });
+          }
         },
-
-        //delete sale
-        deleteSale: function(cb){
-          Sale
-          .destroy(req.allParams())
-          .exec(function(err, deletedSale) {
-            cb();
-          });
-        }
       },
       function(err, results) {
-        return res.send(200,'Sale deleted with success');
+        Sale
+        .destroy(req.allParams())
+        .exec(function(err, deletedSale) {
+          //delete related payment
+          Payment.destroy(sale.payment.id, function(err,deletedPmt){
+            return res.send(200,'Sale deleted with success');
+          });
+        });
       });
     });
   },
@@ -132,6 +157,7 @@ module.exports = {
       .populate('manager')
       .populate('customer')
       .populate('products')
+      .populate('payment')
       .sort('saleDate desc')
       .exec(function(err, foundSales) {
         if (err) {
@@ -202,7 +228,7 @@ module.exports = {
       .then(function(pairs) {
 
         //get the sale to update
-        Sale.findOne(req.param('id')).populate('products').exec(function(err,saleToUpdate){
+        Sale.findOne(req.param('id')).populate('products').populate('payment').exec(function(err,saleToUpdate){
 
           //get the customer
           User.findOne(saleToUpdate.customer, function(err, customer){
@@ -214,8 +240,12 @@ module.exports = {
             }
 
             //check if he has enough credit
-            if (Number(customer.credit) + Number(saleToUpdate.totalPrice) < Number(totalPrice)) {
+            if (req.param('typePayment') === 'IN_CREDIT' &&
+            ((saleToUpdate.payment.type === 'IN_CREDIT' && Number(customer.credit) + Number(saleToUpdate.totalPrice) < Number(totalPrice)) ||
+             (saleToUpdate.payment.type !== 'IN_CREDIT' && Number(customer.credit) < Number(totalPrice)))) {
+
               //destroy the new pairs if he hasn't
+              console.log('heellllloo');
               Pair.deletePairs(pairs,true)
               .then(function(){
                 return res.send(406, "You don't have enough credit.");
@@ -236,10 +266,31 @@ module.exports = {
                   //get the updated sale
                   updatedSale = updatedSale[0];
 
-                  //update the user's credit
-                  customer.credit = Number(customer.credit) + Number(saleToUpdate.totalPrice) - Number(updatedSale.totalPrice);
-                  customer.save(function(){
-                    return res.send(200, updatedSale);
+                  //update the user's credit and the payment
+                  if(saleToUpdate.payment.type === 'IN_CREDIT' && req.param('typePayment') === 'IN_CREDIT'){
+                    customer.credit = Number(customer.credit) + Number(saleToUpdate.totalPrice) - Number(updatedSale.totalPrice);
+                  }
+                  else if(saleToUpdate.payment.type === 'IN_CREDIT' && req.param('typePayment') !== 'IN_CREDIT'){
+                    customer.credit = Number(customer.credit) + Number(saleToUpdate.totalPrice);
+                  }
+                  else if(saleToUpdate.payment.type !== 'IN_CREDIT' && req.param('typePayment') === 'IN_CREDIT'){
+                    customer.credit = Number(customer.credit) - Number(updatedSale.totalPrice);
+                  }
+
+                  Payment.create({
+                    paymentDate : req.param('saleDate') || new Date(),
+                    customer    : updatedSale.customer,
+                    manager     : updatedSale.manager,
+                    type        : req.param('typePayment')
+                  }, function (err, newPayment) {
+                    Payment.destroy(saleToUpdate.payment, function(err,p){
+                      updatedSale.payment = newPayment;
+                      updatedSale.save(function(){
+                        customer.save(function(){
+                          return res.send(200, updatedSale);
+                        });
+                      });
+                    });
                   });
                 });
               });

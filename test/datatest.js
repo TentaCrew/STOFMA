@@ -68,6 +68,14 @@ module.exports = {
       credit:     1000,       //won't be considered during sign up
       password:   'simplegirl'
     },
+    user_customer_05: {
+      id:         15,
+      firstname:  'Picsou',
+      name:       ':D',
+      email:      'pic@sou.fr',
+      sex:        true,
+      password:   'cash'
+    },
     product_01: {
       id:         1,
       name:      'Kinder Bueno',
@@ -148,6 +156,62 @@ module.exports = {
       minimum:   20,
       category:  'DRINK'
     },
+    payment_01: {
+      id:          1,
+      manager:     1,
+      customer:    1,
+      amount:      21.98,
+      type:        'IN_CREDIT',
+      paymentDate: '2015-08-18T21:38:52.750Z'
+    },
+    payment_02: {
+      id:          2,
+      manager:     1,
+      customer:    11,
+      amount:      89.91,
+      type:        'IN_CREDIT',
+      paymentDate: '2015-08-18T21:38:52.750Z'
+    },
+    payment_03: {
+      id:          3,
+      manager:     1,
+      customer:    12,
+      amount:      0.5,
+      type:        'IN_CREDIT',
+      paymentDate: '2015-08-18T21:38:52.750Z'
+    },
+    payment_04: {
+      id:          4,
+      manager:     1,
+      customer:    13,
+      amount:      0.1,
+      type:        'IN_CREDIT',
+      paymentDate: '2015-08-18T21:38:52.750Z'
+    },
+    payment_05: {
+      id:          5,
+      manager:     1,
+      customer:    15,
+      amount:      0.1,
+      type:        'IN_CASH',
+      paymentDate: '2015-08-18T21:38:52.750Z'
+    },
+    payment_06: {
+      id:          6,
+      manager:     1,
+      customer:    15,
+      amount:      0.1,
+      type:        'IN_CHECK',
+      paymentDate: '2015-08-18T21:38:52.750Z'
+    },
+    payment_07: {
+      id:          7,
+      manager:     1,
+      customer:    15,
+      amount:      0.1,
+      type:        'IN_CASH',
+      paymentDate: '2015-08-18T21:38:52.750Z'
+    },
     purchasePair_01: {
       id:       1,
       product:  1,
@@ -208,6 +272,31 @@ module.exports = {
       product:  4,
       quantity: 1
     },
+    salePair_17: {
+      id:       17,
+      product:  4,
+      quantity: 2
+    },
+    salePair_18: {
+      id:       18,
+      product:  1,
+      quantity: 1
+    },
+    salePair_19: {
+      id:       19,
+      product:  1,
+      quantity: 10
+    },
+    salePair_20: {
+      id:       20,
+      product:  2,
+      quantity: 3
+    },
+    salePair_21: {
+      id:       21,
+      product:  2,
+      quantity: 5
+    },
     purchase_01: {
       id:           1,
       manager:      1,
@@ -230,6 +319,7 @@ module.exports = {
       id:           1,
       manager:      1,
       customer:     1,
+      payment:      1,
       products:     [11,13],
       saleDate:     '2015-08-18T21:38:52.750Z'
     },
@@ -237,6 +327,7 @@ module.exports = {
       id:           2,
       manager:      1,
       customer:     11,
+      payment:      2,
       products:     [14,15],
       saleDate:     '2015-08-18T21:38:52.750Z'
     },
@@ -244,6 +335,7 @@ module.exports = {
       id:           3,
       manager:      1,
       customer:     12,
+      payment:      3,
       products:     [12],
       saleDate:     '2015-08-18T21:38:52.750Z'
     },
@@ -251,7 +343,32 @@ module.exports = {
       id:           4,
       manager:      1,
       customer:     13,
+      payment:      4,
       products:     [16],
       saleDate:     '2015-08-18T21:38:52.750Z'
+    },
+    sale_05: {
+      id:           5,
+      manager:      1,
+      customer:     15,
+      payment:      5,
+      products:     [17,19],
+      saleDate:     '2015-08-17T21:38:52.750Z'
+    },
+    sale_06: {
+      id:           6,
+      manager:      1,
+      customer:     15,
+      payment:      6,
+      products:     [20,18],
+      saleDate:     '2015-02-18T21:38:52.750Z'
+    },
+    sale_07: {
+      id:           7,
+      manager:      1,
+      customer:     15,
+      payment:      7,
+      products:     [21],
+      saleDate:     '2014-08-18T21:38:52.750Z'
     }
 };

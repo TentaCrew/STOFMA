@@ -66,18 +66,14 @@ module.exports = {
             cb();
           });
         },
-
-        //delete purchase
-        deletePurchase: function(cb){
-          Purchase
-          .destroy(req.allParams())
-          .exec(function(err, deletedPurchase) {
-            cb();
-          });
-        }
       },
       function(err, results) {
-        return res.send(200,'Purchase deleted with success');
+        //delete purchase
+        Purchase
+        .destroy(req.allParams())
+        .exec(function(err, deletedPurchase) {
+          return res.send(200,'Purchase deleted with success');
+        });
       });
     });
   },

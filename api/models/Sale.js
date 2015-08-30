@@ -27,6 +27,9 @@ module.exports = {
     },
     totalPrice: {
       type: 'FLOAT'
+    },
+    payment:{
+      model: 'Payment'
     }
   },
 
