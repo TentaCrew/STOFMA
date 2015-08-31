@@ -31,7 +31,12 @@ angular.module('stofmaApp.services')
       function getAll() {
         var defer = $q.defer();
         $http.get('/user').success(function (data) {
-          defer.resolve(data.map(UserFactory.remap));
+          defer.resolve(data.map(UserFactory.remap).sort(function(a, b){
+            if (a.name > b.name)
+              return 1;
+            else
+              return -1;
+          }));
         }).error(function (err) {
           defer.reject(err.status);
         });
