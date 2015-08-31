@@ -2,7 +2,7 @@
 
 angular.module('stofmaApp.controllers')
 
-    .controller('SellCtrl', ['$scope', '$q', 'productsData', 'usersData', 'ProductService', 'SaleService', '$mdBottomSheet', 'SweetAlert', 'PaymentService', 'PaymentFactory', function ($scope, $q, productsData, usersData, ProductService, SaleService, $mdBottomSheet, SweetAlert, PaymentService, PaymentFactory) {
+    .controller('SellCtrl', ['$scope', '$q', 'productsData', 'usersData', 'ProductService', 'SaleService', '$mdBottomSheet', 'SweetAlert', 'PaymentService', 'PaymentFactory', '$mdToast', function ($scope, $q, productsData, usersData, ProductService, SaleService, $mdBottomSheet, SweetAlert, PaymentService, PaymentFactory, $mdToast) {
       $scope.products = productsData;
       $scope.users = usersData;
 
@@ -16,6 +16,12 @@ angular.module('stofmaApp.controllers')
 
       $scope.confirmSelling = function ($event) {
         if ($scope.customer === null) {
+          $mdToast.show(
+              $mdToast.simple()
+                  .content('Veuillez sélectionner la personne à servir.')
+                  .position("bottom right")
+                  .hideDelay(5000)
+          );
           return;
         }
 
