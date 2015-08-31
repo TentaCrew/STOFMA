@@ -95,21 +95,21 @@ describe('SaleController', function() {
                   assert.equal(productsAfter[2].quantity,  productsBefore[2].quantity - 3,  'Wrong quantity of product_03');
                   assert.equal(productsAfter[3].quantity,  productsBefore[3].quantity - 2,  'Wrong quantity of product_04');
 
-                  User.findOne(data.user_customer_03.id, function(err,userBefore2){
+                  User.findOne(data.user_customer_02.id, function(err,userBefore2){
                     agent
                     .post('/sale')
                     .send({
 
                       // saleDate is optionnal
                       // manager is optionnal
-                      customerId: data.user_customer_04.id,
+                      customerId: data.user_customer_02.id,
                       typePayment: 'IN_CASH',
                       products: [
                         {product: data.product_04.id, quantity: 100},
                       ]
                     })
                     .end(function(err,res){
-                      User.findOne(data.user_customer_03.id, function(err,userAfter2){
+                      User.findOne(data.user_customer_02.id, function(err,userAfter2){
                         assert.equal(userBefore2.credit, userAfter2.credit, 'The credit shouldn\'t change because it is a payment in cash');
                         done();
                       });
@@ -234,23 +234,6 @@ describe('SaleController', function() {
       .end(done);
     });
 
-    // Before: Get a created Sale's Id
-    var sale;
-    before(function(done) {
-      Sale
-      .find()
-      .limit(1)
-      .exec(function(err, foundSales) {
-        if(err) {
-          done(err);
-        }
-        else {
-          sale = foundSales[0];
-          done();
-        }
-      });
-    });
-
     // After: Log out
     after(function(done) {
       agent
@@ -261,11 +244,11 @@ describe('SaleController', function() {
     // Test
     it('As a manager User, can\'t update the created Sale because of the user doesn\'t have enough credit', function (done) {
       Product.find([{id: data.product_01.id}], function(err,productBefore){
-        User.findOne(sale.customer, function(err,user){
+        User.findOne(data.sale_01.customer, function(err,user){
           //get the credit's user before the sale
           var oldCredit = user.credit;
           agent
-          .patch('/sale/' + sale.id)
+          .patch('/sale/' + data.sale_01.id)
           .send({
             typePayment: 'IN_CREDIT',
             products: [
@@ -274,7 +257,7 @@ describe('SaleController', function() {
           })
           .expect(406)
           .end(function(){
-            User.findOne(sale.customer, function(err,userAfter){
+            User.findOne(data.sale_01.customer, function(err,userAfter){
               assert.equal(oldCredit, userAfter.credit, 'Credit\'s user has changed, but it shouldn\'t.');
               Product.find([{id: data.product_01.id}], function(err,productAfter){
                 assert.equal(productAfter[0].quantity, productBefore[0].quantity, 'Wrong quantity of product_01');
@@ -298,20 +281,6 @@ describe('SaleController', function() {
         password: data.user_manager_01.password
       })
       .end(done);
-    });
-
-    // Before: Get a created Sale's Id
-    var saleId;
-    before(function(done) {
-      Sale.findOne({id: 2}).exec(function(err, foundSales) {
-        if(err) {
-          done(err);
-        }
-        else {
-          saleId = foundSales.id;
-          done();
-        }
-      });
     });
 
     // After: Log out
@@ -547,23 +516,6 @@ describe('SaleController', function() {
       .end(done);
     });
 
-    // Before: Get a created Sale's Id
-    var saleId;
-    before(function(done) {
-      Sale
-      .find()
-      .limit(1)
-      .exec(function(err, foundSales) {
-        if(err) {
-          done(err);
-        }
-        else {
-          saleId = foundSales[0].id;
-          done();
-        }
-      });
-    });
-
     // After: Log out
     after(function(done) {
       agent
@@ -574,7 +526,7 @@ describe('SaleController', function() {
     // Test
     it('As a regular User, can\'t delete a Sale', function (done) {
       agent
-      .delete('/sale/' + saleId)
+      .delete('/sale/' + data.sale_01.id)
       .expect(401, done);
     });
   });
@@ -593,20 +545,6 @@ describe('SaleController', function() {
       .end(done);
     });
 
-    // Before: Get a created Sale's Id
-    var sale;
-    before(function(done) {
-      Sale.findOne({id: 1}).exec(function(err, foundSales) {
-        if(err) {
-          done(err);
-        }
-        else {
-          sale = foundSales;
-          done();
-        }
-      });
-    });
-
     // After: Log out
     after(function(done) {
       agent
@@ -616,22 +554,23 @@ describe('SaleController', function() {
 
     // Test
     it('As a manager User, delete a Sale', function (done) {
-      Product.find([{id: data.product_01.id},{id: data.product_02.id},{id: data.product_03.id},{id: data.product_04.id}], function(err,productsBefore){
-        User.findOne(sale.customer, function(err,user){
-          //get the credit's user before the sale
-          var oldCredit = user.credit;
-          agent
-          .delete('/sale/1')
-          .expect(200)
-          .end(function(){
-            User.findOne(sale.customer, function(err,userAfter){
-              assert.equal(oldCredit+sale.totalPrice, userAfter.credit, 'The new credit is not good.');
-              Product.find([{id: data.product_01.id},{id: data.product_02.id},{id: data.product_03.id},{id: data.product_04.id}], function(err,productsAfter){
-                assert.equal(productsAfter[0].quantity,  productsBefore[0].quantity,      'Wrong quantity of product_01');
-                assert.equal(productsAfter[1].quantity,  productsBefore[1].quantity + 4,  'Wrong quantity of product_02');
-                assert.equal(productsAfter[2].quantity,  productsBefore[2].quantity + 2,  'Wrong quantity of product_03');
-                assert.equal(productsAfter[3].quantity,  productsBefore[3].quantity,      'Wrong quantity of product_04');
-                done();
+      Sale.findOne({id:data.sale_01.id},function(err,saleBefore){
+        Product.find([{id: data.product_01.id},{id: data.product_02.id},{id: data.product_03.id},{id: data.product_04.id}], function(err,productsBefore){
+          User.findOne({id:data.sale_01.customer}, function(err,userBefore){
+            //get the credit's user before the sale
+            agent
+            .delete('/sale/'+data.sale_01.id)
+            .expect(200)
+            .end(function(){
+              User.findOne({id:data.sale_01.customer}, function(err,userAfter){
+                assert.equal(userBefore.credit+saleBefore.totalPrice, userAfter.credit, 'The new credit is not good.');
+                Product.find([{id: data.product_01.id},{id: data.product_02.id},{id: data.product_03.id},{id: data.product_04.id}], function(err,productsAfter){
+                  assert.equal(productsAfter[0].quantity,  productsBefore[0].quantity,      'Wrong quantity of product_01');
+                  assert.equal(productsAfter[1].quantity,  productsBefore[1].quantity + 4,  'Wrong quantity of product_02');
+                  assert.equal(productsAfter[2].quantity,  productsBefore[2].quantity + 2,  'Wrong quantity of product_03');
+                  assert.equal(productsAfter[3].quantity,  productsBefore[3].quantity,      'Wrong quantity of product_04');
+                  done();
+                });
               });
             });
           });

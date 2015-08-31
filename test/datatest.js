@@ -36,7 +36,7 @@ module.exports = {
       sex:        false,
       role:       'USER',
       credit:     100,
-      password:   'catword'
+      password:   'catword',
     },
     user_customer_02: {
       id:         12,
@@ -46,7 +46,8 @@ module.exports = {
       sex:        false,
       role:       'USER',
       credit:     10,
-      password:   'rico'
+      password:   'rico',
+      isMember:   true
     },
     user_customer_03: {
       id:         13,

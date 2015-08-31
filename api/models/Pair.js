@@ -23,6 +23,9 @@ module.exports = {
       type: 'FLOAT',
       required: true
     },
+    memberSale: {       //this attribute is needed to find the price according the user's status
+      type: 'BOOLEAN'
+    },
     totalPrice: function() {
       return this.unitPrice * this.quantity;
     }
@@ -34,8 +37,14 @@ module.exports = {
     .findOne(values.product)
     .exec(function(err, foundProduct) {
       if(foundProduct) {
-        if(!values.unitPrice || values.unitPrice == -1)
-          values.unitPrice = foundProduct.price;
+        if(!values.unitPrice || values.unitPrice == -1) {
+          if(values.memberSale === true){
+            values.unitPrice = foundProduct.memberPrice;
+          }
+          else{
+            values.unitPrice = foundProduct.price;
+          }
+        }
       }
       cb();
     });
@@ -45,8 +54,9 @@ module.exports = {
   * Creates Pairs
   * @param pairs {Array} Array of productId-quantity pairs defined as follows [{productId: <Number>, quantity: <Number>}, ...]
   * @param saleMode {bool} true = sale , false = purchase
+  * @param memberSale {Boolean} Needed to know the price for a specific user
   */
-  createPairs: function(pairs,saleMode) {
+  createPairs: function(pairs, saleMode, memberSale) {
 
     var deferred = q.defer();
     var createdPairs = [];
@@ -59,7 +69,8 @@ module.exports = {
       Pair.create({
         product: productId,
         quantity: quantity,
-        unitPrice: pair.unitPrice || -1
+        unitPrice: pair.unitPrice || -1,
+        memberSale: memberSale
       }, function(err, newPair) {
         if(err) {
           cb(err);
