@@ -79,7 +79,7 @@ module.exports = {
           createdPairs.push(newPair);
           Product.findOne(newPair.product, function(err,product){
             if(saleMode){
-                product.quantity -= Number(newPair.quantity);
+              product.quantity -= Number(newPair.quantity);
             }
             else {
               product.quantity += Number(newPair.quantity);

@@ -147,9 +147,7 @@ describe('SaleController', function() {
     // Test
     it('Shouldn\'t add the new Sale because of the user doesn\'t have enough credit', function (done) {
       Product.find([{id: data.product_01.id},{id: data.product_02.id}], function(err,productsBefore){
-        User.findOne(data.user_customer_01.id, function(err,user){
-          //get the credit's user before the sale
-          var oldCredit = user.credit;
+        User.findOne(data.user_customer_01.id, function(err,userBefore){
           agent
           .post('/sale')
           .send({
@@ -165,10 +163,60 @@ describe('SaleController', function() {
           .expect(406)
           .end(function(err,sale){
             User.findOne(data.user_customer_01.id, function(err,userAfter){
-              assert.equal(oldCredit, userAfter.credit, 'Credit\'s user has changed, but it shouldn\'t.');
+              assert.equal(userBefore.credit, userAfter.credit, 'Credit\'s user has changed, but it shouldn\'t.');
               Product.find([{id: data.product_01.id},{id: data.product_02.id}], function(err,productsAfter){
                 assert.equal(productsAfter[0].quantity, productsBefore[0].quantity, 'Wrong quantity of product_01');
                 assert.equal(productsAfter[1].quantity, productsBefore[1].quantity, 'Wrong quantity of product_02');
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+
+  describe('#add() as a manager User (not enough items in stock)', function() {
+
+    // Before: Log in as a manager User
+    before(function(done){
+      agent
+      .put('/user/login')
+      .send({
+        email: data.user_manager_01.email,
+        password: data.user_manager_01.password
+      })
+      .end(done);
+    });
+
+    // After: Log out
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .end(done);
+    });
+
+    // Test
+    it('Shouldn\'t add the new Sale because of there is no enough items in stock', function (done) {
+      Product.findOne({id: data.product_01.id}, function(err,productBefore){
+        User.findOne(data.user_admin_01.id, function(err,userBefore){
+          agent
+          .post('/sale')
+          .send({
+            // saleDate is optionnal
+            // manager is optionnal
+            customerId: data.user_customer_01.id,
+            typePayment: 'IN_CREDIT',
+            products: [
+              {product: data.product_01.id, quantity: 2000},
+            ]
+          })
+          .expect(407)
+          .end(function(err,sale){
+            User.findOne(data.user_admin_01.id, function(err,userAfter){
+              assert.equal(userBefore.credit, userAfter.credit, 'Credit\'s user has changed, but it shouldn\'t.');
+              Product.findOne({id: data.product_01.id}, function(err,productAfter){
+                assert.equal(productAfter.quantity, productBefore.quantity, 'Quantity of product_01 has changed, but it shouldn\'t.');
                 done();
               });
             });
@@ -345,7 +393,7 @@ describe('SaleController', function() {
         .send({
           typePayment: 'IN_CASH',
           products: [
-            {product: data.product_03.id, quantity: 70}
+            {product: data.product_03.id, quantity: 10}
           ]
         })
         .expect(200)
@@ -497,6 +545,56 @@ describe('SaleController', function() {
             assert.equal(sale06Before.customer.credit - sale06After.totalPrice,  sale06After.customer.credit, 'New credit is not good.');
             assert.equal(sale06After.payment.type, 'IN_CREDIT', 'The new payment type is not good.');
             done();
+          });
+        });
+      });
+    });
+  });
+
+  describe('#update() as a manager User (test update of payment\'s way - 4 tris / 4) with no enough items in stock', function() {
+
+    // Before: Log in as a manager User
+    before(function(done){
+      agent
+      .put('/user/login')
+      .send({
+        email: data.user_manager_01.email,
+        password: data.user_manager_01.password
+      })
+      .end(done);
+    });
+
+    // After: Log out
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .end(done);
+    });
+
+    // Test
+    it('Shouldn\'t add the new Sale because of there is no enough items in stock', function (done) {
+      Product.findOne({id: data.product_01.id}, function(err,productBefore){
+        User.findOne(data.user_admin_01.id, function(err,userBefore){
+          agent
+          .patch('/sale/1')
+          .send({
+            // saleDate is optionnal
+            // manager is optionnal
+            customerId: data.user_customer_01.id,
+            typePayment: 'IN_CASH',
+            products: [
+              {product: data.product_01.id, quantity: 20000},
+            ]
+          })
+          .expect(407)
+          .end(function(err,sale){
+            User.findOne(data.user_admin_01.id, function(err,userAfter){
+              assert.equal(userBefore.credit, userAfter.credit, 'Credit\'s user has changed, but it shouldn\'t.');
+              Product.findOne({id: data.product_01.id}, function(err,productAfter){
+                assert.equal(productAfter.quantity, productBefore.quantity, 'Quantity of product_01 has changed, but it shouldn\'t.');
+                done();
+              });
+            });
           });
         });
       });
