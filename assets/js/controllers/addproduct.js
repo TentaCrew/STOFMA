@@ -15,6 +15,7 @@ angular.module('stofmaApp.controllers')
             name = form.name.$modelValue,
             shortName = form.shortname.$modelValue,
             price = parseFloat(form.unitPrice.$modelValue),
+            memberPrice = parseFloat(form.unitPriceMember.$modelValue),
             minimum = parseInt(form.minimum.$modelValue),
             urlImage = form.urlImage.$modelValue;
 
@@ -30,6 +31,7 @@ angular.module('stofmaApp.controllers')
             name: name,
             shortName: shortName,
             price: price,
+            memberPrice: memberPrice,
             minimum: minimum,
             urlImage: urlImage
           }).then(function (newProduct) {

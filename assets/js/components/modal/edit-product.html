@@ -36,6 +36,14 @@
           </div>
         </md-input-container>
         <md-input-container>
+          <label>Prix unitaire de vente pour les membres</label>
+          <input type="text" ng-model="unitPriceMember" name="unitPriceMember" required>
+
+          <div ng-messages="editProduct.unitPriceMember.$error" ng-show="editProduct.unitPriceMember.$dirty">
+            <div ng-message="notaprice">Le prix doit respecter le format monétaire et doit être positif.</div>
+          </div>
+        </md-input-container>
+        <md-input-container>
           <label>Niveau minimum acceptable</label>
           <input type="number" ng-model="minimum" name="minimum" required>
           <div ng-messages="editProduct.minimum.$error" ng-show="editProduct.minimum.$dirty">

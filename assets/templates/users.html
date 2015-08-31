@@ -1,21 +1,19 @@
 <md-list>
-  <table>
-    <thead>
-      <th>Nom</th>
-      <th>Rôle</th>
-      <th>Solde</th>
-      <th>E-mail</th>
-    </thead>
-    <tr ng-repeat="u in users">
-      <td width="30%"><strong>{{u.name}} {{u.firstname}}</strong></td>
-      <td width="20%">{{u.role}}</td>
-      <td class="text-center" width="15%">{{u.credit | currency:''}} €</td>
-      <td width="30%">{{u.email}}</td>
-      <td width="5%">
-        <md-button class="md-button md-primary md-icon-button" ng-click="goProfileEditor(u.id)">
-          <md-icon class="material-icons">create</md-icon>
-        </md-button>
-      </td>
-    </tr>
-  </table>
+  <md-list-item class="md-2-line" ng-repeat="u in users" ng-click="goProfileEditor(u.id)">
+    <div class="md-list-item-text" layout="row" layout-align="space-between center">
+      <div>
+        <h3><strong>{{u.name}} {{u.firstname}}</strong></h3>
+        <p>{{u.credit}}€</p>
+      </div>
+      <div ng-if="u.isMember">
+        <md-icon class="material-icons md-accent">card_membership</md-icon> Membre
+      </div>
+      <div ng-switch="u.role">
+        <div ng-switch-when="USER"><md-icon class="material-icons md-primary">person</md-icon> Utilisateur</div>
+        <div ng-switch-when="MANAGER"><md-icon class="material-icons md-primary">supervisor_account</md-icon> Manager</div>
+        <div ng-switch-when="ADMINISTRATOR"><md-icon class="material-icons md-primary">whatshot</md-icon> Administateur</div>
+      </div>
+    </div>
+    <md-divider ng-if="!$last"></md-divider>
+  </md-list-item>
 </md-list>

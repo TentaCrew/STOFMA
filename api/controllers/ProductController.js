@@ -11,14 +11,15 @@ module.exports = {
   add: function (req, res) {
     // Creating new Product
     Product.create({
-      name:      req.param('name'),
-      shortName: req.param('shortName'),
-      price:     req.param('price'),
-      quantity:  req.param('quantity'),
-      urlImage:  req.param('urlImage'),
-      minimum:   req.param('minimum'),
-      category:  req.param('category'),
-      isActive:  req.param('isActive')
+      name:         req.param('name'),
+      shortName:    req.param('shortName'),
+      price:        req.param('price'),
+      memberPrice:  req.param('memberPrice'),
+      quantity:     req.param('quantity'),
+      urlImage:     req.param('urlImage'),
+      minimum:      req.param('minimum'),
+      category:     req.param('category'),
+      isActive:     req.param('isActive')
     }, function (err, newProduct) {
       if (err) {
         return res.negotiate(err);

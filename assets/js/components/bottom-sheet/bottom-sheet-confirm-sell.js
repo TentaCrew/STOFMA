@@ -1,8 +1,8 @@
 angular.module('stofmaApp.components')
-    .controller('BottomSheetConfirmSellCtrl', ['$scope', '$mdBottomSheet', 'productsToSell', 'sum', 'PaymentService', function ($scope, $mdBottomSheet, productsToSell, sum, PaymentService) {
+    .controller('BottomSheetConfirmSellCtrl', ['$scope', '$mdBottomSheet', 'productsToSell', 'sum', 'guest', 'PaymentService', function ($scope, $mdBottomSheet, productsToSell, sum, guest, PaymentService) {
       $scope.sum = sum;
       $scope.productsOnSale = productsToSell;
-      PaymentService.getPaymentModes().then(function (pm) {
+      PaymentService.getPaymentModes(guest).then(function (pm) {
         $scope.paymentModes = pm;
       });
       $scope.payment = null;

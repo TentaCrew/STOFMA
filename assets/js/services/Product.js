@@ -3,7 +3,7 @@
 angular.module('stofmaApp.services');
 
 angular.module('stofmaApp.services')
-    .service('ProductService', ['$q', '$http', function ($q, $http) {
+    .service('ProductService', ['$q', '$http', 'ProductFactory', function ($q, $http, ProductFactory) {
       this.getProducts = getProducts;
       this.getCategories = getCategories;
       this.createProduct = createProduct;
@@ -14,27 +14,21 @@ angular.module('stofmaApp.services')
         var defer = $q.defer();
 
         $http.get('/product').success(function (data) {
-          var r = data;
+              var r = data;
 
-          r = r.map(function (o) {
-            o.isOut = function () {
-              return o.quantity == 0;
-            };
-            return o;
-          });
+              r = r.map(ProductFactory.remapProducts);
 
-          if (forSelling) {
-            // Fix the number of selected product to 0
-            r = r.map(function (o) {
-              o.selected = 0;
-              return o;
+              if (forSelling) {
+                // Fix the number of selected product to 0
+                r = r.map(ProductFactory.remapForSelling);
+              }
+
+              defer.resolve(r);
+            }
+        ).
+            error(function (err) {
+              defer.reject();
             });
-          }
-
-          defer.resolve(r);
-        }).error(function (err) {
-          defer.reject();
-        });
 
         return defer.promise;
       }
@@ -63,6 +57,7 @@ angular.module('stofmaApp.services')
       function createProduct(productForm) {
         var defer = $q.defer();
         $http.post('/product', productForm).success(function (np) {
+          np = [np].map(ProductFactory.remapProducts).map(ProductFactory.remapForSelling)[0];
           defer.resolve(np);
         }).error(function (err) {
           defer.reject();
@@ -83,6 +78,7 @@ angular.module('stofmaApp.services')
       function editProduct(id, productForm) {
         var defer = $q.defer();
         $http.patch('/product/' + id, productForm).success(function (np) {
+          np = np.map(ProductFactory.remapProducts).map(ProductFactory.remapForSelling);
           defer.resolve(np[0]);
         }).error(function (err) {
           defer.reject();
@@ -97,6 +93,25 @@ angular.module('stofmaApp.services')
           p.productId = o.id;
           p.quantity = o.quantity;
           return p;
+        },
+        remapProducts: function (o) {
+          o.isOut = function () {
+            return o.quantity == 0;
+          };
+          o.getPrice = function (level) {
+            if (level == 'member')
+              return o.memberPrice;
+            else
+              return o.price;
+          };
+          return o;
+        },
+        remapForSelling: function (o) {
+          o.selected = 0;
+          return o;
+        },
+        getLevelPrice: function (isMember) {
+          return isMember ? 'member' : 'notamember';
         }
       }
     }]);

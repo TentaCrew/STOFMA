@@ -2,8 +2,9 @@
 
 angular.module('stofmaApp.controllers')
 
-    .controller('SalesCtrl', ['$scope', 'salesData', 'SaleService', 'UserService', '$mdBottomSheet', '$mdToast', 'amMoment', '$filter', function ($scope, salesData, SaleService, UserService, $mdBottomSheet, $mdToast, amMoment, $filter) {
+    .controller('SalesCtrl', ['$scope', 'salesData', 'SaleService', 'UserService', '$mdBottomSheet', '$mdToast', 'isManager', function ($scope, salesData, SaleService, UserService, $mdBottomSheet, $mdToast, isManager) {
       $scope.sales = salesData;
+      $scope.isManager = isManager;
 
       // Possible header title : today, yesterday, week, past
       var headerDate = '',

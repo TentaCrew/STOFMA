@@ -77,14 +77,18 @@ angular.module('stofmaApp.services')
           defer.reject();
         }
 
-
         return defer.promise;
       }
 
-      function getPaymentModes() {
+      function getPaymentModes(guest) {
         var defer = $q.defer();
 
-        defer.resolve(that.paymentModes);
+        defer.resolve(that.paymentModes.filter(function (pm) {
+          if (guest === true && pm.id.toLowerCase().indexOf('credit') >= 0)
+            return false;
+          else
+            return true;
+        }));
 
         return defer.promise;
       }
@@ -99,7 +103,7 @@ angular.module('stofmaApp.services')
         },
         isCredit: function (o) {
           var i = o.id;
-          if(angular.isUndefined(i))
+          if (angular.isUndefined(i))
             i = o;
           return i.indexOf('CREDIT') >= 0;
         }

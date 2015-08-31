@@ -88,7 +88,9 @@ angular.module('stofmaApp')
             },
             resolve: {
               salesProvider: 'SaleService',
-
+              isManager: function () {
+                return false;
+              },
               salesData: function (salesProvider) {
                 return salesProvider.getOwnSales();
               }
@@ -171,7 +173,9 @@ angular.module('stofmaApp')
             },
             resolve: {
               salesProvider: 'SaleService',
-              AccessLevels: 'AccessLevels',
+              isManager: function () {
+                return true;
+              },
 
               salesData: function (salesProvider) {
                 return salesProvider.getSales();

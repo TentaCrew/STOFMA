@@ -7,15 +7,23 @@ angular.module('stofmaApp.components')
           usage: "@",
           sellHandler: "=sell", // Must be an function.
           activateHandler: "=activate", // Must be an function returning a promise.
-          editHandler: "=edit" // Must be an function returning a promise.
+          editHandler: "=edit", // Must be an function returning a promise.
+          getSum: '=',
+          levelPrice: "="
         },
         controller: ['$scope', function ($scope) {
           $scope.sum = 0.0;
           $scope.isSellable = false;
+
           $scope.isSellingMode = false;
           $scope.isListingMode = false;
           $scope.isSelectingMode = false;
           $scope.tabSelected = 0;
+
+          $scope.$watch('levelPrice', function (n) {
+            if (angular.isDefined(n))
+              computeSum();
+          });
 
           ProductService.getCategories().then(function (cats) {
             $scope.categories = cats;
@@ -80,28 +88,22 @@ angular.module('stofmaApp.components')
             $scope.isSelectingMode = nv == 'selecting';
           });
 
-          $scope.$watch("editHandler", function (nv, ov) {
+          $scope.$watch("editHandler", function (nv) {
             $scope.canBeEdit = angular.isDefined(nv) && angular.isFunction(nv);
           });
 
           $scope.$watch("products", function (nv, ov) {
-            var sum = 0;
-
-            angular.forEach($scope.products, function (v, k) {
-              if (v.selected > 0) {
-                sum += v.selected * v.price;
-              }
-            });
-            $scope.sum = sum;
-            $scope.isSellable = sum > 0;
+            if ($scope.isSellingMode)
+              computeSum();
 
             if (typeof $scope.$parent.setFabButton == 'function') {
-              if($scope.isSellable)
+              if ($scope.isSellable)
                 $scope.$parent.setFabButton('done', $scope.check);
-              else if($scope.isSellingMode)
+              else if ($scope.isSellingMode)
                 $scope.$parent.setFabButton(false);
             }
 
+            // Go to category on adding or removing (in selecting mode only)
             if ($scope.isSelectingMode && angular.isArray(nv) && angular.isArray(ov) && nv.length != ov.length) {
               var categoryToGo;
               if (nv.length > ov.length) {
@@ -132,6 +134,22 @@ angular.module('stofmaApp.components')
             if ($scope.isSellable) {
               $scope.sellHandler();
             }
+          };
+
+          function computeSum() {
+            var sum = 0;
+
+            angular.forEach($scope.products, function (v, k) {
+              if (v.selected > 0) {
+                sum += v.selected * v.getPrice($scope.levelPrice);
+              }
+            });
+            $scope.sum = sum;
+
+            if (angular.isFunction($scope.getSum))
+              $scope.getSum(sum);
+
+            $scope.isSellable = sum > 0;
           }
         }],
         link: function (scope, element, attrs) {

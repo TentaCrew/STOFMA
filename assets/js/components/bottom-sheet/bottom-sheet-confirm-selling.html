@@ -1,20 +1,23 @@
-<md-bottom-sheet class="md-list md-has-header">
-  <md-subheader>Confirmation de la vente</md-subheader>
-  <div class="md-display-2 text-center">{{sum | currency:''}} €</div>
-  <div class="md-display-1 text-center" ng-repeat="product in productsOnSale">
-    {{ product.selected }} x <strong>{{ product.name }}</strong>
+<md-bottom-sheet class="md-has-header">
+  <div layout-padding>
+    <div class="md-display-2 text-center">{{sum | currency:''}} €</div>
+    <div class="md-display-1 text-center" ng-repeat="product in productsOnSale">
+      {{ product.selected }} x <strong>{{ product.name }}</strong>
+    </div>
   </div>
+  <md-divider></md-divider>
   <form name="confirmSale">
-    <md-input-container layout-padding>
-      <div layout="row" layout-sm="column" layout-align="space-around center">
+    <h1 class="md-title text-center">Moyen de paiement</h1>
+    <md-input-container>
+      <div layout="row" layout-sm="column" layout-align="center center">
         <md-button class="md-button md-raised" ng-click="setPayment(pm.id)" ng-class="{'md-primary':payment == pm.id}" ng-repeat="pm in paymentModes">
           {{pm.name}}
         </md-button>
       </div>
     </md-input-container>
-    <md-list>
+    <md-list layout="row" layout-sm="column" layout-align="center center">
       <md-list-item>
-        <md-button class="md-list-item-content md-primary" ng-click="confirm()" ng-focus>
+        <md-button class="md-list-item-content md-primary" ng-click="confirm()">
           <md-icon class="material-icons">done</md-icon>
           <span class="md-inline-list-icon-label">Confirmer</span>
         </md-button>
