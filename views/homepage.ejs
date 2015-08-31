@@ -30,21 +30,21 @@
   </section>
 </md-sidenav>
 
-<div flex layout="column" tabIndex="-1">
-
-  <md-toolbar layout="row" class="md-whiteframe-z2 md-toolbar-tools">
+<div layout="column" layout-fill style="overflow: auto;">
+  <md-toolbar layout="row" class="md-whiteframe-z2 md-toolbar-tools" md-scroll-shrink>
     <md-button class="md-icon-button" hide-gt-sm ng-click="main.toggleMenu()" aria-label="Afficher le menu">
       <md-icon class="material-icons">menu</md-icon>
     </md-button>
     <h2 ng-bind="pageTitle" class="page-title"></h2>
+
+    <md-button ng-if="fabbutton != null" class="md-fab md-fab-top-right md-accent" ng-click="fabbutton.handler()">
+      <md-icon class="material-icons">{{fabbutton.icon}}</md-icon>
+    </md-button>
   </md-toolbar>
 
-  <div layout-align="center start" role="main">
+  <md-content layout-align="center start" role="main" flex>
     <md-whiteframe ui-view class="stofma-content md-whiteframe-z1" layout layout-padding></md-whiteframe>
-  </div>
-
-  <md-button ng-if="fabbutton != null" class="md-fab md-fab-top-right md-accent" ng-click="fabbutton.handler()">
-    <md-icon class="material-icons">{{fabbutton.icon}}</md-icon>
-  </md-button>
+  </md-content>
 </div>
+
 

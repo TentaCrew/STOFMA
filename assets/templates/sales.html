@@ -1,8 +1,6 @@
 <md-list ng-hide="sales.length == 0">
   <section ng-repeat="sale in sales">
-    <div ng-if="sale.type == 'header'">
-      <md-subheader>{{sale.title}}</md-subheader>
-    </div>
+    <md-subheader ng-if="sale.type == 'header'">{{sale.title}}</md-subheader>
     <md-list-item class="md-3-line md-no-proxy" role="listitem" ng-if="sale.type != 'header'">
       <div class="md-list-item-text" layout="row" layout-align="space-between center">
         <div layout="column">

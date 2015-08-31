@@ -1,8 +1,6 @@
 <md-list ng-hide="purchases.length == 0">
   <section ng-repeat="purchase in purchases">
-    <div ng-if="purchase.type == 'header'">
-      <md-subheader>{{purchase.title}}</md-subheader>
-    </div>
+    <md-subheader ng-if="purchase.type == 'header'">{{purchase.title}}</md-subheader>
     <md-list-item class="md-3-line md-no-proxy" role="listitem" ng-if="purchase.type != 'header'">
       <div class="md-list-item-text" layout="row" layout-align="space-between center">
         <div layout="column">
