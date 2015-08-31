@@ -9,11 +9,12 @@ angular.module('stofmaApp.controllers')
       $scope.simpleUsers = new Array();
       $scope.managerUsers = new Array();
       for(var i = 0 ; i < $scope.allUsers.length ; i++){
-        if($scope.allUsers[i].role === 'USER'){
-          $scope.simpleUsers.push($scope.allUsers[i]);
+        var user = $scope.allUsers[i];
+        if(user.role === 'USER' && user.id !== -1){
+          $scope.simpleUsers.push(user);
         }
-        else if($scope.allUsers[i].role === 'MANAGER'){
-          $scope.managerUsers.push($scope.allUsers[i]);
+        else if(user.role === 'MANAGER'){
+          $scope.managerUsers.push(user);
         }
       }
     };
