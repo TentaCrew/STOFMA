@@ -162,13 +162,18 @@ module.exports = {
   },
 
   get: function (req, res) {
+    // restrict regular users to their own attributes
+    if(!req.session.user.isManager){
+      req.allParams().id = req.session.user.id;
+    }
+
     // Getting users from some parameters
-    User.find(req.allParams(), function(err, user) {
+    User.find(req.allParams(), function(err, users) {
       if (err) {
         return res.negotiate(err);
       }
       else {
-        return res.send(200, user);
+        return res.send(200, users);
       }
     });
   }

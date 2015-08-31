@@ -166,14 +166,13 @@ module.exports = {
   */
   get: function (req, res) {
 
+    // restrict regular users to their own sales only
+    if(!req.session.user.isManager){
+      req.allParams().customer = req.session.user.id;
+    }
+
     if(req.session.lazy) { // Populate everything
-      Sale
-      .find(req.allParams())
-      .populate('manager')
-      .populate('customer')
-      .populate('products')
-      .populate('payment')
-      .sort('saleDate desc')
+      Sale.find(req.allParams()).populate('manager').populate('customer').populate('products').populate('payment').sort('saleDate desc')
       .exec(function(err, foundSales) {
         if (err) {
           return res.negotiate(err);

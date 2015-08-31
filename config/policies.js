@@ -37,7 +37,6 @@ module.exports.policies = {
     'setRole': 'isAdmin',
     'credit':  'isManager',
     'delete':  'isAdmin',
-    'getAll':  'authenticated',
     'get':     'authenticated'
   },
 

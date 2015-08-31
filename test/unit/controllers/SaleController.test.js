@@ -677,4 +677,80 @@ describe('SaleController', function() {
     });
   });
 
+  /**
+  * Get as a manager user
+  */
+  describe('#get() as a manager User', function() {
+
+    // Before: Log in as a manager User
+    before(function(done){
+      agent
+      .put('/user/login')
+      .send({
+        email: data.user_manager_01.email,
+        password: data.user_manager_01.password
+      })
+      .expect(200)
+      .end(done);
+    });
+
+    // After: Log out
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .end(done);
+    });
+
+    // Test
+    it('As a manager user, should get all sales', function (done) {
+      agent
+      .get('/sale')
+      .expect(200)
+      .end(function(err, sales){
+        Sale.count().exec(function(err, nbSales){
+          assert.equal(nbSales, sales.body.length, 'A manager user should get all sales.');
+          done();
+        });
+      });
+    });
+  });
+
+  /**
+  * Get as a regular user
+  */
+  describe('#get() as a regular User', function() {
+
+    // Before: Log in as a regular User
+    before(function(done){
+      agent
+      .put('/user/login')
+      .send({
+        email: data.user_customer_05.email,
+        password: data.user_customer_05.password
+      })
+      .expect(200)
+      .end(done);
+    });
+
+    // After: Log out
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .end(done);
+    });
+
+    // Test
+    it('As a regular user, should get only his own sales', function (done) {
+      agent
+      .get('/sale')
+      .expect(200)
+      .end(function(err, sales){
+        Sale.count({customer: data.user_customer_05.id}, function(err, nbSales){
+          assert.equal(nbSales, sales.body.length, 'A regular user shouldn\'t get all the sales.');
+          done();
+        });
+      });
+    });
+  });
+
 });
