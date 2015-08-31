@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('stofmaApp.controllers')
-    .controller('RegisterCtrl', ['$scope', 'Auth', '$state', '$mdDialog', function ($scope, Auth, $state, $mdDialog) {
+    .controller('RegisterCtrl', ['$scope', 'Auth', '$state', '$mdDialog', '$mdDatePicker', function ($scope, Auth, $state, $mdDialog, $mdDatePicker) {
       $scope.register = function ($event) {
         var form = $scope.registerUser,
-            sex = form.userSex.$modelValue == 0,
+            sex = form.userSex.$modelValue === 0,
             firstName = form.userFirstName.$modelValue,
             name = form.userName.$modelValue,
             email = form.userMail.$modelValue,
@@ -53,4 +53,10 @@ angular.module('stofmaApp.controllers')
           });
         }
       };
+      
+      $scope.showPicker = function(ev) {
+    	$mdDatePicker(ev, $scope.userBirthday).then(function(selectedDate) {
+          $scope.userBirthday = selectedDate;
+        });
+      }  
     }]);
