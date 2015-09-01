@@ -84,7 +84,7 @@ angular.module('stofmaApp.services')
         var defer = $q.defer();
 
         defer.resolve(that.paymentModes.filter(function (pm) {
-          if (guest === true && pm.id.toLowerCase().indexOf('cash') == -1)
+          if (guest === true && pm.id.toLowerCase().indexOf('credit') >= 0)
             return false;
           else
             return true;
