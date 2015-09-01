@@ -35,7 +35,7 @@ module.exports = {
         var stockOut = false;
         async.each(pairs, function(pair, cb) {
           Product.findOne(pair.product, function(err,product){
-            if(Number(product.quantity) - Number(pair.quantity) < 0) {
+            if(Number(product.quantity) < 0) {    //the stock has already been updated in createPairs
               stockOut = true;
             }
             cb();
@@ -256,7 +256,7 @@ module.exports = {
           var stockOut = false;
           async.each(pairs, function(pair, cb) {
             Product.findOne(pair.product, function(err,product){
-              if(Number(product.quantity) - Number(pair.quantity) < 0) {
+              if(Number(product.quantity) < 0) {    //the stock has already been updated in createPairs
                 stockOut = true;
               }
               cb();
