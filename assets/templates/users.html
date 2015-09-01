@@ -1,6 +1,6 @@
 <md-list>
-  <md-list-item class="md-2-line" ng-repeat="u in users" ng-click="goProfileEditor(u.id)">
-    <div class="md-list-item-text" layout="row" layout-align="space-between center">
+  <md-list-item class="md-2-line" ng-repeat="u in users" md-swipe-left="this.quickActions=true" md-swipe-right="this.quickActions=false">
+    <div class="md-list-item-text" layout="row" layout-align="space-between center" ng-show="!this.quickActions" ng-click="goProfileEditor(u.id)">
       <div>
         <h3><strong>{{u.getName(true)}}</strong></h3>
         <p>{{u.credit | currency:''}} €</p>
@@ -13,6 +13,10 @@
         <div ng-switch-when="MANAGER"><md-icon class="material-icons md-primary">supervisor_account</md-icon> Manager</div>
         <div ng-switch-when="ADMINISTRATOR"><md-icon class="material-icons md-primary">whatshot</md-icon> Administateur</div>
       </div>
+    </div>
+    <div class="md-list-item-text" layout="row" layout-align="end center" ng-show="this.quickActions">
+      <md-button class="md-raised md-primary" ng-click="goProfileEditor(u.id)">modifier</md-button>
+      <md-button class="md-raised md-warn" ng-click="">désactiver</md-button>
     </div>
     <md-divider ng-if="!$last"></md-divider>
   </md-list-item>
