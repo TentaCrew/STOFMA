@@ -3,7 +3,7 @@ module.exports = {
     level: 'error'
   },
   models: {
-    connection: 'memoryDb',
+    connection: 'DBTest',
     migrate: 'drop'
   }
 }

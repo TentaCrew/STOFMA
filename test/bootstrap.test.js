@@ -3,13 +3,7 @@ var data = require('./datatest.js');
 
 before(function(done) {
   Sails.lift({
-    log: {
-      level: 'error'
-    },
-    models: {
-      connection: 'localDiskDb',
-      migrate: 'drop'
-    }
+    environment: 'test'
   }, function(){
 
       async.parallel({

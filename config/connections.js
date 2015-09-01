@@ -22,11 +22,13 @@
 module.exports.connections = {
 
   localDiskDb: {
-    adapter: 'sails-disk'
+    adapter: 'sails-disk',
+    database: 'prod_db'
   },
 
-  memoryDb: {
-    adapter: 'sails-memory'
+  DBTest: {
+    adapter: 'sails-disk',
+    database: 'test_db'
   }
 
 
