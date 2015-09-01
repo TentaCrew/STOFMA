@@ -159,7 +159,9 @@ angular.module('stofmaApp.services')
     .factory('UserFactory', function(){
       return {
         remap : function(o){
-          o.getName = function(){
+          o.getName = function(nameFirst){
+            if(angular.isDefined(nameFirst))
+              return o.name + ' ' + o.firstname;
             return o.firstname + ' ' + o.name;
           };
           return o;

@@ -15,6 +15,10 @@
   </md-tab>
 </md-tabs>
 
+<md-switch ng-show="isSelectingMode" ng-model="showMemberPrice" aria-label="levelPrice">
+  Prix membre
+</md-switch>
+
 <h2 class="text-center" ng-if="products.length == 0">Aucun produit enregistré pour le moment.</h2>
 
 <md-toolbar ng-if="isSellingMode">

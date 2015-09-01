@@ -2,8 +2,8 @@
   <md-list-item class="md-2-line" ng-repeat="u in users" ng-click="goProfileEditor(u.id)">
     <div class="md-list-item-text" layout="row" layout-align="space-between center">
       <div>
-        <h3><strong>{{u.name}} {{u.firstname}}</strong></h3>
-        <p>{{u.credit}}€</p>
+        <h3><strong>{{u.getName(true)}}</strong></h3>
+        <p>{{u.credit | currency:''}} €</p>
       </div>
       <div ng-if="u.isMember">
         <md-icon class="material-icons md-accent">card_membership</md-icon> Membre

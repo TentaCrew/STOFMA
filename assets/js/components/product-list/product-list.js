@@ -1,5 +1,5 @@
 angular.module('stofmaApp.components')
-    .directive('productList', ['ProductService', function (ProductService) {
+    .directive('productList', ['ProductService', 'ProductFactory', function (ProductService, ProductFactory) {
       return {
         restrict: 'A',
         scope: {
@@ -23,6 +23,13 @@ angular.module('stofmaApp.components')
           $scope.$watch('levelPrice', function (n) {
             if (angular.isDefined(n))
               computeSum();
+          });
+          
+
+          $scope.$watch('showMemberPrice', function (n) {
+            if (angular.isDefined(n)) {
+              $scope.levelPrice = ProductFactory.getLevelPrice(n);
+            }
           });
 
           ProductService.getCategories().then(function (cats) {

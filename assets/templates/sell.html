@@ -1,12 +1,29 @@
 <div ng-hide="products.length == 0">
-  <form>
-    <md-input-container>
-      <label>Personne à servir</label>
-      <md-select ng-model="customer">
-        <md-option ng-repeat="u in users" ng-value="u">{{u.getName()}}</md-option>
-      </md-select>
+  <form layout="row" layout-align="center center" layout-padding>
+    <md-autocomplete flex="80" md-menu-class="autocomplete-select-user" ng-disabled="guest" required md-selected-item="customer" md-floating-label="Personne à servir" md-autofocus="true" md-autoselect="true" md-select-on-match="true" md-search-text="searchUserText" md-items="user in getMatches(searchUserText)" md-item-text="user.getName()">
+      <md-item-template>
+        <div layout="row">
+          <div ng-switch="user.role">
+            <div ng-switch-when="USER"><md-icon class="material-icons">person</md-icon></div>
+            <div ng-switch-when="MANAGER"><md-icon class="material-icons">supervisor_account</md-icon></div>
+            <div ng-switch-when="ADMINISTRATOR"><md-icon class="material-icons">whatshot</md-icon></div>
+          </div>
+          <span md-highlight-text="searchUserText">{{user.getName()}}</span>&nbsp;-&nbsp;<em>{{user.credit | currency:''}} €</em>
+          <md-icon ng-if="user.isMember" class="material-icons md-accent">card_membership</md-icon>
+        </div>
+      </md-item-template>
+      <md-not-found>
+        Aucun utilisateur trouvé.
+      </md-not-found>
+    </md-autocomplete>
+    <md-input-container flex="20" ng-show="canBeGuest">
+      <md-checkbox ng-model="guest" aria-label="Invité">
+        Invité
+      </md-checkbox>
     </md-input-container>
   </form>
+  
+  <md-divider></md-divider>
 
   <div data-product-list data-products="products" data-usage="selling" class="product-list" data-sell="confirmSelling" data-get-sum="computeSum" data-level-price="levelPrice"></div>
 </div>
