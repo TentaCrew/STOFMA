@@ -1,45 +1,66 @@
-<md-list ng-if="!listingDisplayMode">
-  <div data-product-list data-products="productsOnSale" data-usage="selecting" class="product-list"></div>
-</md-list>
-<md-list ng-if="listingDisplayMode" class="padding">
-  <md-list-item class="md-2-line" ng-repeat="product in productsOnSale">
-    <img ng-src="{{product.urlImage}}" ng-if="product.urlImage" alt="image of {{product.name}}" class="md-avatar"/>
-    <div class="md-list-item-text">
-      <h3>{{product.name}}</h3>
-      <h4><em>{{product.quantity}} x </em><strong>{{product.price | currency:''}} €</strong><em> – {{product.price * product.quantity | currency:''}} €</em></h4>
-    </div>
-    <div layout="row" layout-align="end center">
-      <md-button class="md-button md-accent md-icon-button" ng-click="remove($index)">
-        <md-icon class="material-icons">clear</md-icon>
-      </md-button>
-    </div>
-  </md-list-item>
-</md-list>
+
 <form name="selectProduct" novalidate layout-padding>
   <div>
     <h1 class="md-title">Ajout des articles achetés</h1>
-
-    <div layout="row" layout-sm="column">
-      <md-input-container>
-        <label>Sélection de l'article</label>
-        <md-select ng-model="productSelected" name="productSelected" required>
-          <md-option ng-repeat="product in availableProducts" ng-value="product">{{product.name}}</md-option>
-        </md-select>
-      </md-input-container>
-      <md-input-container>
+    
+    <md-autocomplete flex="100" md-menu-class="autocomplete-select-user" required md-selected-item="productSelected" md-min-length="0" placeholder="Sélection de l'article" md-autofocus="true" md-autoselect="true" md-select-on-match="true" md-search-text="searchProductText" md-items="product in getMatches(searchProductText)" md-item-text="product.name">
+      <md-item-template>
+        <div layout="row" layout-align="space-between center">
+          <span md-highlight-text="searchProductText">{{product.name}}</span>&nbsp;-&nbsp;<em>{{product.quantity}} restant{{product.quantity > 1 ? 's' : ''}}</em>
+          <md-icon ng-if="!product.isOut()" class="material-icons md-accent">layers</md-icon>
+          <md-icon ng-if="product.isOut()" class="material-icons md-accent">layers_clear</md-icon>
+        </div>
+      </md-item-template>
+      <md-not-found>
+        Aucun produit trouvé pour "{{searchProductText}}".
+      </md-not-found>
+    </md-autocomplete>
+    
+    <div layout="row" layout-sm="column" layout-align="space-between center">
+      <md-input-container flex>
         <label>Nombre de produits achetés</label>
         <input type="number" name="howmany" id="numberProduct" ng-model="number" required aria-label="number of product">
       </md-input-container>
-      <md-input-container>
+      <md-input-container flex>
         <label>Prix total payé</label>
         <input type="text" name="cost" ng-model="totalprice" required aria-label="price of product">
       </md-input-container>
-      <md-button class="md-button md-accent" ng-click="addProduct()">
+      <md-button class="md-button md-accent md-raised" ng-click="addProduct()">
         <md-icon class="material-icons">add</md-icon>
         Ajouter
       </md-button>
     </div>
-    <md-button class="md-button md-primary md-raised" ng-click="addPurchase($event)">Confirmer l'achat de {{sum | currency:''}} €.</md-button>
+    
+    <md-divider></md-divider>
+    
+    <md-list class="padding">
+      <md-list-item class="md-2-line" ng-repeat="product in productsOnSale">
+        <img ng-src="{{product.urlImage}}" ng-if="product.urlImage" alt="image of {{product.name}}" class="md-avatar"/>
+        <div class="md-list-item-text">
+          <h3>{{product.name}}</h3>
+          <h4><em>{{product.quantity}} x </em><strong>{{product.price | currency:''}} €</strong><em> – {{product.price * product.quantity | currency:''}} €</em></h4>
+        </div>
+        <div layout="row" layout-align="end center">
+          <md-button class="md-button md-accent md-icon-button" ng-click="remove($index)">
+            <md-icon class="material-icons">clear</md-icon>
+          </md-button>
+        </div>
+      </md-list-item>
+      <md-list-item class="md-2-line" ng-if="productsOnSale.length == 0">
+        <div class="md-list-item-text text-center">
+          <h1 class="md-title">Aucun produit acheté à lister</h1>
+        </div>
+      </md-list-item>
+    </md-list>
+    
+    <h1 class="md-title text-center">Moyen de paiement pour {{sum | currency:''}} €</h1>
+    <md-input-container>
+      <div layout="row" layout-sm="column" layout-align="center center">
+        <md-button class="md-button md-raised" ng-click="setPayment(pm.id)" ng-class="{'md-primary':payment == pm.id}" ng-repeat="pm in paymentModes">
+          {{pm.name}}
+        </md-button>
+      </div>
+    </md-input-container>
   </div>
 </form>
 <h3 class="md-display-1 text-center" ng-if="availableProducts.length == 0">Aucun produit n'est disponible. Veuillez alimenter vos produits.</h3>

@@ -9,6 +9,7 @@ angular.module('stofmaApp.components')
           activateHandler: "=activate", // Must be an function returning a promise.
           editHandler: "=edit", // Must be an function returning a promise.
           getSum: '=',
+          showSwitchPrice: '=',
           levelPrice: "="
         },
         controller: ['$scope', function ($scope) {

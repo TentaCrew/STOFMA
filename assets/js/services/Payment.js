@@ -17,6 +17,21 @@ angular.module('stofmaApp.services')
       }, {
         'id': 'IN_CHECK',
         'name': 'Chèque'
+      },{
+        'id': 'OUT_CASH',
+        'name': 'Liquide'
+      }, {
+        'id': 'OUT_CREDIT',
+        'name': 'Crédit'
+      }, {
+        'id': 'OUT_TRANSFER',
+        'name': 'Virement'
+      }, {
+        'id': 'OUT_CHECK',
+        'name': 'Chèque'
+      }, {
+        'id': 'OUT_CARD',
+        'name': 'Carte bancaire'
       }];
 
       this.getAll = getAll;
@@ -80,14 +95,24 @@ angular.module('stofmaApp.services')
         return defer.promise;
       }
 
-      function getPaymentModes(guest) {
+      function getPaymentModes(guest, direction) {
+        if(angular.isUndefined(direction))
+            direction = 'IN';
+        else
+            direction = direction.toUpperCase();
+          
         var defer = $q.defer();
 
-        defer.resolve(that.paymentModes.filter(function (pm) {
-          if (guest === true && pm.id.toLowerCase().indexOf('credit') >= 0)
-            return false;
-          else
-            return true;
+        defer.resolve(that.paymentModes
+          .filter(function (pm) {
+            return pm.id.split('_')[0].trim() === direction;
+          })
+          .filter(function (pm) {
+            if ((direction == 'IN' && guest === true && pm.id.toLowerCase().indexOf('credit') >= 0) 
+                || direction == 'OUT' && pm.id.toLowerCase().indexOf('credit') >= 0)
+              return false;
+            else
+              return true;
         }));
 
         return defer.promise;

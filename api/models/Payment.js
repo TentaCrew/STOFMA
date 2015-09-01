@@ -34,6 +34,7 @@ module.exports = {
            'OUT_CASH',        //> is when the association pay smthg with cash
            'OUT_CHECK',       //> is when the association pay smthg with a check
            'OUT_TRANSFER',   //> is when the association pay smthg by a bank transfer
+           'OUT_CARD',   //> is when the association pay smthg with a credit card
            'OTHER'],
       defaultsTo: 'OTHER'
     }

@@ -18,12 +18,13 @@ angular.module('stofmaApp.services')
         return defer.promise;
       }
 
-      function doPurchase(products) {
+      function doPurchase(products, paymentMode) {
         var defer = $q.defer();
         products = products.map(PurchaseFactory.remapForApi);
 
         $http.post('/purchase', {
-          products: products
+          products: products,
+          typePayment: paymentMode
         }).success(function(data){
           defer.resolve(data);
         }).error(function(err){

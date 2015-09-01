@@ -1,10 +1,13 @@
 'use strict';
 
 angular.module('stofmaApp.controllers')
-    .controller('AddPurchaseCtrl', ['$scope', '$state', 'productsData', 'PurchaseService', 'ProductFactory', 'SweetAlert', '$timeout', function ($scope, $state, productsData, PurchaseService, ProductFactory, SweetAlert, $timeout) {
+    .controller('AddPurchaseCtrl', ['$scope', '$state', 'productsData', 'PurchaseService', 'ProductFactory', 'SweetAlert', '$timeout', 'PaymentService', '$mdToast', function ($scope, $state, productsData, PurchaseService, ProductFactory, SweetAlert, $timeout, PaymentService, $mdToast) {
       $scope.availableProducts = productsData;
       $scope.productsOnSale = [];
-      $scope.listingDisplayMode = true;
+      
+      PaymentService.getPaymentModes(null, 'OUT').then(function (pm){
+          $scope.paymentModes = pm;
+      })
 
       $scope.$watch('productSelected', function (n, o) {
         if (!angular.equals(n, o) && angular.isDefined(n) && n !== null) {
@@ -23,6 +26,19 @@ angular.module('stofmaApp.controllers')
           });
         }
       }, true);
+      
+      // Auto-complete part
+      
+      $scope.getMatches = getMatches;
+      $scope.searchProductText = '';
+      
+      function getMatches(query) {
+        return query ? $scope.availableProducts.filter(function (p) {
+          return angular.lowercase(p.name).indexOf(angular.lowercase(query)) >= 0;
+        }) : $scope.availableProducts;
+      }
+      
+      // End of Auto-complete part
 
       var regexpHaveComa = new RegExp(/,/);
       $scope.addProduct = function () {
@@ -30,7 +46,7 @@ angular.module('stofmaApp.controllers')
           $scope.totalprice = $scope.totalprice.replace(regexpHaveComa, '.');
 
         if ($scope.selectProduct.$valid) {
-          if ($scope.productSelected !== null) {
+          if ($scope.productSelected !== null && $scope.number > 0) {
             $scope.productSelected.quantity = $scope.number;
             $scope.productSelected.price = parseFloat($scope.totalprice) / $scope.number;
 
@@ -52,18 +68,51 @@ angular.module('stofmaApp.controllers')
               $scope.productsOnSale.push(angular.copy($scope.productSelected));
 
             $scope.productSelected = null;
+            $scope.searchProductText = '';
             $scope.totalprice = '';
             $scope.number = '';
           }
         }
       };
+      
+      $scope.payment = null;
+      
+      $scope.setPayment = function (paymentMode) {
+        $scope.payment = paymentMode;
+      };
+      
+      function isValid () {
+        var valid = true;
+        
+        if ($scope.productsOnSale.length == 0) {
+            $mdToast.show(
+                $mdToast.simple()
+                    .content('Aucun produit n\'a été ajouté')
+                    .position("bottom right")
+                    .hideDelay(5000)
+            );
+            valid = false;
+        } else if($scope.payment == null) {
+            $mdToast.show(
+                $mdToast.simple()
+                    .content('Le moyen de paiement est à renseigner.')
+                    .position("bottom right")
+                    .hideDelay(5000)
+            );
+            valid = false;
+        }
+        
+        return valid;
+      }
 
       $scope.addPurchase = function () {
+        if(!isValid()) return;
+        
         var products = $scope.productsOnSale.filter(function (o) {
           return o.quantity > 0;
         });
 
-        PurchaseService.doPurchase(products).then(function () {
+        PurchaseService.doPurchase(products, $scope.payment).then(function () {
           SweetAlert.swal({
             title: 'Achat enregistré',
             type: 'success'
@@ -84,19 +133,8 @@ angular.module('stofmaApp.controllers')
       $scope.remove = function (index) {
         $scope.productsOnSale.splice(index, 1);
       };
-
-      $scope.$watch('listingDisplayMode', function (v) {
-        if($scope.availableProducts.length == 0 && false)
-          return;
-
-        if (v === true) {
-          $scope.setFabButton('view_week', function () {
-            $scope.listingDisplayMode = !$scope.listingDisplayMode;
-          });
-        } else if (v === false) {
-          $scope.setFabButton('list', function () {
-            $scope.listingDisplayMode = !$scope.listingDisplayMode;
-          });
-        }
+      
+      $scope.setFabButton('done', function () {
+        $scope.addPurchase();
       });
     }]);

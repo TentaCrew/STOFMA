@@ -30,9 +30,9 @@ angular.module('stofmaApp.controllers')
       $scope.searchUserText = '';
       
       function getMatches(query) {
-        return $scope.users.filter(function(u){
-          return u.getName().toLowerCase().indexOf(query.toLowerCase()) >= 0;
-        });
+        return query ? $scope.users.filter(function(u){
+          return angular.lowercase(u.getName()).indexOf(angular.lowercase(query)) >= 0;
+        }) : $scope.users;
       }
       
       // End of Auto-complete part
