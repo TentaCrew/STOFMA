@@ -29,7 +29,7 @@ angular.module('stofmaApp.controllers')
         UserService.get(userId).then(function (u) {
           var user = u;
           if (form.$valid) {
-            Auth.credit(userId, {credit: amount})
+            Auth.credit(userId, {credit: amount, typePayment: 'IN_CASH'}) //TODO : get the right payment type
                 .then(function (res) {
                   SweetAlert.swal({
                     title: 'Le compte de ' + user.firstname + ' ' + user.name + ' a été crédité de ' + Number(amount).toFixed(2) + '€',

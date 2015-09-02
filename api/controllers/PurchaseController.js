@@ -38,7 +38,7 @@ module.exports = {
         type        : req.param('typePayment')
       }, function (err, newPayment) {
         if (err) {
-          return res.negotiate(err);
+          return res.send(400,'Payment not created.');
         }
         else {
           //create the Purchase
@@ -89,7 +89,12 @@ module.exports = {
         .destroy(req.allParams())
         .exec(function(err, deletedPurchase) {
           Payment.destroy(purchase.payment.id, function(err,deletedPmt){
-            return res.send(200,'Purchase deleted with success');
+            if(err){
+              return res.send(400,'Payment not deleted.');
+            }
+            else{
+              return res.send(200,'Purchase deleted with success');
+            }
           });
         });
       });
@@ -174,7 +179,7 @@ module.exports = {
     else
       updatedValues.purchaseDate = new Date();
 
-    Purchase.findOne(req.param('id')).populate('products').exec(function(err,purchaseToUpdate){
+    Purchase.findOne(req.param('id')).populate('products').populate('payment').exec(function(err,purchaseToUpdate){
       //create the pairs
       Pair.createPairs(req.param('products'),false)
         .then(function(pairs) {
@@ -195,17 +200,27 @@ module.exports = {
               Payment.create({
                 paymentDate : req.param('purchaseDate') || new Date(),
                 manager     : req.session.user.id,
-                type        : req.param('typePayment')
+                type        : req.param('typePayment') || purchaseToUpdate.payment.type
               }, function (err, newPayment) {
-                Payment.destroy(purchaseToUpdate.payment, function(err,p){
-                  newPayment.amount = updatedPurchase.totalPrice;
-                  updatedPurchase.payment = newPayment;
-                  updatedPurchase.save(function(){
-                    newPayment.save(function(){
-                      return res.send(200, updatedPurchase);
-                    });
+                if(err){
+                  return res.send(400,'Payment not created.');
+                }
+                else {
+                  Payment.destroy(purchaseToUpdate.payment, function(err,p){
+                    if(err){
+                      return res.send(400,'Payment not deleted.');
+                    }
+                    else{
+                      newPayment.amount = updatedPurchase.totalPrice;
+                      updatedPurchase.payment = newPayment;
+                      updatedPurchase.save(function(){
+                        newPayment.save(function(){
+                          return res.send(200, updatedPurchase);
+                        });
+                      });
+                    }
                   });
-                });
+                }
               });
             });
           });

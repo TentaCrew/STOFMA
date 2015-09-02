@@ -469,7 +469,7 @@ describe('SaleController', function() {
     before(function(done){
       agent
       .patch('/user/'+data.sale_06.customer+'/credit')
-      .send({credit: 9})
+      .send({credit: 9, typePayment: 'IN_CHECK'})
       .end(done);
     });
 
@@ -518,7 +518,7 @@ describe('SaleController', function() {
     before(function(done){
       agent
       .patch('/user/'+data.sale_06.customer+'/credit')
-      .send({credit: 20})
+      .send({credit: 20, typePayment: 'IN_CASH'})
       .end(done);
     });
 

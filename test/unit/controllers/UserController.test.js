@@ -219,7 +219,7 @@ describe('UsersController', function() {
       .patch('/user/'+data.user_customer_03.id)
       .send({
         name:     'mynewname',
-        credit:   1000,
+        credit:   1000,     //will be ignored
         password: 'passup'
       })
       .expect(200, done);
@@ -258,7 +258,7 @@ describe('UsersController', function() {
       agent
       .patch('/user/'+data.user_customer_02.id)
       .send({
-        credit: 9999,
+        credit: 9999,   //will be ignored
         role: 'MANAGER'
       })
       .expect(200)
@@ -355,7 +355,7 @@ describe('UsersController', function() {
       User.findOne({id:data.user_customer_02.id}, function(err,userBefore){
         agent
         .patch('/user/'+data.user_customer_02.id+'/credit')
-        .send({credit: 10})
+        .send({credit: 10, typePayment: 'IN_CASH'})
         .expect(200)
         .end(function(){
           User.findOne({id:data.user_customer_02.id}, function(err,userAfter){
@@ -391,7 +391,7 @@ describe('UsersController', function() {
       User.findOne({id:data.user_customer_02.id}, function(err,userBefore){
         agent
         .patch('/user/'+data.user_customer_02.id+'/credit')
-        .send({credit: 20})
+        .send({credit: 20, typePayment: 'IN_CASH'})
         .expect(200)
         .end(function(){
           User.findOne({id:data.user_customer_02.id}, function(err,userAfter){
@@ -427,7 +427,7 @@ describe('UsersController', function() {
       User.findOne({id:data.user_customer_02.id}, function(err,userBefore){
         agent
         .patch('/user/'+data.user_customer_02.id+'/credit')
-        .send({credit: 1000})
+        .send({credit: 1000, typePayment: 'IN_CASH'})
         .expect(401)
         .end(function(){
           User.findOne({id:data.user_customer_02.id}, function(err,userAfter){

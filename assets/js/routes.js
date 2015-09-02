@@ -274,6 +274,27 @@ angular.module('stofmaApp')
               }
             }
           })
+          .state('manager.accountStatement', {
+            url: '/add',
+            controller: 'AccountStatementCtrl',
+            templateUrl: 'assets/templates/accountStatement.html',
+            data: {
+              name: 'Bilan financier',
+              icon: 'equalizer'
+            },
+            resolve: {
+              paymentsProvider: 'PaymentService',
+
+              paymentsData: function (paymentsProvider) {
+                return paymentsProvider.getAll();
+              },
+              usersProvider: 'UserService',
+
+              usersData: function (usersProvider) {
+                return usersProvider.getAll();
+              }
+            }
+          })
           .state('admin', {
             abstract: true,
             template: '<div ui-view />',

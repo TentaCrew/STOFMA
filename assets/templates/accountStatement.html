@@ -1,0 +1,20 @@
+<div layout="row" layout-sm="column" layout-padding>
+  <div>
+    <h2>Entrées</h2>
+      <p>Espèces:  <strong>{{in_totalCash}} €</strong></p>
+      <p>Chèques:  <strong>{{in_totalCheck}} €</strong></p>
+      <p>Virement: <strong>{{in_totalTransfer}} €</strong></p>
+      <p>Total:    <strong>{{in_total}} €</strong></p>
+    <h3>Informations</h3>
+      <p>Le montant des ventes effecutées via le solde s'élève à <strong>{{in_totalFromCredit}} €</strong></p>
+      <p>Un total de <strong>{{totalCredited}}</strong> € a été crédité sur les comptes des utilisateurs.</p>
+      <p><em>Un total de <strong>{{totalRemainingCredit}}</strong> € est toujours disponible sur les comptes des utilisateurs.<em></p>
+    <h2>Sorties</h2>
+      <p>Espèces:        <strong>{{out_totalCash}} €</strong></p>
+      <p>Chèques:        <strong>{{out_totalCheck}} €</strong></p>
+      <p>Virement:       <strong>{{out_totalTransfer}} €</strong></p>
+      <p>Carte bancaire: <strong>{{out_totalCB}} €</strong></p>
+      <p>Total:          <strong>{{out_total}} €</strong></p>
+  </div>
+</div>
+<h2 class="text-center" ng-show="payment.length == 0 && isManager">Aucun paiement n'a été enregistré pour le moment.</h2>

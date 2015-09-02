@@ -44,6 +44,7 @@ describe('PurchaseController', function() {
         agent
         .post('/purchase')
         .send({
+          typePayment: 'OUT_CARD',
           products: [
             {product: data.product_01.id, quantity: 100, unitPrice: 1},
             {product: data.product_02.id, quantity: 75, unitPrice: 1},
@@ -97,6 +98,7 @@ describe('PurchaseController', function() {
       .send({
         // purchaseDate is optionnal
         // manager is optionnal
+        typePayment: 'OUT_CASH',
         products: [
           {product: data.product_01.id, quantity: 1},
           {product: data.product_02.id, quantity: 12}
@@ -150,6 +152,7 @@ describe('PurchaseController', function() {
         agent
         .patch('/purchase/2')
         .send({
+          typePayment: 'OUT_CHECK',
           products: [
             // remove {product: data.product_02.id, quantity: 11, unitPrice: 1}
             {product: data.product_01.id, quantity: 10, unitPrice: 1}

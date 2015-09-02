@@ -135,10 +135,11 @@ module.exports = {
             customer    : req.param('id'),
             manager     : req.session.user.id,
             amount      : req.param('credit'),
-            type        : 'IN_CREDIT'
+            type        : req.param('typePayment'),
+            creditMode  : true
           }, function (err, newPayment) {
             if (err) {
-              return res.negotiate(err);
+              return res.send(400, 'Payment not created.');
             }
             else {
               return res.send(user);

@@ -5,14 +5,15 @@ before(function(done) {
   Sails.lift({
     environment: 'test'
   }, function(){
-
       async.parallel({
         createUsers: function(cb){
           User.create([data.user_admin_01,data.user_manager_01,data.user_customer_01,data.user_customer_02,data.user_customer_03,data.user_customer_05], cb);
         },
 
         createPayment: function(cb){
-          Payment.create([data.payment_01,data.payment_02,data.payment_03,data.payment_04,data.payment_05,data.payment_06,data.payment_07,data.payment_11,data.payment_12,data.payment_13], cb);
+          Payment.create([data.payment_01, data.payment_02, data.payment_03, data.payment_04, data.payment_05, data.payment_06, data.payment_07, data.payment_11, 
+                          data.payment_12, data.payment_13, data.payment_credit_user_admin_01, data.payment_credit_user_manager_01,
+                          data.payment_credit_user_customer_01, data.payment_credit_user_customer_02], cb);
         },
       },
 

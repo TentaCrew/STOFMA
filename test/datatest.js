@@ -6,7 +6,7 @@ module.exports = {
       email:     'the_admin@stofma.com',
       sex:       true,
       role:      'ADMINISTRATOR',
-      credit:    1000000,
+      credit:    100,
       password:  'admin'
     },
     user_manager_01: {
@@ -76,6 +76,44 @@ module.exports = {
       email:      'pic@sou.fr',
       sex:        true,
       password:   'cash'
+    },
+
+    //create the payments for their credit
+    payment_credit_user_admin_01: {
+      id:          -1,
+      manager:     1,
+      customer:    99,
+      amount:      100,
+      type:        'IN_CASH',
+      creditMode:  true,
+      paymentDate: '2015-08-18T21:38:52.750Z'
+    },
+    payment_credit_user_manager_01: {
+      id:          -2,
+      manager:     1,
+      customer:    1,
+      amount:      100,
+      type:        'IN_CASH',
+      creditMode:  true,
+      paymentDate: '2015-08-18T21:38:52.750Z'
+    },
+    payment_credit_user_customer_01: {
+      id:          -3,
+      manager:     1,
+      customer:    11,
+      amount:      100,
+      type:        'IN_CASH',
+      creditMode:  true,
+      paymentDate: '2015-08-18T21:38:52.750Z'
+    },
+    payment_credit_user_customer_02: {
+      id:          -4,
+      manager:     1,
+      customer:    12,
+      amount:      10,
+      type:        'IN_CASH',
+      creditMode:  true,
+      paymentDate: '2015-08-18T21:38:52.750Z'
     },
     product_01: {
       id:         1,
@@ -185,7 +223,7 @@ module.exports = {
       id:          4,
       manager:     1,
       customer:    13,
-      amount:      0.1,
+      amount:      99.9,
       type:        'IN_CREDIT',
       paymentDate: '2015-08-18T21:38:52.750Z'
     },
@@ -193,7 +231,7 @@ module.exports = {
       id:          5,
       manager:     1,
       customer:    15,
-      amount:      0.1,
+      amount:      5.2,
       type:        'IN_CASH',
       paymentDate: '2015-08-18T21:38:52.750Z'
     },
@@ -201,7 +239,7 @@ module.exports = {
       id:          6,
       manager:     1,
       customer:    15,
-      amount:      0.1,
+      amount:      9.99,
       type:        'IN_CHECK',
       paymentDate: '2015-08-18T21:38:52.750Z'
     },
@@ -209,28 +247,28 @@ module.exports = {
       id:          7,
       manager:     1,
       customer:    15,
-      amount:      0.1,
+      amount:      2.5,
       type:        'IN_CASH',
       paymentDate: '2015-08-18T21:38:52.750Z'
     },
     payment_11: {
       id:          11,
       manager:     1,
-      amount:      0.1,
+      amount:      117.4,
       type:        'OUT_CHECK',
       paymentDate: '2015-08-18T21:38:52.750Z'
     },
     payment_12: {
       id:          12,
       manager:     1,
-      amount:      0.1,
+      amount:      10,
       type:        'OUT_TRANSFER',
       paymentDate: '2015-08-18T21:38:52.750Z'
     },
     payment_13: {
       id:          13,
       manager:     1,
-      amount:      0.1,
+      amount:      0.10,
       type:        'OUT_CASH',
       paymentDate: '2015-08-18T21:38:52.750Z'
     },

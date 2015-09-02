@@ -65,7 +65,7 @@ module.exports = {
               type        : req.param('typePayment')
             }, function (err, newPayment) {
               if (err) {
-                return res.negotiate(err);
+                return res.send(400,'Payment not created.');
               }
               else {
 
@@ -149,7 +149,12 @@ module.exports = {
         .exec(function(err, deletedSale) {
           //delete related payment
           Payment.destroy(sale.payment.id, function(err,deletedPmt){
-            return res.send(200,'Sale deleted with success');
+            if(err){
+              return res.send(400,'Payment not deleted.');
+            }
+            else {
+              return res.send(200,'Sale deleted with success');
+            }
           });
         });
       });
@@ -309,20 +314,29 @@ module.exports = {
                     paymentDate : req.param('saleDate') || new Date(),
                     customer    : updatedSale.customer,
                     manager     : req.session.user.id,
-                    type        : req.param('typePayment')
+                    type        : req.param('typePayment') || saleToUpdate.payment.type
                   }, function (err, newPayment) {
-
-                    Payment.destroy(saleToUpdate.payment, function(err,p){
-                      newPayment.amount = updatedSale.totalPrice;
-                      updatedSale.payment = newPayment;
-                      updatedSale.save(function(){
-                        newPayment.save(function(){
-                          customer.save(function(){
-                            return res.send(200, updatedSale);
+                    if(err){
+                      return res.send(400, 'Payment not created.');
+                    }
+                    else {
+                      Payment.destroy(saleToUpdate.payment, function(err,p){
+                        if(err){
+                          return res.send(400,'Payment not deleted.');
+                        }
+                        else {
+                          newPayment.amount = updatedSale.totalPrice;
+                          updatedSale.payment = newPayment;
+                          updatedSale.save(function(){
+                            newPayment.save(function(){
+                              customer.save(function(){
+                                return res.send(200, updatedSale);
+                              });
+                            });
                           });
-                        });
+                        }
                       });
-                    });
+                    }
                   });
                 });
               });

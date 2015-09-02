@@ -202,7 +202,7 @@ module.exports.routes = {
   },
 
 /**
-* Routes about payments
+* Routes about payments and statement of account
 */
 
   // Add payment
@@ -210,7 +210,7 @@ module.exports.routes = {
     controller: 'PaymentController',
     action: 'add'
   },
-  // Get all payments
+  // Get some payments
   'GET /payment': {
     controller: 'PaymentController',
     action: 'get'
