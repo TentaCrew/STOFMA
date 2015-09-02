@@ -8,10 +8,8 @@
           <h4>Vendu <span class="ng-hide" ng-show="seeMore">le <em>{{sale.saleDate | amDateFormat:'LLLL'}} </em>
         </span>par <strong>{{sale.manager.firstname}} {{sale.manager.name}}</strong></h4>
 
-          <p>Montant : <strong>{{ sale.totalPrice | currency:''}} €</strong>
-          </p>
-          <p>Paiement : <strong>{{ sale.payment.type }}</strong>
-          </p>
+          <p>Montant : <strong>{{ sale.totalPrice | currency:''}} €</strong></p>
+          <p>Paiement : <strong>{{ sale.payment.name }}</strong></p>
           <ul ng-show="seeMore">
             <li ng-repeat="pair in sale.pairs">
               {{pair.quantity}} x <em><strong>{{pair.name}}</strong></em> : <strong>{{pair.price|currency:''}} €</strong>

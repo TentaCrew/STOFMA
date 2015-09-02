@@ -12,6 +12,7 @@ module.exports = {
     Payment.create({
       paymentDate : new Date(),
       customer    : req.param('customerId'),
+      name        : req.param('name'),
       manager     : req.param('managerId') || req.session.user.id,
       amount      : req.param('amount'),
       type        : req.param('type')

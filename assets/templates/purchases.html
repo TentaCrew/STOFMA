@@ -8,6 +8,7 @@
           <h4>A effectué un achat <span class="ng-hide" ng-show="seeMore">le <em>{{purchase.purchaseDate | amDateFormat:'LLLL'}}</em> </span></h4>
 
           <p>Montant : <strong>{{ purchase.totalPrice | currency:''}} €</strong></p>
+          <p>Paiement : <strong>{{ purchase.payment.name }}</strong></p>
           <ul ng-show="seeMore">
             <li ng-repeat="pair in purchase.pairs">
               <em><strong>{{pair.name}}</strong></em> x{{pair.quantity}} – <strong>{{pair.price|currency:''}} €</strong>

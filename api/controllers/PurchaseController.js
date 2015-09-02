@@ -109,6 +109,7 @@ module.exports = {
         .find(req.allParams())
         .populate('manager')
         .populate('products')
+        .populate('payment')
         .sort('purchaseDate desc')
         .exec(function(err, foundPurchases) {
           if (err) {

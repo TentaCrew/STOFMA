@@ -14,6 +14,10 @@ module.exports = {
       type: 'DATE',
       required: true
     },
+    name: {
+      type: 'STRING',
+      required: true
+    },
     customer: {
       model: 'User'
     },
@@ -37,5 +41,40 @@ module.exports = {
            'OTHER'],
       defaultsTo: 'OTHER'
     }
+  },
+
+  beforeValidate: function(values, next) {
+    switch (values.type) {
+      case 'IN_CREDIT' :
+        values.name = 'Solde';
+        break;
+      case 'IN_CASH' :
+        values.name = 'Espèces';
+        break;
+      case 'IN_CHECK' :
+        values.name = 'Chèque';
+        break;
+      case 'IN_TRANSFER' :
+        values.name = 'Virement';
+        break;
+      case 'OUT_CASH' :
+        values.name = 'Espèces';
+        break;
+      case 'OUT_CHECK' :
+        values.name = 'Chèque';
+        break;
+      case 'OUT_TRANSFER' :
+        values.name = 'Virement';
+        break;
+      case 'OUT_CARD' :
+        values.name = 'Carte bancaire';
+        break;
+      case 'OTHER' :
+        values.name = 'Autre';
+        break;
+      default:
+        values.name = 'Autre';
+    }
+    next();
   }
 };
