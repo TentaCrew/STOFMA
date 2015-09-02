@@ -13,7 +13,6 @@ module.exports = {
   * @param req
   * @param req.param                                     {Object}    Match criteria
   * @param [req.param.saleDate = Current date]           {Date}      Date of the Sale creation
-  * @param [req.param.managerId = Current session's id]  {Number}    Id of the manager User
   * @param req.param.customerId                          {Number}    Id of the customer User
   * @param req.param.products                            {Array}     Array of productId-quantity pairs defined as follows [{productId: <Number>, quantity: <Number>}, ...]
   * @param res
@@ -62,7 +61,7 @@ module.exports = {
             Payment.create({
               paymentDate : req.param('saleDate') || new Date(),
               customer    : req.param('customerId'),
-              manager     : req.param('managerId') || req.session.user.id,
+              manager     : req.session.user.id,
               type        : req.param('typePayment')
             }, function (err, newPayment) {
               if (err) {
@@ -74,7 +73,7 @@ module.exports = {
                 Sale.create({
                   saleDate: req.param('saleDate') || new Date(),
                   customer: req.param('customerId'),
-                  manager:  req.param('managerId') || req.session.user.id,
+                  manager:  req.session.user.id,
                   products: pairs,
                   payment: newPayment
                 }, function (err, newSale) {
@@ -231,7 +230,7 @@ module.exports = {
 
     var updatedValues = {};
     if(req.param('customerId')) updatedValues.customer = req.param('customerId');
-    if(req.param('managerId')) updatedValues.manager = req.param('managerId');
+    updatedValues.manager =  req.session.user.id;
     if(req.param('saleDate'))
       updatedValues.saleDate = req.param('saleDate');
     else
@@ -309,7 +308,7 @@ module.exports = {
                   Payment.create({
                     paymentDate : req.param('saleDate') || new Date(),
                     customer    : updatedSale.customer,
-                    manager     : updatedSale.manager,
+                    manager     : req.session.user.id,
                     type        : req.param('typePayment')
                   }, function (err, newPayment) {
 

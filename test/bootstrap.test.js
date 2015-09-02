@@ -12,7 +12,7 @@ before(function(done) {
         },
 
         createPayment: function(cb){
-          Payment.create([data.payment_01,data.payment_02,data.payment_03,data.payment_04,data.payment_05,data.payment_06,data.payment_07], cb);
+          Payment.create([data.payment_01,data.payment_02,data.payment_03,data.payment_04,data.payment_05,data.payment_06,data.payment_07,data.payment_11,data.payment_12,data.payment_13], cb);
         },
       },
 

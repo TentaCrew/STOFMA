@@ -213,6 +213,27 @@ module.exports = {
       type:        'IN_CASH',
       paymentDate: '2015-08-18T21:38:52.750Z'
     },
+    payment_11: {
+      id:          11,
+      manager:     1,
+      amount:      0.1,
+      type:        'OUT_CHECK',
+      paymentDate: '2015-08-18T21:38:52.750Z'
+    },
+    payment_12: {
+      id:          12,
+      manager:     1,
+      amount:      0.1,
+      type:        'OUT_TRANSFER',
+      paymentDate: '2015-08-18T21:38:52.750Z'
+    },
+    payment_13: {
+      id:          13,
+      manager:     1,
+      amount:      0.1,
+      type:        'OUT_CASH',
+      paymentDate: '2015-08-18T21:38:52.750Z'
+    },
     purchasePair_01: {
       id:       1,
       product:  1,
@@ -301,18 +322,21 @@ module.exports = {
     purchase_01: {
       id:           1,
       manager:      1,
+      payment:      11,
       products:     [1,2,3],
       purchaseDate: '2015-08-18T21:38:52.750Z'
     },
     purchase_02: {
       id:           2,
       manager:      1,
+      payment:      12,
       products:     [4,5],
       purchaseDate: '2015-08-18T21:38:52.750Z'
     },
     purchase_03: {
       id:           3,
       manager:      1,
+      payment:      13,
       products:     [6],
       purchaseDate: '2015-08-18T21:38:52.750Z'
     },

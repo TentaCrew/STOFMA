@@ -13,7 +13,6 @@ module.exports = {
   * @param req
   * @param req.param                                     {Object}    Match criteria
   * @param [req.param.purchaseDate = Current date]       {Date}      Date of the Purchase creation
-  * @param [req.param.managerId = Current session's id]  {Number}    Id of the manager User
   * @param req.param.products                            {Array}     Array of productId-quantity pairs defined as follows [{productId: <Number>, quantity: <Number>}, ...]
   * @param res
   */
@@ -31,21 +30,38 @@ module.exports = {
     Pair.createPairs(req.param('products'),false)
     .then(function(pairs) {
 
-      //create the Purchase
-      Purchase.create({
-        purchaseDate: req.param('purchaseDate') || new Date(),
-        manager:      req.param('managerId') || req.session.user.id,
-        products:     pairs
-      }, function (err, newPurchase) {
+      //Create the Payment without amount (unknown at this moment)
+      Payment.create({
+        paymentDate : req.param('purchaseDate') || new Date(),
+        customer    : req.param('customerId'),
+        manager     : req.session.user.id,
+        type        : req.param('typePayment')
+      }, function (err, newPayment) {
         if (err) {
           return res.negotiate(err);
         }
         else {
-          return res.send(200, newPurchase);
+          //create the Purchase
+          Purchase.create({
+            purchaseDate: req.param('purchaseDate') || new Date(),
+            manager:      req.session.user.id,
+            products:     pairs,
+            payment:      newPayment
+          }, function (err, newPurchase) {
+            if (err) {
+              return res.negotiate(err);
+            }
+            else {
+              //update the amount of the Payment if the totalPrice of the Purchase
+              newPayment.amount = Number(newPurchase.totalPrice);
+              newPayment.save(function(){
+                return res.send(200, newPurchase);
+              });
+            }
+          });
         }
       });
-    })
-    .catch(res.negotiate);
+    });
   },
 
   /**
@@ -55,7 +71,7 @@ module.exports = {
   * @param res
   */
   delete: function (req, res) {
-    Purchase.findOne(req.allParams()).populate('products').exec(function(err,purchase){
+    Purchase.findOne(req.allParams()).populate('products').populate('payment').exec(function(err,purchase){
 
       async.parallel({
 
@@ -72,7 +88,9 @@ module.exports = {
         Purchase
         .destroy(req.allParams())
         .exec(function(err, deletedPurchase) {
-          return res.send(200,'Purchase deleted with success');
+          Payment.destroy(purchase.payment.id, function(err,deletedPmt){
+            return res.send(200,'Purchase deleted with success');
+          });
         });
       });
     });
@@ -149,7 +167,7 @@ module.exports = {
     // TODO Verify parameters
 
     var updatedValues = {};
-    if(req.param('managerId')) updatedValues.manager = req.param('managerId');
+    updatedValues.manager = req.session.user.id;
     if(req.param('purchaseDate'))
       updatedValues.purchaseDate = req.param('purchaseDate');
     else
@@ -169,7 +187,25 @@ module.exports = {
 
             //update the purchase with the new values
             Purchase.update(req.param('id'), updatedValues, function (err, updatedPurchase) {
-              return res.send(200, updatedPurchase);
+
+              //get the updated Purchase
+              updatedPurchase = updatedPurchase[0];
+
+              Payment.create({
+                paymentDate : req.param('purchaseDate') || new Date(),
+                manager     : req.session.user.id,
+                type        : req.param('typePayment')
+              }, function (err, newPayment) {
+                Payment.destroy(purchaseToUpdate.payment, function(err,p){
+                  newPayment.amount = updatedPurchase.totalPrice;
+                  updatedPurchase.payment = newPayment;
+                  updatedPurchase.save(function(){
+                    newPayment.save(function(){
+                      return res.send(200, updatedPurchase);
+                    });
+                  });
+                });
+              });
             });
           });
         })

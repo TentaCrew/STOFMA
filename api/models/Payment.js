@@ -15,8 +15,7 @@ module.exports = {
       required: true
     },
     customer: {
-      model: 'User',
-      required: true
+      model: 'User'
     },
     manager: {
       model: 'User',
