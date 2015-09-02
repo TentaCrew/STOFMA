@@ -34,4 +34,5 @@
     <md-divider ng-if="!$last"></md-divider>
   </section>
 </md-list>
-<h2 class="text-center" ng-show="sales.length == 0">Aucune vente n'a été enregistrée pour le moment.</h2>
+<h2 class="text-center" ng-show="sales.length == 0 && isManager">Aucune vente n'a été enregistrée pour le moment.</h2>
+<h2 class="text-center" ng-show="sales.length == 0 && !isManager">Aucune achat n'a été effectué pour le moment.</h2>
