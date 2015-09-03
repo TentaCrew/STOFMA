@@ -1,6 +1,7 @@
 'use strict';
 
 var data = require('../../datatest.js');
+var assert = require('assert');
 var request = require('supertest');
 var agent;
 
@@ -163,6 +164,74 @@ describe('ProductController', function() {
         category:  'FOOD'
       })
       .expect(401, done)
+    });
+  });
+
+  describe('#update() as manager', function() {
+
+    // Before: Log in as a manager User
+    before(function(done){
+      agent
+      .put('/user/login')
+      .send({
+        email: data.user_manager_01.email,
+        password: data.user_manager_01.password
+      })
+      .expect(200)
+      .end(done);
+    });
+
+    // After: Log out
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .expect(200)
+      .end(done);
+    });
+
+    it('should update the prices of product with 11 (not member) and 0 (member)', function (done) {
+      agent
+      .patch('/product/'+data.product_09.id)
+      .send({
+        price: 11,
+        memberPrice: 0
+      })
+      .expect(200)
+      .end(function(err,res){
+        assert.equal(res.body[0].price, 11, 'The price hasn\'t changed.');
+        assert.equal(res.body[0].memberPrice, 0, 'The member price hasn\'t changed.');
+        done();
+      });
+    });
+
+    it('should update the prices of product with 0 (not member) and 0 (member)', function (done) {
+      agent
+      .patch('/product/'+data.product_09.id)
+      .send({
+        price: 0,
+        memberPrice: 0
+      })
+      .expect(200)
+      .end(function(err,res){
+        assert.equal(res.body[0].price, 0, 'The price hasn\'t changed.');
+        assert.equal(res.body[0].memberPrice, 0, 'The member price hasn\'t changed.');
+        done();
+      });
+    });
+
+    it('should update the prices of product with 1 (not member) and 3 (member)', function (done) {
+      agent
+      .patch('/product/'+data.product_09.id)
+      .send({
+        price: 1,
+        memberPrice: 3
+      })
+      .expect(200)
+      .end(function(err,res){
+        assert.equal(res.body[0].price, 1, 'The price hasn\'t changed.');
+        assert.equal(res.body[0].memberPrice, 3, 'The member price hasn\'t changed.');
+        done();
+      });
     });
   });
 

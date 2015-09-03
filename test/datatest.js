@@ -194,6 +194,17 @@ module.exports = {
       minimum:   20,
       category:  'DRINK'
     },
+    product_09: {
+      id:         9,
+      name:      'Bambou',
+      shortName: 'BBOU',
+      quantity:  10,
+      price:     10,
+      memberPrice:0,
+      urlImage:  'http://media3.cultureindoor.com/7059-large_default/bambou-60cm.jpg',
+      minimum:   20,
+      category:  'OTHER'
+    },
     payment_01: {
       id:          1,
       manager:     1,

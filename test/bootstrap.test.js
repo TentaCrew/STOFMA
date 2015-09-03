@@ -21,7 +21,7 @@ before(function(done) {
         async.parallel({
 
         createProducts: function(cb){
-          Product.create([data.product_01,data.product_02,data.product_03,data.product_04,data.product_05,data.product_06,data.product_07], function(){
+          Product.create([data.product_01,data.product_02,data.product_03,data.product_04,data.product_05,data.product_06,data.product_07,data.product_09], function(){
             Pair.create([data.purchasePair_01,data.purchasePair_02,data.purchasePair_03,data.purchasePair_04,data.purchasePair_05,data.purchasePair_06,
                          data.salePair_11,data.salePair_12,data.salePair_13,data.salePair_14,data.salePair_15,data.salePair_16,data.salePair_17,
                          data.salePair_18,data.salePair_19,data.salePair_20,data.salePair_21], function(err,pairs){

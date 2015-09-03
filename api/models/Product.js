@@ -54,7 +54,7 @@ module.exports = {
   },
 
   beforeValidate: function(values, next) {
-    if(!values.memberPrice) {
+    if(values.memberPrice == null) {
       values.memberPrice = values.price;
     }
     next();
