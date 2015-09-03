@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('stofmaApp.controllers')
-    .controller('AddProductCtrl', ['$scope', '$state', 'ProductService', 'SweetAlert',  function ($scope, $state, ProductService, SweetAlert) {
+    .controller('AddProductCtrl', ['$scope', '$state', 'ProductService', 'SweetAlert', function ($scope, $state, ProductService, SweetAlert) {
       $scope.setFabButton('clear', function () {
         $state.go('^');
         $scope.setFabButton('add', function () {
@@ -19,19 +19,23 @@ angular.module('stofmaApp.controllers')
             minimum = parseInt(form.minimum.$modelValue),
             urlImage = form.urlImage.$modelValue;
 
-        if (isNaN(price) || price <= 0)
-          form.unitPrice.$setValidity('notaprice');
+        if (isNaN(price) || price < 0)
+          form.unitPrice.$setValidity('notaprice', false);
+        else
+          form.unitPrice.$setValidity('notaprice', true);
 
-        if (isNaN(minimum) || minimum <= 0)
-          form.minimum.$setValidity('notanumber');
+        if (isNaN(minimum) || minimum < 0)
+          form.minimum.$setValidity('notanumber', false);
+        else
+          form.minimum.$setValidity('notanumber', true);
 
         if (form.$valid) {
           ProductService.createProduct({
             category: category,
             name: name,
             shortName: shortName,
-            price: price,
-            memberPrice: memberPrice,
+            price: ''+price,
+            memberPrice: ''+memberPrice,
             minimum: minimum,
             urlImage: urlImage
           }).then(function (newProduct) {

@@ -17,7 +17,7 @@ angular.module('stofmaApp.controllers')
       });
 
       function loadPayments() {
-        PaymentService.get('IN_CREDIT').then(function (payments) {
+        PaymentService.getAllCredit().then(function (payments) {
           $scope.payments = payments;
         });
       }

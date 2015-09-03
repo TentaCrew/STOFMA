@@ -23,12 +23,12 @@ angular.module('stofmaApp.components')
             minimum = parseInt(form.minimum.$modelValue),
             urlImage = form.urlImage.$modelValue;
 
-        if (isNaN(price) || price <= 0)
+        if (isNaN(price) || price < 0)
           form.unitPrice.$setValidity('notaprice', false);
         else
           form.unitPrice.$setValidity('notaprice', true);
 
-        if (isNaN(minimum) || minimum <= 0)
+        if (isNaN(minimum) || minimum < 0)
           form.minimum.$setValidity('notanumber', false);
         else
           form.minimum.$setValidity('notanumber', true);
@@ -38,8 +38,8 @@ angular.module('stofmaApp.components')
             category: category,
             name: name,
             shortName: shortName,
-            price: price,
-            memberPrice: memberPrice,
+            price: ''+price,
+            memberPrice: ''+memberPrice,
             minimum: minimum,
             urlImage: urlImage
           });

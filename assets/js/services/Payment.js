@@ -35,6 +35,7 @@ angular.module('stofmaApp.services')
       }];
 
       this.getAll = getAll;
+      this.getAllCredit = getAllCredit;
       this.get = get;
       this.getPaymentModes = getPaymentModes;
       this.doPayment = doPayment;
@@ -42,6 +43,18 @@ angular.module('stofmaApp.services')
       function getAll() {
         var defer = $q.defer();
         $http.get('/payment').success(function (data) {
+          that.payments = data.map(PaymentFactory.remap);
+          defer.resolve(that.payments);
+        }).error(function (err) {
+          defer.reject(err.status);
+        });
+
+        return defer.promise;
+      }
+
+      function getAllCredit() {
+        var defer = $q.defer();
+        $http.get('/payment?creditMode=true').success(function (data) {
           that.payments = data.map(PaymentFactory.remap);
           defer.resolve(that.payments);
         }).error(function (err) {
