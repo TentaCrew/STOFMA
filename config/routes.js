@@ -85,6 +85,11 @@ module.exports.routes = {
     controller: 'UserController',
     action: 'setRole'
   },
+  // Change user's status (member or not)
+  'PATCH /user/:id/member': {
+    controller: 'UserController',
+    action: 'setMember'
+  },
   // Log in user
   'PUT /user/login': {
     controller: 'UserController',
