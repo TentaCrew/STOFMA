@@ -77,7 +77,6 @@ module.exports = {
       sex:        true,
       password:   'cash'
     },
-
     //create the payments for their credit
     payment_credit_user_admin_01: {
       id:          -1,
@@ -207,7 +206,7 @@ module.exports = {
       id:          2,
       manager:     1,
       customer:    11,
-      amount:      89.91,
+      amount:      1.20,
       type:        'IN_CREDIT',
       paymentDate: '2015-08-18T21:38:52.750Z'
     },
@@ -223,7 +222,7 @@ module.exports = {
       id:          4,
       manager:     1,
       customer:    13,
-      amount:      99.9,
+      amount:      0.10,
       type:        'IN_CREDIT',
       paymentDate: '2015-08-18T21:38:52.750Z'
     },
@@ -239,7 +238,7 @@ module.exports = {
       id:          6,
       manager:     1,
       customer:    15,
-      amount:      9.99,
+      amount:      2,
       type:        'IN_CHECK',
       paymentDate: '2015-08-18T21:38:52.750Z'
     },
