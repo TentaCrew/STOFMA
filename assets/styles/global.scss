@@ -6,6 +6,7 @@
   max-width: 1080px;
   width: 100%;
   margin: 0 auto;
+  margin-bottom: 45px;
 }
 
 .wrap {
@@ -59,6 +60,10 @@ md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
 .sum.selected {
   color: white;
   background-color: #000000;
+}
+
+.md-button.md-icon-button.sum.selected:hover {
+  background-color: #555;
 }
 
 .stofma-content md-list-item.md-2-line {

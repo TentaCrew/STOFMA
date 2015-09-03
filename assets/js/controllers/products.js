@@ -43,12 +43,13 @@ angular.module('stofmaApp.controllers')
         var defer = $q.defer();
 
         $mdDialog.show({
-          controller: DialogEditProductController,
-          templateUrl: '/js/components/modal/edit-product.html',
+          controller: 'DialogProductController',
+          templateUrl: '/js/components/modal/modal-product.html',
           clickOutsideToClose: true,
           locals: {
             product: product,
-            categories: ProductService.getCategories()
+            categories: ProductService.getCategories(),
+            title: 'Modification du produit <strong>' + product.name + '</strong>'
           }
         })
             .then(function (productForm) {
@@ -75,56 +76,4 @@ angular.module('stofmaApp.controllers')
 
         return defer.promise;
       };
-
-      function DialogEditProductController($scope, categories, product) {
-        $scope.categories = categories;
-        $scope.category = product.category;
-        $scope.name = product.name;
-        $scope.shortname = product.shortName;
-        $scope.unitPrice = product.price;
-        $scope.unitPriceMember = product.memberPrice;
-        $scope.minimum = product.minimum;
-        $scope.urlImage = product.urlImage;
-
-        $scope.submit = function () {
-          var form = $scope.editProduct,
-              category = form.category.$modelValue,
-              name = form.name.$modelValue,
-              shortName = form.shortname.$modelValue,
-              price = parseFloat(form.unitPrice.$modelValue),
-              memberPrice = parseFloat(form.unitPriceMember.$modelValue),
-              minimum = parseInt(form.minimum.$modelValue),
-              urlImage = form.urlImage.$modelValue;
-
-          if (isNaN(price) || price <= 0)
-            form.unitPrice.$setValidity('notaprice', false);
-          else
-            form.unitPrice.$setValidity('notaprice', true);
-
-          if (isNaN(minimum) || minimum <= 0)
-            form.minimum.$setValidity('notanumber', false);
-          else
-            form.minimum.$setValidity('notanumber', true);
-
-          if (form.$valid) {
-            ProductService.editProduct(product.id, {
-              category: category,
-              name: name,
-              shortName: shortName,
-              price: price,
-              memberPrice: memberPrice,
-              minimum: minimum,
-              urlImage: urlImage
-            }).then(function (newProduct) {
-              $mdDialog.hide(newProduct);
-            }).catch(function (err) {
-              $mdDialog.cancel();
-            });
-          }
-        };
-
-        $scope.cancel = function () {
-          $mdDialog.cancel();
-        };
-      }
     }]);

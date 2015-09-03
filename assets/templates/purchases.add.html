@@ -1,9 +1,12 @@
 
 <form name="selectProduct" novalidate layout-padding>
   <div>
-    <h1 class="md-title">Ajout des articles achetés</h1>
+    <div layout="row" layout-sm="column" layout-align="space-between center">
+      <h1 class="md-title">Ajout des articles achetés</h1>
+      <md-button class="md-button md-accent" ng-click="createProduct()">Produit inexistant ?</md-button>
+    </div>
     
-    <md-autocomplete flex="100" md-menu-class="autocomplete-select-user" required md-selected-item="productSelected" md-min-length="0" placeholder="Sélection de l'article" md-autofocus="true" md-autoselect="true" md-select-on-match="true" md-search-text="searchProductText" md-items="product in getMatches(searchProductText)" md-item-text="product.name">
+    <md-autocomplete md-menu-class="autocomplete-select-user" required md-selected-item="productSelected" md-min-length="0" placeholder="Sélection de l'article" md-autofocus="true" md-autoselect="true" md-select-on-match="true" md-search-text="searchProductText" md-items="product in getMatches(searchProductText)" md-item-text="product.name">
       <md-item-template>
         <div layout="row" layout-align="space-between center">
           <span md-highlight-text="searchProductText">{{product.name}}</span>&nbsp;-&nbsp;<em>{{product.quantity}} restant{{product.quantity > 1 ? 's' : ''}}</em>
@@ -26,7 +29,7 @@
         <input type="text" name="cost" ng-model="totalprice" required aria-label="price of product">
       </md-input-container>
       <md-button class="md-button md-accent md-raised" ng-click="addProduct()">
-        <md-icon class="material-icons">add</md-icon>
+        <md-icon>add</md-icon>
         Ajouter
       </md-button>
     </div>
@@ -42,7 +45,7 @@
         </div>
         <div layout="row" layout-align="end center">
           <md-button class="md-button md-accent md-icon-button" ng-click="remove($index)">
-            <md-icon class="material-icons">clear</md-icon>
+            <md-icon>clear</md-icon>
           </md-button>
         </div>
       </md-list-item>

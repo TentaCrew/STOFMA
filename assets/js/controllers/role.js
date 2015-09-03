@@ -1,16 +1,16 @@
 'use strict';
 
 angular.module('stofmaApp.controllers')
-  .controller('RoleCtrl', ['$q','$scope', '$state', 'usersData', 'Auth', 'UserService', 'SweetAlert', function ($q, $scope, $state, usersData, Auth, UserService, SweetAlert) {
+  .controller('RoleCtrl', ['$q','$scope', '$state', 'usersData', 'Auth', 'UserService', 'UserFactory', 'SweetAlert', function ($q, $scope, $state, usersData, Auth, UserService, UserFactory, SweetAlert) {
 
-    $scope.allUsers = usersData;
+    $scope.allUsers = UserFactory.onlyRealUsers(usersData);
 
     $scope.loadData = function(){
-      $scope.simpleUsers = new Array();
-      $scope.managerUsers = new Array();
+      $scope.simpleUsers = [];
+      $scope.managerUsers = [];
       for(var i = 0 ; i < $scope.allUsers.length ; i++){
         var user = $scope.allUsers[i];
-        if(user.role === 'USER' && user.id !== -1){
+        if(user.role === 'USER'){
           $scope.simpleUsers.push(user);
         }
         else if(user.role === 'MANAGER'){

@@ -1,6 +1,6 @@
 <md-list ng-hide="purchases.length == 0">
   <section ng-repeat="purchase in purchases">
-    <md-subheader ng-if="purchase.type == 'header'">{{purchase.title}}</md-subheader>
+    <div ng-if="purchase.type == 'header'"><md-subheader class="md-no-sticky">{{purchase.title}}</md-subheader></div>
     <md-list-item class="md-3-line md-no-proxy" role="listitem" ng-if="purchase.type != 'header'">
       <div class="md-list-item-text" layout="row" layout-align="space-between center">
         <div layout="column">
@@ -17,12 +17,16 @@
         </div>
         <div layout="row" layout-align="end center">
           <md-button class="md-fab md-mini" ng-click="seeMore=!seeMore">
-            <md-icon>add</md-icon>
+            <md-tooltip md-direction="top">Afficher plus</md-tooltip>
+            <md-icon ng-if="!seeMore">visibility</md-icon>
+            <md-icon ng-if="seeMore">visibility_off</md-icon>
           </md-button>
           <md-button class="md-fab md-mini md-primary" ng-click="amend(purchase.id, $index)">
+            <md-tooltip md-direction="top">Modifier</md-tooltip>
             <md-icon>create</md-icon>
           </md-button>
           <md-button class="md-fab md-mini md-warn" ng-click="remove(purchase.id, $index)">
+            <md-tooltip md-direction="top">Supprimer</md-tooltip>
             <md-icon>clear</md-icon>
           </md-button>
         </div>

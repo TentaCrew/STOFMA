@@ -10,6 +10,7 @@ angular.module('stofmaApp.controllers')
         if ($mdSidenav('left').isOpen())
           that.toggleMenu();
 
+        // TODO Improved this !
         UserService.getFromSession().then(function (user) {
           if (!angular.equals(user, $scope.user))
             $scope.user = user;

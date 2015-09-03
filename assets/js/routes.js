@@ -1,14 +1,22 @@
 angular.module('stofmaApp')
     .config(['$stateProvider', '$urlRouterProvider', 'AccessLevels', function ($stateProvider, $urlRouterProvider, AccessLevels) {
 
+      var timeRetrieve = new Date(),
+          currentSession = null;
       var authenticated = ['$q', 'UserService', function ($q, UserService) {
         var defer = $q.defer();
-        UserService.getCurrentSession()
-            .then(function (session) {
-              defer.resolve(session);
-            }).catch(function () {
-              defer.reject('Non connecté');
-            });
+        if (currentSession !== null && (timeRetrieve.getTime() + 5 * 60 * 1000) > new Date().getTime()) {
+          defer.resolve(currentSession);
+        } else {
+          UserService.getCurrentSession()
+              .then(function (session) {
+                currentSession = session;
+                timeRetrieve = new Date();
+                defer.resolve(currentSession);
+              }).catch(function () {
+                defer.reject('Non connecté');
+              });
+        }
         return defer.promise;
       }];
 
@@ -43,7 +51,7 @@ angular.module('stofmaApp')
             template: '<div ui-view />',
             data: {
               access: AccessLevels.user,
-              name: 'Membre'
+              name: ''
             },
             resolve: {
               authenticated: authenticated
@@ -56,7 +64,7 @@ angular.module('stofmaApp')
             data: {
               name: 'Accueil',
               icon: 'home',
-              weight: 1
+              hidden: true
             }
           })
           .state('user.profile', {
@@ -119,7 +127,7 @@ angular.module('stofmaApp')
             data: {
               name: 'Paramètres',
               icon: 'settings',
-              weight: 20
+              hidden: true
             }
           })
           .state('manager', {
@@ -275,7 +283,7 @@ angular.module('stofmaApp')
             }
           })
           .state('manager.accountStatement', {
-            url: '/add',
+            url: '/balance',
             controller: 'AccountStatementCtrl',
             templateUrl: 'assets/templates/accountStatement.html',
             data: {

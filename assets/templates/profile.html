@@ -11,7 +11,7 @@
   <form name="updateUser">
     <md-input-container class="md-icon-float">
       <label>Adresse e-mail</label>
-      <md-icon class="material-icons">email</md-icon>
+      <md-icon>email</md-icon>
       <input type="email" name="userMail" ng-model="user.email" ng-model="userMail" required>
 
       <div ng-messages="updateUser.userMail.$error" ng-show="updateUser.userMail.$dirty">
@@ -21,27 +21,32 @@
     </md-input-container>
     <md-input-container class="md-icon-float">
       <label>Numéro de téléphone</label>
-      <md-icon class="material-icons">phone</md-icon>
-      <input type="text" name="userPhoneNumber" ng-model="user.phoneNumber" ng-model="userPhoneNumber" required pattern="[0-9\s]+">
+      <md-icon>phone</md-icon>
+      <input type="text" name="userPhoneNumber" ng-model="user.phoneNumber" ng-model="userPhoneNumber" pattern="[0-9\s]+">
 
       <div ng-messages="updateUser.userPhoneNumber.$error" ng-show="updateUser.userPhoneNumber.$dirty">
-        <div ng-message="required">Ce champ est obligatoire</div>
         <div ng-message="pattern">Le numéro n'est pas correct</div>
       </div>
     </md-input-container>
     <md-input-container class="md-icon-float">
       <label>Mot de passe</label>
-      <md-icon class="material-icons">code</md-icon>
+      <md-icon>code</md-icon>
       <input type="password" name="userPassword" ng-model="userPassword">
     </md-input-container>
     <md-input-container class="md-icon-float">
       <label>Vérification du mot de passe</label>
-      <md-icon class="material-icons">done_all</md-icon>
+      <md-icon>done_all</md-icon>
       <input type="password" name="userPasswordVerif" ng-model="userPasswordVerif">
 
       <div ng-messages="updateUser.userPasswordVerif.$error" ng-show="updateUser.userPasswordVerif.$dirty">
         <div ng-message="equals">Les mots de passes ne correspondent pas.</div>
       </div>
+    </md-input-container>
+
+    <md-input-container ng-if="!updateHimSelf">
+      <md-checkbox ng-model="user.isMember" ng-click="changeIsMember(user.isMember)" aria-label="Invité">
+        <md-icon class="material-icons">card_membership</md-icon> Membre
+      </md-checkbox>
     </md-input-container>
 
     <md-button ng-click="update($event)" class="md-primary">Enregitrer les modifications</md-button>

@@ -3,6 +3,7 @@
     <div class="md-list-item-text" layout="row" layout-align="space-between center">
       <div>
         <h3><strong>{{u.getName(true)}}</strong></h3>
+        <h4><em>{{u.email}}</em></h4>
         <p>{{u.credit | currency:''}} €</p>
       </div>
       <div ng-if="u.isMember">

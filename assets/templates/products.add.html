@@ -30,7 +30,7 @@
     </md-input-container>
     <md-input-container flex>
       <label>Prix unitaire de vente pour les membres</label>
-      <input type="text" ng-model="unitPriceMember" name="unitPriceMember" required>
+      <input type="text" ng-model="unitPriceMember" name="unitPriceMember">
 
       <div ng-messages="createProduct.unitPriceMember.$error" ng-show="createProduct.unitPriceMember.$dirty">
         <div ng-message="notaprice">Le prix doit respecter le format monétaire et doit être positif.</div>
@@ -50,7 +50,7 @@
     <input type="text" ng-model="urlImage" name="urlImage">
   </md-input-container>
   <md-button class="md-button md-primary md-raised" ng-click="addProduct()">
-    <md-icon class="material-icons">done</md-icon>
+    <md-icon>done</md-icon>
     Créer le nouveau produit
   </md-button>
 </form>

@@ -67,7 +67,9 @@ angular.module('stofmaApp.services')
 
       function setProductEnable(id, isEnable) {
         var defer = $q.defer();
-        $http.patch('/product/' + id, {isActive: isEnable}).success(function (data) {
+        $http.patch('/product/' + id, {
+          isActive: isEnable
+        }).success(function (data) {
           defer.resolve(true);
         }).error(function (err) {
           defer.reject(false);

@@ -1,9 +1,34 @@
 <h3>Créditer le compte d'un utilisateur.</h3>
 
 <form name="creditAccount">
+  <md-autocomplete required md-menu-class="autocomplete-select-user" md-selected-item="selectedUser" placeholder="Personne à créditer" md-autofocus="true"
+                   md-autoselect="true" md-select-on-match="true" md-search-text="searchUserText" md-items="user in getMatches(searchUserText)"
+                   md-item-text="user.getName()">
+    <md-item-template>
+      <div layout="row">
+        <div ng-switch="user.role">
+          <div ng-switch-when="USER">
+            <md-icon>person</md-icon>
+          </div>
+          <div ng-switch-when="MANAGER">
+            <md-icon>supervisor_account</md-icon>
+          </div>
+          <div ng-switch-when="ADMINISTRATOR">
+            <md-icon>whatshot</md-icon>
+          </div>
+        </div>
+        <span md-highlight-text="searchUserText">{{user.getName()}}</span>&nbsp;-&nbsp;<em>{{user.credit | currency:''}} €</em>
+        <md-icon ng-if="user.isMember" class="material-icons md-accent">card_membership</md-icon>
+      </div>
+    </md-item-template>
+    <md-not-found>
+      Aucun utilisateur trouvé.
+    </md-not-found>
+  </md-autocomplete>
+  <br>
   <md-input-container class="md-icon-float">
     <label>Montant à créditer</label>
-    <md-icon class="material-icons">attach_money</md-icon>
+    <md-icon>attach_money</md-icon>
     <input type="text" name="amountToCredit" ng-model="amountToCredit" required>
 
     <div ng-messages="creditAccount.amountToCredit.$error" ng-show="creditAccount.amountToCredit.$dirty">
@@ -11,17 +36,24 @@
       <div ng-message="pattern">La valeur saisie n'est pas correcte</div>
     </div>
   </md-input-container>
-  <md-select name="selectedUser" ng-model="selectedUser" placeholder="Sélectionner la personne à créditer" ng-disabled="invitedUser" style="margin-left:20px;">
-    <md-option ng-repeat="user in users" ng-value="user.id">{{user.firstname}} {{user.name}}</md-option>
-  </md-select>
-  <md-list>
-    <md-list-item>
-      <md-button class="md-list-item-content md-primary" ng-click="credit($event)">
-        <md-icon class="material-icons">done</md-icon>
-        Créditer le compte
-      </md-button>
-    </md-list-item>
-  </md-list>
+
+
+  <div layout="row" layout-sm="column" layout-align="space-around center">
+    <md-input-container>
+      <h1 class="md-title text-center">Moyen de paiement</h1>
+
+      <div layout="row" layout-sm="column" layout-align="center center">
+        <md-button class="md-button md-raised" ng-click="setPayment(pm.id)" ng-class="{'md-primary':payment == pm.id}" ng-repeat="pm in paymentModes">
+          {{pm.name}}
+        </md-button>
+      </div>
+    </md-input-container>
+
+    <md-button class="md-raised md-primary" ng-click="credit($event)">
+      <md-icon>done</md-icon>
+      Créditer le compte
+    </md-button>
+  </div>
 </form>
 <h3 ng-if="payments.length > 0">Liste des opérations</h3>
 <md-list>
@@ -29,12 +61,11 @@
     <md-list-item class="md-3-line md-no-proxy" role="listitem">
       <div class="md-list-item-text">
         <h3><strong>{{payment.customer.firstname}} {{payment.customer.name}}</strong></h3>
-        <h4 ng-if="payment.amount >= 0">Crédité<span ng-if="payment.customer.sex == false">e</span> le <em>{{payment.paymentDate | amDateFormat:'DD/MM/YYYY'}}</em>
-          à <em>{{payment.paymentDate | amDateFormat:'HH:mm'}}</em> par {{ payment.manager.name }}</h4>
-        <h4 ng-if="payment.amount < 0">Débité<span ng-if="payment.customer.sex == false">e</span> le <em>{{payment.paymentDate | amDateFormat:'DD/MM/YYYY'}}</em>
+        <h4>{{payment.amount > 0 ? 'Crédité' : 'Débité'}}<span ng-if="payment.customer.sex == false">e</span> le <em>{{payment.paymentDate |
+          amDateFormat:'DD/MM/YYYY'}}</em>
           à <em>{{payment.paymentDate | amDateFormat:'HH:mm'}}</em> par {{ payment.manager.name }}</h4>
 
-        <p>Montant : <strong>{{payment.amount}} €</strong></p>
+        <p>Montant : <strong>{{payment.amount | currency:''}} €</strong></p>
       </div>
     </md-list-item>
     <md-divider ng-if="!$last"></md-divider>

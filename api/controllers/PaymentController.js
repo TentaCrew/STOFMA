@@ -31,6 +31,7 @@ module.exports = {
     Payment.find(req.allParams())
     .populate('customer')
     .populate('manager')
+    .sort('paymentDate desc')
     .exec(function(err, payment) {
       if (err) {
         return res.negotiate(err);

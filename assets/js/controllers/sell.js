@@ -2,17 +2,12 @@
 
 angular.module('stofmaApp.controllers')
 
-    .controller('SellCtrl', ['$scope', '$q', 'productsData', 'usersData', 'ProductService', 'ProductFactory', 'SaleService', '$mdBottomSheet', 'SweetAlert', 'PaymentService', 'PaymentFactory', '$mdToast', function ($scope, $q, productsData, usersData, ProductService, ProductFactory, SaleService, $mdBottomSheet, SweetAlert, PaymentService, PaymentFactory, $mdToast) {
+    .controller('SellCtrl', ['$scope', '$q', 'productsData', 'usersData', 'ProductService', 'ProductFactory', 'SaleService', '$mdBottomSheet', 'SweetAlert', 'PaymentService', 'PaymentFactory', 'UserFactory', '$mdToast', function ($scope, $q, productsData, usersData, ProductService, ProductFactory, SaleService, $mdBottomSheet, SweetAlert, PaymentService, PaymentFactory, UserFactory, $mdToast) {
       $scope.products = productsData;
-      
+
       $scope.canBeGuest = false;
-      $scope.users = usersData.filter(function(u){
-        if(u.id == -1){
-          $scope.canBeGuest = true;
-          return false;
-        } else {
-          return true;
-        }
+      $scope.users = UserFactory.onlyRealUsers(usersData, function () {
+        $scope.canBeGuest = true;
       });
 
       $scope.customer = null;
@@ -23,18 +18,18 @@ angular.module('stofmaApp.controllers')
           $scope.products = data;
         });
       };
-      
+
       // Auto-complete part
-      
+
       $scope.getMatches = getMatches;
       $scope.searchUserText = '';
-      
+
       function getMatches(query) {
-        return query ? $scope.users.filter(function(u){
+        return query ? $scope.users.filter(function (u) {
           return angular.lowercase(u.getName()).indexOf(angular.lowercase(query)) >= 0;
         }) : $scope.users;
       }
-      
+
       // End of Auto-complete part
 
       $scope.$watch('customer', function () {
@@ -44,8 +39,8 @@ angular.module('stofmaApp.controllers')
       $scope.$watch('guest', function () {
         updateLevelPrice();
       });
-      
-      function updateLevelPrice () {
+
+      function updateLevelPrice() {
         if (angular.isDefined($scope.guest) && $scope.guest === true) {
           $scope.levelPrice = ProductFactory.getLevelPrice(false);
         } else if (angular.isDefined($scope.customer) && $scope.customer !== null) {
@@ -83,9 +78,9 @@ angular.module('stofmaApp.controllers')
           }
         }).then(function (response) {
           if (response.confirm) {
-            var customerId = $scope.guest ? -1 : $scope.customer.id,
-              customerName = customerId == -1 ? 'votre invité' : $scope.customer.getName();
-              
+            var customerId = $scope.guest ? UserFactory.getGuestUserId() : $scope.customer.id,
+                customerName = customerId == UserFactory.getGuestUserId() ? 'votre invité' : $scope.customer.getName();
+
             SaleService.doSale(customerId, products, response.paymentMode).then(function (newSale) {
               SweetAlert.swal({
                 title: 'Vente terminée pour ' + customerName + '!',

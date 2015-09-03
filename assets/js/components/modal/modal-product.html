@@ -1,11 +1,11 @@
-<md-dialog aria-label="Edit of the product {{name}}">
+<md-dialog aria-label="{{title}}">
   <form name="editProduct">
     <md-toolbar>
       <div class="md-toolbar-tools">
-        <h2>Modification du produit {{name}}</h2>
+        <h2>{{title}}</h2>
         <span flex></span>
         <md-button class="md-icon-button" ng-click="cancel('not applicable')">
-          <md-icon class="material-icons" aria-label="Close dialog">clear</md-icon>
+          <md-icon aria-label="Close dialog">clear</md-icon>
         </md-button>
       </div>
     </md-toolbar>

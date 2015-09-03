@@ -77,4 +77,8 @@ angular.module('stofmaApp.controllers')
           }
         });
       };
+
+      $scope.amend = function(id, index) {
+        $state.go()
+      }
     }]);
