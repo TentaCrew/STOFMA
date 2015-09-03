@@ -66,6 +66,7 @@
           à <em>{{payment.paymentDate | amDateFormat:'HH:mm'}}</em> par {{ payment.manager.name }}</h4>
 
         <p>Montant : <strong>{{payment.amount | currency:''}} €</strong></p>
+        <p>Moyen : <strong>{{payment.name}}</strong></p>
       </div>
     </md-list-item>
     <md-divider ng-if="!$last"></md-divider>

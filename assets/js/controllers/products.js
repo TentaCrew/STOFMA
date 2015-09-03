@@ -49,7 +49,7 @@ angular.module('stofmaApp.controllers')
           locals: {
             product: product,
             categories: ProductService.getCategories(),
-            title: 'Modification du produit <strong>' + product.name + '</strong>'
+            title: 'Modification du produit ' + product.name
           }
         })
             .then(function (productForm) {
