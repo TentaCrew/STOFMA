@@ -7,6 +7,7 @@
     "manager"
   ],
   "dependencies": {
+    "bower": "^1.5.2",
     "ejs": "~0.8.4",
     "grunt": "0.4.2",
     "grunt-bower": "^0.20.0",
@@ -33,7 +34,6 @@
     "start": "node app.js",
     "debug": "node debug app.js",
     "test": "mocha test/bootstrap.test.js test/unit/**/*.test.js -t 5000",
-    "preinstall": "npm install bower -g",
     "install": "bower install"
   },
   "main": "app.js",
