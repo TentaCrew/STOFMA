@@ -54,8 +54,7 @@ module.exports = {
 
   signup: function (req, res) {
     // Creating new User
-    User.create({
-      id:          req.param('id'),
+    var user = {
       firstname:   req.param('firstname'),
       name:        req.param('name'),
       birthdate:   req.param('birthdate'),
@@ -63,7 +62,11 @@ module.exports = {
       password:    req.param('password'),
       email:       req.param('email'),
       phoneNumber: req.param('phoneNumber')
-    }, function (err, newUser) {
+    };
+    if(req.param('id')) {
+      user.id = req.param('id');
+    }
+    User.create(user, function (err, newUser) {
       if (err) {
         return res.negotiate(err);
       }
