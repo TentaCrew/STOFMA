@@ -152,11 +152,32 @@ angular.module('stofmaApp')
           })
           .state('manager.sell', {
             url: '/sell',
-            controller: 'SellCtrl',
+            controller: 'ManageSellCtrl',
             templateUrl: 'assets/templates/sell.html',
             data: {
               name: 'Vendre un produit',
               icon: 'add_shopping_cart'
+            },
+            resolve: {
+              productProvider: 'ProductService',
+
+              productsData: function (productProvider) {
+                return productProvider.getProducts(true);
+              },
+              usersProvider: 'UserService',
+
+              usersData: function (usersProvider) {
+                return usersProvider.getAll();
+              }
+            }
+          })
+          .state('manager.editsale', {
+            url: '/sale/{id:int}',
+            controller: 'ManageSellCtrl',
+            templateUrl: 'assets/templates/sell.html',
+            data: {
+              name: 'Modifier une vente',
+              hidden: true
             },
             resolve: {
               productProvider: 'ProductService',
@@ -203,6 +224,38 @@ angular.module('stofmaApp')
 
               purchasesData: function (purchasesProvider) {
                 return purchasesProvider.getPurchases();
+              }
+            }
+          })
+          .state('manager.addpurchase', {
+            url: '/purchase/add',
+            controller: 'ManagePurchaseCtrl',
+            templateUrl: 'assets/templates/purchases.manage.html',
+            data: {
+              name: 'Ajout d\'un achat',
+              hidden: true
+            },
+            resolve: {
+              productsProvider: 'ProductService',
+
+              productsData: function (productsProvider) {
+                return productsProvider.getProducts();
+              }
+            }
+          })
+          .state('manager.editpurchase', {
+            url: '/purchase/edit/{id:int}',
+            controller: 'ManagePurchaseCtrl',
+            templateUrl: 'assets/templates/purchases.manage.html',
+            data: {
+              name: 'Modification d\'un achat',
+              hidden: true
+            },
+            resolve: {
+              productsProvider: 'ProductService',
+
+              productsData: function (productsProvider) {
+                return productsProvider.getProducts();
               }
             }
           })
@@ -266,22 +319,6 @@ angular.module('stofmaApp')
               hidden: true
             }
           })
-          .state('manager.addpurchase', {
-            url: '/purchase/add',
-            controller: 'AddPurchaseCtrl',
-            templateUrl: 'assets/templates/purchases.add.html',
-            data: {
-              name: 'Ajout d\'un achat',
-              hidden: true
-            },
-            resolve: {
-              productsProvider: 'ProductService',
-
-              productsData: function (productsProvider) {
-                return productsProvider.getProducts();
-              }
-            }
-          })
           .state('manager.accountStatement', {
             url: '/balance',
             controller: 'AccountStatementCtrl',
@@ -324,7 +361,7 @@ angular.module('stofmaApp')
             }
           })
           .state('admin.profile', {
-            url: '/profile/:id',
+            url: '/profile/{id:int}',
             controller: 'ProfileCtrl',
             templateUrl: 'assets/templates/profile.html',
             data: {

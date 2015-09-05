@@ -4,9 +4,7 @@
 
 .stofma-content {
   max-width: 1080px;
-  width: 100%;
-  margin: 0 auto;
-  margin-bottom: 45px;
+  margin: 0 auto 45px;
 }
 
 .wrap {
@@ -68,10 +66,6 @@ md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
 
 .stofma-content md-list-item.md-2-line {
   align-items: center;
-}
-
-[ui-view] {
-  width: 100%;
 }
 
 .md-sidenav-left.md-closed-add,

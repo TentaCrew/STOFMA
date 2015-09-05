@@ -12,7 +12,7 @@ angular.module('stofmaApp.controllers')
         var defer = $q.defer();
 
         $mdBottomSheet.show({
-          templateUrl: '/js/components/bottom-sheet/bottom-sheet-confirm-' + (isEnable ? 'enable' : 'disable') + '-product.html',
+          templateUrl: 'assets/js/components/bottom-sheet/bottom-sheet-confirm-' + (isEnable ? 'enable' : 'disable') + '-product.html',
           controller: 'BottomSheetConfirmCtrl'
         }).then(function (response) {
           if (response.confirm) {
@@ -44,7 +44,7 @@ angular.module('stofmaApp.controllers')
 
         $mdDialog.show({
           controller: 'DialogProductController',
-          templateUrl: '/js/components/modal/modal-product.html',
+          templateUrl: 'assets/js/components/modal/modal-product.html',
           clickOutsideToClose: true,
           locals: {
             product: product,
@@ -56,7 +56,7 @@ angular.module('stofmaApp.controllers')
               ProductService.editProduct(product.id, productForm).then(function (newProduct) {
                 $mdToast.show(
                     $mdToast.simple()
-                        .content('Produit mise à jour.')
+                        .content('Produit mis à jour.')
                         .position("bottom right")
                         .hideDelay(3000)
                 );

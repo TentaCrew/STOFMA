@@ -20,7 +20,7 @@ angular.module('stofmaApp.controllers')
         }
 
         if (form.$valid) {
-          phoneNumber = phoneNumber.replace(/ /, '');
+          phoneNumber = (''+phoneNumber).replace(/ /, '');
 
           Auth.register({
             sex: sex,
@@ -29,7 +29,7 @@ angular.module('stofmaApp.controllers')
             email: email,
             password: password,
             phoneNumber: phoneNumber,
-            birthdate: birthday
+            birthdate: moment(birthday).local()
           }).then(function (res) {
             $state.go('user.home');
           }).catch(function (err) {

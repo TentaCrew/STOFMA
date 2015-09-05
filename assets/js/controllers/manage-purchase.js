@@ -1,9 +1,26 @@
 'use strict';
 
 angular.module('stofmaApp.controllers')
-    .controller('AddPurchaseCtrl', ['$scope', '$q', '$state', 'productsData', 'PurchaseService', 'ProductFactory', 'SweetAlert', '$timeout', 'PaymentService', '$mdToast', 'ProductService', '$mdDialog', function ($scope, $q, $state, productsData, PurchaseService, ProductFactory, SweetAlert, $timeout, PaymentService, $mdToast, ProductService, $mdDialog) {
+    .controller('ManagePurchaseCtrl', ['$scope', '$q', '$state', '$stateParams', 'productsData', 'PurchaseService', 'ProductFactory', 'SweetAlert', '$timeout', 'PaymentService', '$mdToast', 'ProductService', '$mdDialog', function ($scope, $q, $state, $stateParams, productsData, PurchaseService, ProductFactory, SweetAlert, $timeout, PaymentService, $mdToast, ProductService, $mdDialog) {
       $scope.availableProducts = productsData;
       $scope.productsOnSale = [];
+
+      var modes = ['add', 'edit'];
+      $scope.mode = modes[0];
+
+      if (angular.isDefined($stateParams.id)) {
+        // If it's an edit action
+        $scope.mode = modes[1];
+
+        $scope.editPurchaseId = $stateParams.id;
+
+        PurchaseService.getPurchase($scope.editPurchaseId, true).then(function (p) {
+          $scope.payment = p.payment.type;
+          angular.forEach(p.products, function (v) {
+            $scope.addProduct(v.product, v.quantity, v.unitPrice * v.quantity);
+          })
+        });
+      }
 
       PaymentService.getPaymentModes(null, 'OUT').then(function (pm) {
         $scope.paymentModes = pm;
@@ -41,38 +58,47 @@ angular.module('stofmaApp.controllers')
       // End of Auto-complete part
 
       var regexpHaveComa = new RegExp(/,/);
-      $scope.addProduct = function () {
-        if (regexpHaveComa.test($scope.totalprice))
-          $scope.totalprice = $scope.totalprice.replace(regexpHaveComa, '.');
+      $scope.addProduct = function (product, number, totalPrice) {
+        var byArgs = product && angular.isDefined(number) && angular.isDefined(totalPrice);
+        if (!product) {
+          product = $scope.productSelected;
+          number = $scope.number;
+          totalPrice = $scope.totalprice;
+        }
 
-        if ($scope.selectProduct.$valid) {
-          if ($scope.productSelected !== null && $scope.number > 0) {
-            $scope.productSelected.quantity = $scope.number;
-            $scope.productSelected.price = parseFloat($scope.totalprice) / $scope.number;
+        if (regexpHaveComa.test(totalPrice))
+          totalPrice = totalPrice.replace(regexpHaveComa, '.');
+
+        if ($scope.selectProduct.$valid || byArgs) {
+          if (product !== null && number > 0) {
+            product.quantity = number;
+            product.price = parseFloat(totalPrice) / number;
 
             var productIsPresent = false;
             for (var i = 0; i < $scope.productsOnSale.length; i++) {
-              if ($scope.productsOnSale[i].id == $scope.productSelected.id) {
-                if ($scope.productsOnSale[i].price != $scope.productSelected.price) {
+              if ($scope.productsOnSale[i].id == product.id) {
+                if ($scope.productsOnSale[i].price != product.price) {
                   // Different price : creating of an other product with the new price
-                  $scope.productsOnSale.push(angular.copy($scope.productSelected));
+                  $scope.productsOnSale.push(angular.copy(product));
                 } else {
                   // Product added's price equals to present product
-                  $scope.productsOnSale[i].quantity += $scope.productSelected.quantity;
+                  $scope.productsOnSale[i].quantity += product.quantity;
                 }
                 productIsPresent = true;
                 break;
               }
             }
             if (!productIsPresent)
-              $scope.productsOnSale.push(angular.copy($scope.productSelected));
+              $scope.productsOnSale.push(angular.copy(product));
 
-            $scope.productSelected = null;
-            $scope.selectProduct.$setPristine();
-            $scope.selectProduct.$setUntouched();
-            $scope.searchProductText = '';
-            $scope.totalprice = '';
-            $scope.number = '';
+            if (byArgs) {
+              $scope.productSelected = null;
+              $scope.selectProduct.$setPristine();
+              $scope.selectProduct.$setUntouched();
+              $scope.searchProductText = '';
+              $scope.totalprice = '';
+              $scope.number = '';
+            }
           }
         }
       };
@@ -82,7 +108,7 @@ angular.module('stofmaApp.controllers')
 
         $mdDialog.show({
           controller: 'DialogProductController',
-          templateUrl: '/js/components/modal/modal-product.html',
+          templateUrl: 'assets/js/components/modal/modal-product.html',
           clickOutsideToClose: true,
           locals: {
             product: null,
@@ -156,7 +182,11 @@ angular.module('stofmaApp.controllers')
           return o.quantity > 0;
         });
 
-        PurchaseService.doPurchase(products, $scope.payment).then(function () {
+        var methodSave = $scope.mode == modes[0] ?
+            PurchaseService.doPurchase(products, $scope.payment)
+            : PurchaseService.editPurchase($scope.editPurchaseId, products, $scope.payment);
+
+        methodSave.then(function () {
           SweetAlert.swal({
             title: 'Achat enregistré',
             type: 'success'

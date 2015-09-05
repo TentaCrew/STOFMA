@@ -29,6 +29,6 @@ angular.module('stofmaApp.components')
         link: function (scope, element, attrs) {
           element.addClass('product-list-line');
         },
-        templateUrl: '/js/components/product-list/product-line/product-line.html'
+        templateUrl: 'assets/js/components/product-list/product-line/product-line.html'
       };
     });

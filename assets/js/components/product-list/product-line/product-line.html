@@ -18,7 +18,8 @@
     </md-button>
   </div>
   <div ng-if="product.isOut()">
-    <strong>Le produit est en rupture de stock.</strong>
+    <strong hide-sm>Le produit est en rupture de stock.</strong>
+    <strong hide-gt-sm>Rupture de stock.</strong>
   </div>
   <div ng-if="$parent.isSelectingMode" layout="row" layout-align="end center">
     <md-button class="md-icon-button md-primary" ng-if="$parent.$parent.canBeEdit" ng-click="edit(product)">

@@ -162,6 +162,6 @@ angular.module('stofmaApp.components')
         }],
         link: function (scope, element, attrs) {
         },
-        templateUrl: '/js/components/product-list/product-list.html'
+        templateUrl: 'assets/js/components/product-list/product-list.html'
       };
     }]);

@@ -54,7 +54,7 @@ angular.module('stofmaApp.controllers')
 
       $scope.remove = function (id, index) {
         $mdBottomSheet.show({
-          templateUrl: '/js/components/bottom-sheet/bottom-sheet-confirm-remove-purchase.html',
+          templateUrl: 'assets/js/components/bottom-sheet/bottom-sheet-confirm-remove-purchase.html',
           controller: 'BottomSheetConfirmCtrl'
         }).then(function (response) {
           if (response.confirm) {
@@ -78,7 +78,9 @@ angular.module('stofmaApp.controllers')
         });
       };
 
-      $scope.amend = function(id, index) {
-        $state.go()
+      $scope.amend = function (id) {
+        $state.go('manager.editpurchase', {
+          id: id
+        });
       }
     }]);

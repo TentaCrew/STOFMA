@@ -43,10 +43,9 @@
     <md-input-container class="md-icon-float">
       <label>Numéro de téléphone</label>
       <md-icon>phone</md-icon>
-      <input type="text" name="userPhoneNumber" ng-model="userPhoneNumber" required pattern="[0-9\s]+">
+      <input type="text" name="userPhoneNumber" ng-model="userPhoneNumber" pattern="[0-9\s]+">
 
       <div ng-messages="registerUser.userPhoneNumber.$error" ng-show="registerUser.userPhoneNumber.$dirty">
-        <div ng-message="required">Ce champ est obligatoire</div>
         <div ng-message="pattern">Le numéro n'est pas correct</div>
       </div>
     </md-input-container>

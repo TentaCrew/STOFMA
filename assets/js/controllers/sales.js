@@ -2,7 +2,7 @@
 
 angular.module('stofmaApp.controllers')
 
-    .controller('SalesCtrl', ['$scope', 'salesData', 'SaleService', 'UserService', '$mdBottomSheet', '$mdToast', 'isManager', function ($scope, salesData, SaleService, UserService, $mdBottomSheet, $mdToast, isManager) {
+    .controller('SalesCtrl', ['$scope', '$state', 'salesData', 'SaleService', 'UserService', '$mdBottomSheet', '$mdToast', 'isManager', function ($scope, $state, salesData, SaleService, UserService, $mdBottomSheet, $mdToast, isManager) {
       $scope.sales = salesData;
       $scope.isManager = isManager;
 
@@ -51,7 +51,7 @@ angular.module('stofmaApp.controllers')
 
       $scope.remove = function (id, index) {
         $mdBottomSheet.show({
-          templateUrl: '/js/components/bottom-sheet/bottom-sheet-confirm-remove-sale.html',
+          templateUrl: 'assets/js/components/bottom-sheet/bottom-sheet-confirm-remove-sale.html',
           controller: 'BottomSheetConfirmCtrl'
         }).then(function (response) {
           if (response.confirm) {
@@ -74,4 +74,10 @@ angular.module('stofmaApp.controllers')
           }
         });
       };
+
+      $scope.amend = function (id) {
+        $state.go('manager.editsale', {
+          id: id
+        });
+      }
     }]);

@@ -21,6 +21,15 @@ angular.module('stofmaApp.controllers')
         $scope.setFabButton(false);
       });
 
+      $scope.getCurrentUser = function () {
+        var defer = $q.defer();
+        $scope.$watch('user', function (u) {
+          if (angular.isDefined(u))
+            defer.resolve(u);
+        });
+        return defer.promise;
+      };
+
       $rootScope.$on("$stateChangeError", function (event, toState, d, fromState) {
         if (fromState.data)
           $scope.pageTitle = fromState.data.name;
