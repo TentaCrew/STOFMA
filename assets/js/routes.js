@@ -341,22 +341,6 @@ angular.module('stofmaApp')
                 return userProvider.get($stateParams.id);
               }
             }
-          })
-          .state('admin.role', {
-            url: '/role',
-            controller: 'RoleCtrl',
-            templateUrl: 'assets/templates/role.html',
-            data: {
-              name: 'Gérer les rôles',
-              icon: 'group'
-            },
-            resolve: {
-              userProvider: 'UserService',
-              usersData: function (userProvider) {
-                return userProvider.getAll();
-
-              }
-            }
           });
 
       $urlRouterProvider.otherwise('/home');

@@ -34,6 +34,11 @@ var jsFilesToInject = [
   // Adds app.js and routes.js.
   'js/*.js',
 
+  // Load plugins
+  'plugins/*/config.js',
+  'plugins/*/js/controllers/*.js',
+  'plugins/*/js/services/*.js',
+
   // Initialize angular's modules.
   'js/init.js',
 
@@ -53,7 +58,8 @@ var jsFilesToInject = [
 // templates get spit out to the same file.  Be sure and check out `tasks/README.md`
 // for information on customizing and installing new tasks.
 var templateFilesToInject = [
-  'templates/**/*.html'
+  'templates/**/*.html',
+  'plugins/*/templates/**/*.html'
 ];
 
 

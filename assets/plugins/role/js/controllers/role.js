@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('stofmaApp.controllers')
-  .controller('RoleCtrl', ['$q','$scope', '$state', 'usersData', 'Auth', 'UserService', 'UserFactory', 'SweetAlert', function ($q, $scope, $state, usersData, Auth, UserService, UserFactory, SweetAlert) {
+  .controller('RoleCtrl', ['$q','$scope', '$state', 'usersData', 'Auth', 'UserService', 'RoleService', 'UserFactory', 'SweetAlert', function ($q, $scope, $state, usersData, Auth, UserService, RoleService, UserFactory, SweetAlert) {
 
     $scope.allUsers = UserFactory.onlyRealUsers(usersData);
 
@@ -37,7 +37,7 @@ angular.module('stofmaApp.controllers')
 
       UserService.get(userId).then(function (user) {
         if (form.$valid) {
-          Auth.setRole(userId, {role: 'MANAGER'})
+          RoleService.setRole(userId, {role: 'MANAGER'})
           .then(function (res) {
             SweetAlert.swal({
               title: user.firstname+' '+user.name+' est désormais manager !',
@@ -60,7 +60,7 @@ angular.module('stofmaApp.controllers')
 
     $scope.removeManager = function (userId) {
       UserService.get(userId).then(function (user) {
-        Auth.setRole(userId, {role: 'USER'})
+        RoleService.setRole(userId, {role: 'USER'})
         .then(function (res) {
           SweetAlert.swal({
             title: user.firstname+' '+user.name+' n\'est plus manager !',
