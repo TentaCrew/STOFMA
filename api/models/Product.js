@@ -47,6 +47,10 @@ module.exports = {
       type: 'BOOLEAN',
       defaultsTo: true
     },
+    forSale: {
+      type: 'BOOLEAN',
+      defaultsTo: true
+    },
     notifyForRestocking: {
       type: 'BOOLEAN',
       defaultsTo: true

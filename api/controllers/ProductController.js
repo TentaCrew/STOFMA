@@ -19,7 +19,8 @@ module.exports = {
       urlImage:     req.param('urlImage'),
       minimum:      req.param('minimum'),
       category:     req.param('category'),
-      isActive:     req.param('isActive')
+      isActive:     req.param('isActive'),
+      forSale:      req.param('forSale')
     }, function (err, newProduct) {
       if (err) {
         return res.negotiate(err);
