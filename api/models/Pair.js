@@ -20,8 +20,7 @@ module.exports = {
       required: true
     },
     unitPrice: {
-      type: 'FLOAT',
-      required: true
+      type: 'FLOAT'
     },
     memberSale: {       //this attribute is needed to find the price according the user's status
       type: 'BOOLEAN'
@@ -37,7 +36,7 @@ module.exports = {
     .findOne(values.product)
     .exec(function(err, foundProduct) {
       if(foundProduct) {
-        if(!values.unitPrice || values.unitPrice == -1) {
+        if(values.unitPrice === null) {
           if(values.memberSale === true){
             values.unitPrice = foundProduct.memberPrice;
           }
@@ -69,7 +68,7 @@ module.exports = {
       Pair.create({
         product: productId,
         quantity: quantity,
-        unitPrice: pair.unitPrice || -1,
+        unitPrice: pair.unitPrice,
         memberSale: memberSale
       }, function(err, newPair) {
         if(err) {

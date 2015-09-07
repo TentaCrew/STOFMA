@@ -46,7 +46,7 @@ describe('PurchaseController', function() {
         .send({
           typePayment: 'OUT_CARD',
           products: [
-            {product: data.product_01.id, quantity: 100, unitPrice: 1},
+            {product: data.product_01.id, quantity: 100, unitPrice: 0},
             {product: data.product_02.id, quantity: 75, unitPrice: 1},
             {product: data.product_03.id, quantity: 80, unitPrice: 1},
             //{product: data.product_02.id, quantity: 15, unitPrice: 1},   //currently ignored because of concurrent access to the resource
