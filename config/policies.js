@@ -35,6 +35,7 @@ module.exports.policies = {
     'logout':    'authenticated',
     'update':    'authenticated',
     'setRole':   'isAdmin',
+    'setActive': 'isAdmin',
     'setMember': 'isManager',
     'credit':    'isManager',
     'delete':    'isAdmin',

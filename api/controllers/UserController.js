@@ -90,6 +90,7 @@ module.exports = {
     delete req.allParams().credit;    // to update credit, use the credit function
     delete req.allParams().role;      // to update role, use the setRole function
     delete req.allParams().isMember;  // to update status, use the setMember function
+    delete req.allParams().isActive;  // to set an user active, use the setActive function
 
     if(updateHimSelf) {
       delete req.allParams().name;
@@ -130,6 +131,20 @@ module.exports = {
 
     User.findOne({id: req.param('id')}, function(err, user) {
       User.update(user, {isMember: req.param('isMember')}, function(err,user){
+        if (err) {
+          return res.negotiate(err);
+        }
+        else {
+          return res.send(user);
+        }
+      });
+    });
+  },
+
+  setActive: function(req, res) {
+
+    User.findOne({id: req.param('id')}, function(err, user) {
+      User.update(user, {isActive: req.param('isActive')}, function(err,user){
         if (err) {
           return res.negotiate(err);
         }

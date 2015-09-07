@@ -53,6 +53,10 @@ module.exports = {
     isMember: {
       type: 'BOOLEAN',
       defaultsTo: false
+    },
+    isActive: {
+      type: 'BOOLEAN',
+      defaultsTo: true
     }
 
   },

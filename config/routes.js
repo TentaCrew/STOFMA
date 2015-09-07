@@ -90,6 +90,11 @@ module.exports.routes = {
     controller: 'UserController',
     action: 'setMember'
   },
+  // Change user's status (active or not)
+  'PATCH /user/:id/active': {
+    controller: 'UserController',
+    action: 'setActive'
+  },
   // Log in user
   'PUT /user/login': {
     controller: 'UserController',
