@@ -30,6 +30,11 @@ module.exports = {
     Pair.createPairs(req.param('products'),false)
     .then(function(pairs) {
 
+      var totalPrice = 0;
+      for (var i = 0; i < pairs.length; i++) {
+        totalPrice += Number(pairs[i].unitPrice * pairs[i].quantity);
+      }
+
       //Create the Payment without amount (unknown at this moment)
       Payment.create({
         paymentDate : req.param('purchaseDate') || new Date(),
@@ -46,6 +51,7 @@ module.exports = {
             purchaseDate: req.param('purchaseDate') || new Date(),
             manager:      req.session.user.id,
             products:     pairs,
+            totalPrice:   totalPrice,
             payment:      newPayment
           }, function (err, newPurchase) {
             if (err) {
@@ -184,12 +190,18 @@ module.exports = {
       Pair.createPairs(req.param('products'),false)
         .then(function(pairs) {
 
+          var totalPrice = 0;
+          for (var i = 0; i < pairs.length; i++) {
+            totalPrice += Number(pairs[i].unitPrice * pairs[i].quantity);
+          }
+
           //remove the old pairs
           Pair.deletePairs(purchaseToUpdate.products,false)
           .then(function(){
 
             //add the new pairs
             updatedValues.products = pairs;
+            updatedValues.totalPrice = totalPrice;
 
             //update the purchase with the new values
             Purchase.update(req.param('id'), updatedValues, function (err, updatedPurchase) {

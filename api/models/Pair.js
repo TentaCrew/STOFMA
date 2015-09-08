@@ -25,8 +25,8 @@ module.exports = {
     memberSale: {       //this attribute is needed to find the price according the user's status
       type: 'BOOLEAN'
     },
-    totalPrice: function() {
-      return this.unitPrice * this.quantity;
+    totalPrice: {
+      type: 'FLOAT'
     }
 
   },
@@ -36,7 +36,7 @@ module.exports = {
     .findOne(values.product)
     .exec(function(err, foundProduct) {
       if(foundProduct) {
-        if(values.unitPrice === null) {
+        if(values.unitPrice === null || values.unitPrice === undefined) {
           if(values.memberSale === true){
             values.unitPrice = foundProduct.memberPrice;
           }
@@ -44,6 +44,7 @@ module.exports = {
             values.unitPrice = foundProduct.price;
           }
         }
+        values.totalPrice = values.unitPrice * values.quantity;
       }
       cb();
     });

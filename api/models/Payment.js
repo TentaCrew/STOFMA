@@ -48,6 +48,11 @@ module.exports = {
   },
 
   beforeValidate: function(values, next) {
+
+    if(values.amount){
+      values.amount = Number(values.amount).toFixed(2);
+    }
+
     switch (values.type) {
       case 'IN_CREDIT' :
         values.name = 'Solde';

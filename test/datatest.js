@@ -394,6 +394,7 @@ module.exports = {
       customer:     1,
       payment:      1,
       products:     [11,13],
+      totalPrice:   21.98,
       saleDate:     '2015-08-18T21:38:52.750Z'
     },
     sale_02: {
@@ -402,6 +403,7 @@ module.exports = {
       customer:     11,
       payment:      2,
       products:     [14,15],
+      totalPrice:   1.20,
       saleDate:     '2015-08-18T21:38:52.750Z'
     },
     sale_03: {
@@ -410,6 +412,7 @@ module.exports = {
       customer:     12,
       payment:      3,
       products:     [12],
+      totalPrice:   0.5,
       saleDate:     '2015-08-18T21:38:52.750Z'
     },
     sale_04: {
@@ -418,6 +421,7 @@ module.exports = {
       customer:     15,
       payment:      4,
       products:     [16],
+      totalPrice:   0.1,
       saleDate:     '2015-08-18T21:38:52.750Z'
     },
     sale_05: {
@@ -426,6 +430,7 @@ module.exports = {
       customer:     15,
       payment:      5,
       products:     [17,19],
+      totalPrice:   5.20,
       saleDate:     '2015-08-17T21:38:52.750Z'
     },
     sale_06: {
@@ -434,6 +439,7 @@ module.exports = {
       customer:     15,
       payment:      6,
       products:     [20,18],
+      totalPrice:   2,
       saleDate:     '2015-02-18T21:38:52.750Z'
     },
     sale_07: {
@@ -442,6 +448,7 @@ module.exports = {
       customer:     15,
       payment:      7,
       products:     [21],
+      totalPrice:   2.5,
       saleDate:     '2014-08-18T21:38:52.750Z'
     }
 };

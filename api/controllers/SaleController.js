@@ -24,7 +24,6 @@ module.exports = {
       //create the pairs
       Pair.createPairs(req.param('products'), true, customer.isMember).then(function(pairs) {
 
-        //get his credit
         var totalPrice = 0;
         for (var i = 0; i < pairs.length; i++) {
           totalPrice += Number(pairs[i].unitPrice * pairs[i].quantity);
@@ -75,6 +74,7 @@ module.exports = {
                   customer: req.param('customerId'),
                   manager:  req.session.user.id,
                   products: pairs,
+                  totalPrice: totalPrice,
                   payment: newPayment
                 }, function (err, newSale) {
 
@@ -292,6 +292,9 @@ module.exports = {
 
                 //add the new pairs
                 updatedValues.products = pairs;
+
+                //add the new totalPrice
+                updatedValues.totalPrice = totalPrice;
 
                 //update the sale with the new values
                 Sale.update(saleToUpdate.id, updatedValues, function (err, updatedSale) {
