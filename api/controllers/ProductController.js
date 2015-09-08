@@ -58,12 +58,14 @@ module.exports = {
 
   get: function (req, res) {
     // Getting Product from some parameters
-    Product.find(req.allParams(), function(err, product) {
+    Product.find(req.allParams())
+    .sort('id asc')
+    .exec(function(err, products) {
       if (err) {
         return res.negotiate(err);
       }
       else {
-        return res.send(product);
+        return res.send(products);
       }
     });
   }
