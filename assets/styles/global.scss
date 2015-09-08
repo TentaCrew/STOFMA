@@ -73,7 +73,6 @@ md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
   transition: 0.2s ease-in all;
 }
 
-
 .screen-intro {
   position: fixed;
   top: 0;
@@ -87,8 +86,9 @@ md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
   
   img {
     width: 100%;
-    max-width: 350px;
     height: auto;
+    max-height: 350px;
+    max-width: 350px;
   }
   
   &.ng-hide-add-active {

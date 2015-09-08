@@ -21,6 +21,9 @@ angular.module('stofmaApp.services')
               if (forSelling) {
                 // Fix the number of selected product to 0
                 r = r.map(ProductFactory.remapForSelling);
+                r = r.filter(function (p) {
+                  return p.forSale;
+                });
               }
 
               defer.resolve(r);

@@ -44,6 +44,9 @@
           <h4><em>{{product.quantity}} x </em><strong>{{product.price | currency:''}} €</strong><em> – {{product.price * product.quantity | currency:''}} €</em></h4>
         </div>
         <div layout="row" layout-align="end center">
+          <md-button class="md-button md-primary md-icon-button" ng-click="edit($index)">
+            <md-icon>create</md-icon>
+          </md-button>
           <md-button class="md-button md-accent md-icon-button" ng-click="remove($index)">
             <md-icon>clear</md-icon>
           </md-button>

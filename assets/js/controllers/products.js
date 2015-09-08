@@ -13,7 +13,10 @@ angular.module('stofmaApp.controllers')
 
         $mdBottomSheet.show({
           templateUrl: 'assets/js/components/bottom-sheet/bottom-sheet-confirm-' + (isEnable ? 'enable' : 'disable') + '-product.html',
-          controller: 'BottomSheetConfirmCtrl'
+          controller: 'BottomSheetConfirmCtrl',
+          locals: {
+            data: {}
+          }
         }).then(function (response) {
           if (response.confirm) {
             ProductService.setProductEnable(id, isEnable).then(function () {

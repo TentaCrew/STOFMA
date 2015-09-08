@@ -49,6 +49,9 @@
     <label>Url du produit</label>
     <input type="text" ng-model="urlImage" name="urlImage">
   </md-input-container>
+  <md-input-container>
+    <md-checkbox name="forSale" ng-init="forSale = true" ng-model="forSale">Stocké pour la vente</md-checkbox>
+  </md-input-container>
   <md-button class="md-button md-primary md-raised" ng-click="addProduct()">
     <md-icon>done</md-icon>
     Créer le nouveau produit

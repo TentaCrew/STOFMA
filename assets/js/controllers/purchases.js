@@ -55,7 +55,10 @@ angular.module('stofmaApp.controllers')
       $scope.remove = function (id, index) {
         $mdBottomSheet.show({
           templateUrl: 'assets/js/components/bottom-sheet/bottom-sheet-confirm-remove-purchase.html',
-          controller: 'BottomSheetConfirmCtrl'
+          controller: 'BottomSheetConfirmCtrl',
+          locals: {
+            data: {}
+          }
         }).then(function (response) {
           if (response.confirm) {
             PurchaseService.deletePurchase(id).then(function () {

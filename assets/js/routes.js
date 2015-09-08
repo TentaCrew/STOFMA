@@ -110,13 +110,13 @@ angular.module('stofmaApp')
             templateUrl: 'assets/templates/stallproducts.html',
             data: {
               name: 'La cafet\'',
-              icon: 'list'
+              icon: 'local_dining'
             },
             resolve: {
               productsProvider: 'ProductService',
 
               productsData: function (productsProvider) {
-                return productsProvider.getProducts(false);
+                return productsProvider.getProducts(true);
               }
             }
           })

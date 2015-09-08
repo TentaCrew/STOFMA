@@ -5,7 +5,6 @@ angular.module('stofmaApp.controllers')
       $scope.products = productsData;
 
       $scope.getCurrentUser().then(function (u) {
-        console.log(u);
         $scope.levelPrice = ProductFactory.getLevelPrice(u.isMember);
       });
     }]);

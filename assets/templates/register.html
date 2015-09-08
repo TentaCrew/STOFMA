@@ -1,35 +1,35 @@
 <div class="">
   <p class="md-body-2">Inscrivez-vous en renseignant vos informations personnelles.</p>
 
-  <form name="registerUser">
+  <form name="registerUser" layout-padding>
     <md-input-container>
       <md-radio-group name="userSex" ng-model="userSex" required>
         <label>Sexe</label>
-        <md-radio-button value="0" checked>Homme</md-radio-button>
+        <md-radio-button value="0">Homme</md-radio-button>
         <md-radio-button value="1">Femme</md-radio-button>
       </md-radio-group>
       <div ng-messages="registerUser.userSex.$error" ng-show="registerUser.$dirty">
         <div ng-message="required">Ce champ est obligatoire</div>
       </div>
     </md-input-container>
-    <md-input-container class="md-icon-float">
-      <label>Prénom</label>
-      <md-icon>person</md-icon>
-      <input type="text" name="userFirstName" ng-model="userFirstName" required>
+    <div layout-gt-sm="row" layout-padding>
+      <md-input-container flex>
+        <label>Prénom</label>
+        <input type="text" name="userFirstName" ng-model="userFirstName" required>
 
-      <div ng-messages="registerUser.userFirstName.$error" ng-show="registerUser.userFirstName.$dirty">
-        <div ng-message="required">Ce champ est obligatoire</div>
-      </div>
-    </md-input-container>
-    <md-input-container class="md-icon-float">
-      <label>Nom</label>
-      <md-icon>person</md-icon>
-      <input type="text" name="userName" ng-model="userName" required>
+        <div ng-messages="registerUser.userFirstName.$error" ng-show="registerUser.userFirstName.$dirty">
+          <div ng-message="required">Ce champ est obligatoire</div>
+        </div>
+      </md-input-container>
+      <md-input-container flex>
+        <label>Nom</label>
+        <input type="text" name="userName" ng-model="userName" required>
 
-      <div ng-messages="registerUser.userName.$error" ng-show="registerUser.userName.$dirty">
-        <div ng-message="required">Ce champ est obligatoire</div>
-      </div>
-    </md-input-container>
+        <div ng-messages="registerUser.userName.$error" ng-show="registerUser.userName.$dirty">
+          <div ng-message="required">Ce champ est obligatoire</div>
+        </div>
+      </md-input-container>
+    </div>
     <md-input-container class="md-icon-float">
       <label>Adresse e-mail</label>
       <md-icon>email</md-icon>
@@ -38,6 +38,18 @@
       <div ng-messages="registerUser.userMail.$error" ng-show="registerUser.userMail.$dirty">
         <div ng-message="required">Ce champ est obligatoire</div>
         <div ng-message="email">L'adresse e-mail n'est pas correct</div>
+        <div ng-message="equals">Les adresses ne correspondent pas.</div>
+      </div>
+    </md-input-container>
+    <md-input-container class="md-icon-float">
+      <label>Vérification de l'adresse e-mail</label>
+      <md-icon>done_all</md-icon>
+      <input type="email" name="userMailVerif" ng-model="userMailVerif" required>
+
+      <div ng-messages="registerUser.userMailVerif.$error" ng-show="registerUser.userMailVerif.$dirty">
+        <div ng-message="required">Ce champ est obligatoire</div>
+        <div ng-message="email">L'adresse e-mail n'est pas correct</div>
+        <div ng-message="equals">Les adresses ne correspondent pas.</div>
       </div>
     </md-input-container>
     <md-input-container class="md-icon-float">
@@ -52,32 +64,31 @@
     <md-input-container class="md-icon-float">
       <label>Date de naissance</label>
       <md-icon>today</md-icon>
-      <input type="date"  name="userBirthday" ng-model="userBirthday" required ng-click="showPicker($event)">
+      <input type="date" name="userBirthday" ng-model="userBirthday" required ng-focus="showPicker($event)">
 
       <div ng-messages="registerUser.userBirthday.$error" ng-show="registerUser.userBirthday.$dirty">
         <div ng-message="required">Ce champ est obligatoire</div>
       </div>
     </md-input-container>
-    <md-input-container class="md-icon-float">
-      <label>Mot de passe</label>
-      <md-icon>code</md-icon>
-      <input type="password" name="userPassword" ng-model="userPassword" required>
+    <div layout-gt-sm="row">
+      <md-input-container flex>
+        <label>Mot de passe</label>
+        <input type="password" name="userPassword" ng-model="userPassword" required>
 
-      <div ng-messages="registerUser.userPassword.$error" ng-show="registerUser.userPassword.$dirty">
-        <div ng-message="required">Ce champ est obligatoire</div>
-      </div>
-    </md-input-container>
-    <md-input-container class="md-icon-float">
-      <label>Vérification du mot de passe</label>
-      <md-icon>done_all</md-icon>
-      <input type="password" name="userPasswordVerif" ng-model="userPasswordVerif" required>
+        <div ng-messages="registerUser.userPassword.$error" ng-show="registerUser.userPassword.$dirty">
+          <div ng-message="required">Ce champ est obligatoire</div>
+        </div>
+      </md-input-container>
+      <md-input-container flex>
+        <label>Vérification du mot de passe</label>
+        <input type="password" name="userPasswordVerif" ng-model="userPasswordVerif" required>
 
-      <div ng-messages="registerUser.userPasswordVerif.$error" ng-show="registerUser.userPasswordVerif.$dirty">
-        <div ng-message="required">Ce champ est obligatoire</div>
-        <div ng-message="equals">Les mots de passes ne correspondent pas.</div>
-      </div>
-    </md-input-container>
-
+        <div ng-messages="registerUser.userPasswordVerif.$error" ng-show="registerUser.userPasswordVerif.$dirty">
+          <div ng-message="required">Ce champ est obligatoire</div>
+          <div ng-message="equals">Les mots de passes ne correspondent pas.</div>
+        </div>
+      </md-input-container>
+    </div>
     <md-button ng-click="register($event)" class="md-primary">S'inscrire</md-button>
   </form>
 </div>

@@ -91,7 +91,7 @@ angular.module('stofmaApp.controllers')
             if (!productIsPresent)
               $scope.productsOnSale.push(angular.copy(product));
 
-            if (byArgs) {
+            if (!byArgs) {
               $scope.productSelected = null;
               $scope.selectProduct.$setPristine();
               $scope.selectProduct.$setUntouched();
@@ -206,6 +206,15 @@ angular.module('stofmaApp.controllers')
 
       $scope.remove = function (index) {
         $scope.productsOnSale.splice(index, 1);
+      };
+
+      $scope.edit = function (index) {
+        var productPurchase = $scope.productsOnSale[index];
+        $scope.productSelected = productPurchase;
+        $scope.number = productPurchase.quantity;
+        $scope.totalprice = productPurchase.quantity * productPurchase.price;
+
+        $scope.remove(index);
       };
 
       $scope.setFabButton('done', function () {

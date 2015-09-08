@@ -8,10 +8,19 @@ angular.module('stofmaApp.controllers')
             firstName = form.userFirstName.$modelValue,
             name = form.userName.$modelValue,
             email = form.userMail.$modelValue,
+            emailVerif = form.userMailVerif.$modelValue,
             password = form.userPassword.$modelValue,
             passwordVerif = form.userPasswordVerif.$modelValue,
             birthday = form.userBirthday.$modelValue,
             phoneNumber = form.userPhoneNumber.$modelValue;
+
+        if (!angular.equals(email, emailVerif)) {
+          form.userMail.$setValidity('equals', false);
+          form.userMailVerif.$setValidity('equals', false);
+        } else {
+          form.userMail.$setValidity('equals', true);
+          form.userMailVerif.$setValidity('equals', true);
+        }
 
         if (!angular.equals(password, passwordVerif)) {
           form.userPasswordVerif.$setValidity('equals', false);
@@ -20,7 +29,7 @@ angular.module('stofmaApp.controllers')
         }
 
         if (form.$valid) {
-          phoneNumber = (''+phoneNumber).replace(/ /, '');
+          phoneNumber = ('' + phoneNumber).replace(/ /, '');
 
           Auth.register({
             sex: sex,
@@ -30,12 +39,13 @@ angular.module('stofmaApp.controllers')
             password: password,
             phoneNumber: phoneNumber,
             birthdate: moment(birthday).local()
-          }).then(function (res) {
+          }).then(function (userLogin) {
+            $scope.setCurrentUser(userLogin);
             $state.go('user.home');
           }).catch(function (err) {
             switch (err.status) {
               case 400:
-                if(angular.isDefined(err.invalidAttributes.email) && err.invalidAttributes.email[0].rule == 'unique') {
+                if (angular.isDefined(err.invalidAttributes.email) && err.invalidAttributes.email[0].rule == 'unique') {
                   var alert = $mdDialog.alert({
                     title: 'Inscription échouée',
                     content: 'Utilisateur déjà existant !',

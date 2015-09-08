@@ -18,7 +18,7 @@ angular.module('stofmaApp', [
           .accentPalette('pink');
     }])
     .config(['$provide', function ($provide) {
-      $provide.decorator('$templateCache', function ($delegate) {
+      $provide.decorator('$templateCache', ['$delegate', function ($delegate) {
         var originalGet = $delegate.get;
 
         $delegate.get = function (key) {
@@ -34,7 +34,7 @@ angular.module('stofmaApp', [
         };
 
         return $delegate;
-      });
+      }]);
 
       return this;
     }])

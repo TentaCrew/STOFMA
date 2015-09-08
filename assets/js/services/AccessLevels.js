@@ -1,7 +1,7 @@
 angular.module('stofmaApp.auth')
     .constant('AccessLevels', {
-      anon: 'anonymous',
-      user: 'user',
-      manager: 'manager',
-      admin: 'administrator'
+      anon: 'ANONYMOUS',
+      user: 'USER',
+      manager: 'MANAGER',
+      admin: 'ADMINISTRATOR'
     });

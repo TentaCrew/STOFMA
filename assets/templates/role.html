@@ -1,9 +1,20 @@
 <h3>Gérer les rôles des utilisateurs.</h3>
 
 <form name="addManagerForm" ng-hide="simpleUsers.length == 0">
-  <md-select name="selectedUser" ng-model="selectedUser" placeholder="Sélectionner le nouveau manager" ng-disabled="invitedUser" style="margin-left:20px;">
-    <md-option ng-repeat="user in simpleUsers" ng-value="user.id">{{user.firstname}} {{user.name}}</md-option>
-  </md-select>
+  <md-autocomplete md-menu-class="autocomplete-select-user" required md-selected-item="selectedUser" placeholder="Sélectionner le futur manager" md-autofocus="true" md-autoselect="true" md-select-on-match="true" md-search-text="searchUserText" md-items="user in getMatches(searchUserText)" md-item-text="user.getName()">
+    <md-item-template>
+      <div layout="row">
+        <div>
+          <md-icon>person</md-icon>
+        </div>
+        <span md-highlight-text="searchUserText">{{user.getName()}}</span>&nbsp;-&nbsp;<em>{{user.credit | currency:''}} €</em>
+        <md-icon ng-if="user.isMember" class="material-icons md-accent">card_membership</md-icon>
+      </div>
+    </md-item-template>
+    <md-not-found>
+      Aucun utilisateur trouvé.
+    </md-not-found>
+  </md-autocomplete>
   <md-list>
     <md-list-item>
       <md-button class="md-list-item-content md-primary" ng-click="addManager($event)">
@@ -15,14 +26,14 @@
 </form>
 <h3 class="md-display-1 text-center" ng-show="simpleUsers.length == 0">Aucun utilisateur n'est disponible. Veuillez ajouter des utilisateurs pour gérer leur rôles.</h3>
 <h3 ng-if="managerUsers.length != 0">Liste des managers</h3>
-<md-list>
-  <section ng-repeat="manager in managerUsers">
+<md-list layout-padding>
+  <section ng-repeat="manager in managers">
     <md-list-item class="md-2-line">
       <div class="md-list-item-text" layout="row" layout-sm="column">
-        {{manager.firstname}} {{manager.name}}
+        {{manager.getName()}}
       </div>
       <div layout="row" layout-align="end center">
-        <md-button class="md-button md-accent md-icon-button" ng-click="removeManager(manager.id)">
+        <md-button class="md-button md-accent md-icon-button" ng-click="removeManager(manager.id, $index)">
           <md-icon>clear</md-icon>
         </md-button>
       </div>

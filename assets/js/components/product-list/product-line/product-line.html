@@ -5,7 +5,6 @@
     <h3 hide-gt-sm show-sm>{{product.shortName}}</h3>
     <h4><em ng-if="$parent.isSelectingMode">{{product.quantity}} x </em><strong>{{product.getPrice($parent.levelPrice) | currency:''}} €</strong><em ng-if="$parent.isSelectingMode"> – {{product.getPrice($parent.levelPrice) * product.quantity | currency:''}} €</em></h4>
   </div>
-  <div flex></div>
   <div ng-if="$parent.isSellingMode" layout="row" layout-align="end center" class="btn-product-action">
     <md-button class="md-icon-button md-accent" ng-click="remove(product.id)">
       <md-icon>remove_circle</md-icon>
@@ -22,6 +21,10 @@
     <strong hide-gt-sm>Rupture de stock.</strong>
   </div>
   <div ng-if="$parent.isSelectingMode" layout="row" layout-align="end center">
+    <md-button class="md-icon-button" ng-if="!product.forSale">
+      <md-tooltip md-direction="top">Pas à la vente</md-tooltip>
+      <md-icon>directions</md-icon>
+    </md-button>
     <md-button class="md-icon-button md-primary" ng-if="$parent.$parent.canBeEdit" ng-click="edit(product)">
       <md-icon>edit</md-icon>
     </md-button>

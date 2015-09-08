@@ -43,12 +43,6 @@
       </div>
     </md-input-container>
 
-    <md-input-container ng-if="!updateHimSelf">
-      <md-checkbox ng-model="user.isMember" ng-click="changeIsMember(user.isMember)" aria-label="Invité">
-        <md-icon class="material-icons">card_membership</md-icon> Membre
-      </md-checkbox>
-    </md-input-container>
-
     <md-button ng-click="update($event)" class="md-primary">Enregitrer les modifications</md-button>
   </form>
 </div>

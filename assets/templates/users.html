@@ -1,18 +1,26 @@
 <md-list>
-  <md-list-item class="md-2-line" ng-repeat="u in users" ng-click="goProfileEditor(u.id)">
+  <md-list-item class="md-2-line" ng-repeat="u in users" ng-click="action(u.id, $index)">
     <div class="md-list-item-text" layout="row" layout-align="space-between center">
-      <div>
+      <div flex="20" flex-sm="40">
         <h3><strong>{{u.getName(true)}}</strong></h3>
         <h4><em>{{u.email}}</em></h4>
+
         <p>{{u.credit | currency:''}} €</p>
       </div>
-      <div ng-if="u.isMember">
-        <md-icon class="material-icons md-accent">card_membership</md-icon> Membre
+      <div>
+        <span ng-if="u.isMember"><md-icon class="material-icons md-accent">card_membership</md-icon> <span hide-sm>Membre</span></span>
+        <span ng-if="!u.isMember"><md-icon class="material-icons md-default">card_membership</md-icon> <span hide-sm>Non-membre</span></span>
       </div>
       <div ng-switch="u.role">
-        <div ng-switch-when="USER"><md-icon class="material-icons md-primary">person</md-icon> Utilisateur</div>
-        <div ng-switch-when="MANAGER"><md-icon class="material-icons md-primary">supervisor_account</md-icon> Manager</div>
-        <div ng-switch-when="ADMINISTRATOR"><md-icon class="material-icons md-primary">whatshot</md-icon> Administateur</div>
+        <div ng-switch-when="USER">
+          <md-icon class="material-icons md-primary">personn</md-icon>
+        </div>
+        <div ng-switch-when="MANAGER">
+          <md-icon class="material-icons md-primary">supervisor_account</md-icon>
+        </div>
+        <div ng-switch-when="ADMINISTRATOR">
+          <md-icon class="material-icons md-primary">whatshot</md-icon>
+        </div>
       </div>
     </div>
     <md-divider ng-if="!$last"></md-divider>

@@ -1,14 +1,11 @@
 angular.module('stofmaApp.controllers')
-    .controller('NavCtrl', ['$rootScope', '$scope', 'Auth', '$mdBottomSheet', '$mdSidenav', '$state', 'AccessLevels', function ($rootScope, $scope, Auth, $mdBottomSheetr, $mdSidenav, $state, AccessLevels) {
+    .controller('NavCtrl', ['$rootScope', '$scope', 'Auth', '$mdSidenav', '$state', 'AccessLevels', function ($rootScope, $scope, Auth, $mdSidenav, $state, AccessLevels) {
       var that = this;
       $scope.isCollapsed = true;
       $scope.auth = Auth;
 
       $scope.role = null;
       $scope.isUser = false;
-      $scope.isAnonymous = false;
-      $scope.isManager = false;
-      $scope.isAdmin = false;
 
       $scope.allPages = angular.copy($state.get()).filter(function (s) {
         return angular.isDefined(s.data) && angular.isDefined(s.data.name) && s.data.name.length > 0
@@ -18,39 +15,34 @@ angular.module('stofmaApp.controllers')
         return o;
       });
 
-      $scope.$parent.$watch('user', function (nv) {
-        $scope.role = (nv === null || angular.isUndefined(nv)) ? null : nv.role.toLowerCase();
-        $scope.isAnonymous = $scope.role === null;
-        $scope.isAdmin = $scope.role == AccessLevels.admin;
-        $scope.isManager = $scope.isAdmin ? true : $scope.role == AccessLevels.manager; // Admin can be manager
-        $scope.isUser = $scope.isManager ? true : $scope.role == AccessLevels.user; // Manager is user too
+      $scope.getCurrentUser(function (user) {
+        $scope.isUser = !(user === null);
 
-        refreshMenu();
+        refreshMenu(user);
       });
 
-      function haveAccess(s) {
-        if ($scope.isAnonymous && s.data.access == AccessLevels.anon)
-          return true;
-
-        if ($scope.isUser && s.data.access == AccessLevels.user)
-          return true;
-        else if ($scope.isManager && s.data.access == AccessLevels.manager)
-          return true;
-        else if ($scope.isAdmin && s.data.access == AccessLevels.admin)
-          return true;
-
-        return false;
-      }
-
-      function refreshMenu() {
+      function refreshMenu(user) {
         $scope.pages = $scope.allPages.filter(function (s) {
-          return haveAccess(s);
+          return haveAccess(user, s);
         });
       }
 
+      function haveAccess(user, s) {
+        var cascadeLevel = true;
+        if (s.data && s.data.noCascadeRole)
+          cascadeLevel = false;
+
+        if (user === null) // If not authenticated, only access to anonymous pages
+          return s.data.access == AccessLevels.anon;
+
+        return (user.isSimpleUser(cascadeLevel) && s.data.access == AccessLevels.user)
+            || (user.isManager(cascadeLevel) && s.data.access == AccessLevels.manager)
+            || (user.isAdmin() && s.data.access == AccessLevels.admin);
+      }
+
       $scope.logout = function () {
-        $scope.isAnonymous = true;
         Auth.logout().then(function () {
+          $scope.setCurrentUser(null);
           $state.go('anon.login');
         });
       };

@@ -11,6 +11,7 @@ angular.module('stofmaApp.components')
         $scope.unitPriceMember = product.memberPrice;
         $scope.minimum = product.minimum;
         $scope.urlImage = product.urlImage;
+        $scope.forSale = product.forSale;
       }
 
       $scope.submit = function () {
@@ -21,7 +22,8 @@ angular.module('stofmaApp.components')
             price = parseFloat(form.unitPrice.$modelValue),
             memberPrice = parseFloat(form.unitPriceMember.$modelValue),
             minimum = parseInt(form.minimum.$modelValue),
-            urlImage = form.urlImage.$modelValue;
+            urlImage = form.urlImage.$modelValue,
+            forSale = form.forSale.$modelValue;
 
         if (isNaN(price) || price < 0)
           form.unitPrice.$setValidity('notaprice', false);
@@ -41,7 +43,8 @@ angular.module('stofmaApp.components')
             price: ''+price,
             memberPrice: ''+memberPrice,
             minimum: minimum,
-            urlImage: urlImage
+            urlImage: urlImage,
+            forSale: forSale
           });
         }
       };

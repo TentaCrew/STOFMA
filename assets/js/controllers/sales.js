@@ -52,7 +52,10 @@ angular.module('stofmaApp.controllers')
       $scope.remove = function (id, index) {
         $mdBottomSheet.show({
           templateUrl: 'assets/js/components/bottom-sheet/bottom-sheet-confirm-remove-sale.html',
-          controller: 'BottomSheetConfirmCtrl'
+          controller: 'BottomSheetConfirmCtrl',
+          locals: {
+            data: {}
+          }
         }).then(function (response) {
           if (response.confirm) {
             SaleService.deleteSale(id).then(function () {

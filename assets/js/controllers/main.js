@@ -13,20 +13,34 @@ angular.module('stofmaApp.controllers')
         // TODO Improved this !
         UserService.getFromSession().then(function (user) {
           if (!angular.equals(user, $scope.user))
-            $scope.user = user;
+            $scope.setCurrentUser(user);
         }, function (err) {
-          $scope.user = null;
+          $scope.setCurrentUser(null);
         });
 
         $scope.setFabButton(false);
       });
 
-      $scope.getCurrentUser = function () {
+      $scope.user = null;
+
+      $scope.setCurrentUser = function (u) {
+        $scope.user = u;
+      };
+
+      $scope.getCurrentUser = function (callbackChange) {
         var defer = $q.defer();
         $scope.$watch('user', function (u) {
-          if (angular.isDefined(u))
-            defer.resolve(u);
+          if (angular.isDefined(u)) {
+            if(u !== null)
+              defer.resolve($scope.user);
+            if (angular.isFunction(callbackChange))
+              callbackChange(u);
+          }
         });
+
+        if (angular.isDefined($scope.user) && $scope.user !== null)
+          defer.resolve($scope.user);
+
         return defer.promise;
       };
 
@@ -65,4 +79,5 @@ angular.module('stofmaApp.controllers')
           }
         }
       }
-    }]);
+    }])
+;

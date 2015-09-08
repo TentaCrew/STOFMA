@@ -13,6 +13,7 @@ angular.module('stofmaApp.services')
       this.logout = logout;
       this.register = register;
       this.update = update;
+      this.disable = disable;
       this.credit = credit;
       this.setRole = setRole;
       this.setMember = setMember;
@@ -31,7 +32,7 @@ angular.module('stofmaApp.services')
 
       function getAll() {
         var defer = $q.defer();
-        $http.get('/user').success(function (data) {
+        $http.get('/user?isActive=true').success(function (data) {
           defer.resolve(data.map(UserFactory.remap));
         }).error(function (err) {
           defer.reject(err.status);
@@ -40,20 +41,28 @@ angular.module('stofmaApp.services')
         return defer.promise;
       }
 
-      function get(id) {
+      function get(id, uniq) {
         var defer = $q.defer();
 
-        getAll().then(function (usersData) {
-          for (var i = 0; i < usersData.length; i++) {
-            var d = usersData[i];
-            if (d.id == id) {
-              defer.resolve(d);
-              break;
+        if (uniq) {
+          $http.get('/user/' + id).success(function (userData) {
+            defer.resolve(UserFactory.remap(userData[0]));
+          }).error(function (err) {
+            defer.reject(null);
+          });
+        } else {
+          getAll().then(function (usersData) {
+            for (var i = 0; i < usersData.length; i++) {
+              var d = usersData[i];
+              if (d.id == id) {
+                defer.resolve(d);
+                break;
+              }
             }
-          }
-        }).catch(function (err) {
-          defer.reject(err);
-        });
+          }).catch(function (err) {
+            defer.reject(err);
+          });
+        }
 
         return defer.promise;
       }
@@ -62,7 +71,7 @@ angular.module('stofmaApp.services')
         var defer = $q.defer();
 
         getCurrentSession().then(function (session) {
-          get(session.id).then(function (user) {
+          get(session.id, true).then(function (user) {
             defer.resolve(user);
           }, function (err) {
             defer.reject(null);
@@ -125,11 +134,25 @@ angular.module('stofmaApp.services')
         return defer.promise;
       }
 
+      function disable(userId, disable) {
+        var defer = $q.defer();
+
+        $http.patch('/user/' + userId + '/active', {
+          isActive: !disable
+        }).success(function (result) {
+          defer.resolve(result);
+        }).error(function (err) {
+          defer.reject(err);
+        });
+
+        return defer.promise;
+      }
+
       function credit(userId, formData) {
         var defer = $q.defer();
 
-        $http.patch('/user/' + userId + '/credit', formData).success(function (result) {
-          defer.resolve(result);
+        $http.patch('/user/' + userId + '/credit', formData).success(function (user) {
+          defer.resolve(UserFactory.remap(user[0]));
         }).error(function (err) {
           defer.reject(err);
         });
@@ -141,7 +164,7 @@ angular.module('stofmaApp.services')
         var defer = $q.defer();
 
         $http.patch('/user/' + userId + '/role', formData).success(function (result) {
-          defer.resolve(result);
+          defer.resolve(UserFactory.remap(result[0]));
         }).error(function (err) {
           defer.reject(err);
         });
@@ -154,8 +177,8 @@ angular.module('stofmaApp.services')
 
         $http.patch('/user/' + userId + '/member', {
           isMember: !!member
-        }).success(function () {
-          defer.resolve();
+        }).success(function (user) {
+          defer.resolve(UserFactory.remap(user[0]));
         }).error(function () {
           defer.reject();
         });
@@ -163,7 +186,7 @@ angular.module('stofmaApp.services')
         return defer.promise;
       }
     }])
-    .factory('UserFactory', function () {
+    .factory('UserFactory', ['AccessLevels', function (AccessLevels) {
       var guestUserId = -1;
 
       return {
@@ -172,6 +195,15 @@ angular.module('stofmaApp.services')
             if (angular.isDefined(nameFirst))
               return o.name + ' ' + o.firstname;
             return o.firstname + ' ' + o.name;
+          };
+          o.isAdmin = function () {
+            return o.role == AccessLevels.admin;
+          };
+          o.isManager = function (cascade) {
+            return cascade ? o.role == AccessLevels.manager || o.role == AccessLevels.admin : o.role == AccessLevels.manager;
+          };
+          o.isSimpleUser = function (cascade) {
+            return cascade ? o.role == AccessLevels.user || o.role == AccessLevels.manager || o.role == AccessLevels.admin : o.role == AccessLevels.user;
           };
           return o;
         },
@@ -188,4 +220,4 @@ angular.module('stofmaApp.services')
           return guestUserId;
         }
       }
-    });
+    }]);

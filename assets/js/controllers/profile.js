@@ -42,14 +42,4 @@ angular.module('stofmaApp.controllers')
         }
       };
 
-      $scope.changeIsMember = function () {
-        var im = !$scope.user.isMember;
-        UserService.setMember($scope.user.id, im).then(function () {
-          SweetAlert.swal({
-            title: $scope.user.getName() + ' est désormais ' + (im ? '' : 'non-') + 'membre.',
-            type: 'success'
-          });
-        });
-      };
-
     }]);

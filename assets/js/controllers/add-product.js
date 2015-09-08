@@ -17,7 +17,8 @@ angular.module('stofmaApp.controllers')
             price = parseFloat(form.unitPrice.$modelValue),
             memberPrice = parseFloat(form.unitPriceMember.$modelValue),
             minimum = parseInt(form.minimum.$modelValue),
-            urlImage = form.urlImage.$modelValue;
+            urlImage = form.urlImage.$modelValue,
+            forSale = form.forSale.$modelValue;
 
         if (isNaN(price) || price < 0)
           form.unitPrice.$setValidity('notaprice', false);
@@ -37,7 +38,8 @@ angular.module('stofmaApp.controllers')
             price: ''+price,
             memberPrice: ''+memberPrice,
             minimum: minimum,
-            urlImage: urlImage
+            urlImage: urlImage,
+            forSale: forSale
           }).then(function (newProduct) {
             $scope.products.push(newProduct);
             $state.go('^');
