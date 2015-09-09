@@ -13,10 +13,10 @@
   </md-input-container>
   <md-input-container>
     <label>Nom court du produit</label>
-    <input type="text" ng-model="shortname" name="shortname" ng-maxlength="8" required>
+    <input type="text" ng-model="shortname" name="shortname" ng-maxlength="12" required>
 
     <div ng-messages="createProduct.shortname.$error" ng-show="createProduct.shortname.$dirty">
-      <div ng-message="maxlength">La taille du nom court doit est inférieur à 8 caractères</div>
+      <div ng-message="maxlength">La taille du nom court doit être inférieure à 12 caractères</div>
     </div>
   </md-input-container>
   <div layout="row" layout-sm="column">

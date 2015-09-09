@@ -5,6 +5,7 @@ angular.module('stofmaApp.services');
 angular.module('stofmaApp.services')
     .service('ProductService', ['$q', '$http', 'ProductFactory', function ($q, $http, ProductFactory) {
       this.getProducts = getProducts;
+      this.getProductsInStock = getProductsInStock;
       this.getCategories = getCategories;
       this.createProduct = createProduct;
       this.setProductEnable = setProductEnable;
@@ -18,13 +19,39 @@ angular.module('stofmaApp.services')
 
               r = r.map(ProductFactory.remapProducts);
 
+              r = r.filter(function (p) {
+                return p.forSale;
+              });
+
               if (forSelling) {
-                // Fix the number of selected product to 0
                 r = r.map(ProductFactory.remapForSelling);
-                r = r.filter(function (p) {
-                  return p.forSale;
-                });
               }
+
+              r = r.sort(function (p) {
+                return p.isOut() ? 1 : -1;
+              });
+
+              defer.resolve(r);
+            }
+        ).
+            error(function (err) {
+              defer.reject();
+            });
+
+        return defer.promise;
+      }
+
+      function getProductsInStock() {
+        var defer = $q.defer();
+
+        $http.get('/product?forSale=false').success(function (data) {
+              var r = data;
+
+              r = r.map(ProductFactory.remapProducts);
+
+              r = r.sort(function (p) {
+                return p.isOut() ? 1 : -1;
+              });
 
               defer.resolve(r);
             }

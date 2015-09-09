@@ -11,7 +11,7 @@
           <p>Montant : <strong>{{ purchase.totalPrice | currency:''}} €</strong> – <strong>{{ purchase.payment.name }}</strong></p>
           <ul ng-show="seeMore">
             <li ng-repeat="pair in purchase.pairs">
-              <em><strong>{{pair.name}}</strong></em> x{{pair.quantity}} – <strong>{{pair.price|currency:''}} €</strong>
+              <em><strong>{{pair.name}}</strong></em> x {{pair.quantity}} – <strong>{{pair.price|currency:''}} €</strong>
             </li>
           </ul>
         </div>

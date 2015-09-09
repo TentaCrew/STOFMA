@@ -3,9 +3,28 @@
 angular.module('stofmaApp.controllers')
     .controller('ProductCtrl', ['$scope', 'productsData', 'categoriesData', 'ProductService', '$state', '$q', '$mdBottomSheet', '$mdToast', '$mdDialog', function ($scope, productsData, categoriesData, ProductService, $state, $q, $mdBottomSheet, $mdToast, $mdDialog) {
       $scope.products = productsData;
+
+      ProductService.getProductsInStock().then(function (products) {
+        $scope.productsStock = products;
+      });
       $scope.categories = categoriesData;
       $scope.setFabButton('add', function () {
         $state.go('manager.products.add');
+      });
+
+      $scope.selectedTab = 'list-on-sale-product';
+
+      $scope.setTabMenu([
+        {
+          id: 'list-on-sale-product',
+          name: 'Produits de vente'
+        },
+        {
+          id: 'list-stock-product',
+          name: 'Produits stockés'
+        }
+      ], function (tab) {
+        $scope.selectedTab = tab.id;
       });
 
       $scope.onSetEnable = function (id, isEnable) {

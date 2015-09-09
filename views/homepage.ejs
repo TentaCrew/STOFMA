@@ -1,7 +1,7 @@
 <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z3"
             md-component-id="left"
             md-is-locked-open="$mdMedia('gt-md')" ng-cloak>
-  <section ng-controller="NavCtrl">
+  <section ng-controller="NavCtrl" layout="column" layout-fill layout-align="center space-between">
     <md-toolbar class="md-tall md-hue-2" ng-if="isUser">
       <span flex></span>
 
@@ -36,18 +36,31 @@
 </md-sidenav>
 
 <div layout="column" layout-fill style="overflow: hidden;">
-  <md-toolbar layout="row" class="md-whiteframe-z2 md-toolbar-tools" md-scroll-shrink>
-    <md-button class="md-icon-button" hide-gt-md ng-click="main.toggleMenu()" aria-label="Afficher le menu">
-      <md-icon>menu</md-icon>
-    </md-button>
-    <h2 ng-bind="pageTitle" class="page-title"></h2>
-    <md-button ng-show="fabbutton != null" class="md-fab md-fab-top-right md-accent" ng-click="fabbutton.handler()">
-      <md-icon>{{fabbutton.icon}}</md-icon>
-    </md-button>
+  <md-toolbar class="md-whiteframe-z2" md-scroll-shrink>
+    <div class="md-toolbar-tools">
+      <md-button class="md-icon-button" hide-gt-md ng-click="main.toggleMenu()" aria-label="Afficher le menu">
+        <md-icon>menu</md-icon>
+      </md-button>
+      <h2 ng-bind="pageTitle" class="page-title"></h2>
+      <md-button ng-show="fabbutton != null" class="md-fab md-fab-top-right md-accent" ng-click="fabbutton.handler()">
+        <md-icon>{{fabbutton.icon}}</md-icon>
+      </md-button>
+    </div>
+    <div ng-if="tabmenu != null">
+      <md-tabs md-center-tabs="true" class="md-primary" md-selected="tabmenu.selected">
+        <md-tab id="{{tab.id}}" ng-repeat="tab in tabmenu.tabs" ng-click="tabmenu.ontabchange(tab)" aria-controls="{{tab.id}}-content">{{tab.name}}</md-tab>
+      </md-tabs>
+    </div>
   </md-toolbar>
 
   <md-content layout-align="center start" role="main" flex>
     <div ui-view class="stofma-content md-whiteframe-z1" layout-padding></div>
+    <footer layout-align="center center" layout="column">
+      <div layout-padding>
+        <a ui-sref="anon.mentions">Mentions légales</a>
+      </div>
+      <em>© {{getYear()}} – version {{getVersion()}}</em>
+    </footer>
   </md-content>
 </div>
 

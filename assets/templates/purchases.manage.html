@@ -3,7 +3,7 @@
   <div>
     <div layout="row" layout-sm="column" layout-align="space-between center">
       <h1 class="md-title">Ajout des articles achetés</h1>
-      <md-button class="md-button md-accent" ng-click="createProduct()">Produit inexistant ?</md-button>
+      <md-button tabindex="-1" class="md-button md-accent" ng-click="createProduct()">Produit inexistant ?</md-button>
     </div>
     
     <md-autocomplete md-menu-class="autocomplete-select-user" required md-selected-item="productSelected" md-min-length="0" placeholder="Sélection de l'article" md-autofocus="true" md-autoselect="true" md-select-on-match="true" md-search-text="searchProductText" md-items="product in getMatches(searchProductText)" md-item-text="product.name">

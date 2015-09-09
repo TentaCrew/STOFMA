@@ -41,15 +41,19 @@ angular.module('stofmaApp.controllers')
             urlImage: urlImage,
             forSale: forSale
           }).then(function (newProduct) {
-            $scope.products.push(newProduct);
+            if(newProduct.forSale)
+              $scope.products.push(newProduct);
+            else
+              $scope.productsStock.push(newProduct);
+
             $state.go('^');
             $scope.setFabButton('add', function () {
               $state.go('manager.products.add');
             });
           }).catch(function (err) {
             SweetAlert.swal({
-              title: 'La vente n\'a pas réussi.',
-              text: 'Merci de recréditer votre solde.',
+              title: 'L\'ajout du produit n\'a pas réussi.',
+              text: 'Merci de vérifier tous les champs.',
               type: 'error'
             });
           });

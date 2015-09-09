@@ -5,7 +5,7 @@ angular.module('stofmaApp')
           currentSession = null;
       var authenticated = ['$q', 'UserService', function ($q, UserService) {
         var defer = $q.defer();
-        if (currentSession !== null && (timeRetrieve.getTime() + 5 * 60 * 1000) > new Date().getTime()) {
+        if (currentSession !== null && (timeRetrieve.getTime() + 60 * 1000) > new Date().getTime()) {
           defer.resolve(currentSession);
         } else {
           UserService.getCurrentSession()
@@ -44,6 +44,14 @@ angular.module('stofmaApp')
             data: {
               name: 'Inscription',
               icon: 'assignment_ind'
+            }
+          })
+          .state('anon.mentions', {
+            url: '/mentions',
+            templateUrl: 'assets/templates/mentions.html',
+            data: {
+              name: 'Mentions légales',
+              hidden: true
             }
           })
           .state('user', {

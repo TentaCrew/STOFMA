@@ -2,6 +2,7 @@
 
 angular.module('stofmaApp.controllers')
     .controller('RegisterCtrl', ['$scope', 'Auth', '$state', '$mdDialog', '$mdDatePicker', function ($scope, Auth, $state, $mdDialog, $mdDatePicker) {
+
       $scope.register = function ($event) {
         var form = $scope.registerUser,
             sex = form.userSex.$modelValue === 0,
@@ -63,10 +64,19 @@ angular.module('stofmaApp.controllers')
           });
         }
       };
-      
-      $scope.showPicker = function(ev) {
-    	$mdDatePicker(ev, $scope.userBirthday).then(function(selectedDate) {
-          $scope.userBirthday = selectedDate;
-        });
-      }  
+
+      var tempo = null;
+      $scope.showPicker = function (ev) {
+        console.log(moment().diff(moment(tempo), 'seconds'));
+        if (tempo == null || moment().diff(moment(tempo), 'seconds') >= 2) {
+          tempo = new Date();
+          if (!$scope.userBirthday)
+            $scope.userBirthday = moment().subtract(24, 'years').toDate(); // Go 24 years before
+
+          $mdDatePicker(ev, $scope.userBirthday).then(function (selectedDate) {
+            $scope.userBirthday = selectedDate;
+            tempo = new Date();
+          });
+        }
+      }
     }]);

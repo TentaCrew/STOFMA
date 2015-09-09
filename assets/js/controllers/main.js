@@ -1,16 +1,15 @@
 'use strict';
 
 angular.module('stofmaApp.controllers')
-    .controller('MainCtrl', ['$scope', '$rootScope', '$state', '$q', '$mdBottomSheet', '$mdSidenav', '$timeout', 'UserService', function ($scope, $rootScope, $state, $q, $mdBottomSheet, $mdSidenav, $timeout, UserService) {
+    .controller('MainCtrl', ['$scope', '$rootScope', 'version', '$state', '$q', '$mdBottomSheet', '$mdSidenav', '$timeout', 'UserService', function ($scope, $rootScope, version, $state, $q, $mdBottomSheet, $mdSidenav, $timeout, UserService) {
       var that = this;
       $scope.pageTitle = "";
 
-      $rootScope.$on("$stateChangeStart", function (event, toState) {
+      $rootScope.$on("$stateChangeStart", function (event, toState, data, fromState) {
         $scope.pageTitle = toState.data.name;
         if ($mdSidenav('left').isOpen())
           that.toggleMenu();
 
-        // TODO Improved this !
         UserService.getFromSession().then(function (user) {
           if (!angular.equals(user, $scope.user))
             $scope.setCurrentUser(user);
@@ -18,7 +17,10 @@ angular.module('stofmaApp.controllers')
           $scope.setCurrentUser(null);
         });
 
-        $scope.setFabButton(false);
+        if (angular.isUndefined(fromState) || !(fromState.name.indexOf(toState.name) >= 0 || toState.name.indexOf(fromState.name) >= 0)) {
+          $scope.setFabButton(false);
+          $scope.setTabMenu(false);
+        }
       });
 
       $scope.user = null;
@@ -31,7 +33,7 @@ angular.module('stofmaApp.controllers')
         var defer = $q.defer();
         $scope.$watch('user', function (u) {
           if (angular.isDefined(u)) {
-            if(u !== null)
+            if (u !== null)
               defer.resolve($scope.user);
             if (angular.isFunction(callbackChange))
               callbackChange(u);
@@ -78,6 +80,27 @@ angular.module('stofmaApp.controllers')
             handler: onclickcb
           }
         }
-      }
+      };
+
+      $scope.tabmenu = null;
+
+      $scope.setTabMenu = function (tabs, ontabchange) {
+        if (angular.isUndefined(tabs) || tabs === false)
+          $scope.tabmenu = null;
+        else {
+          $scope.tabmenu = {
+            ontabchange: ontabchange,
+            tabs: tabs
+          }
+        }
+      };
+
+      $scope.getVersion = function () {
+        return version;
+      };
+
+      $scope.getYear = function () {
+        return moment().get('year');
+      };
     }])
 ;

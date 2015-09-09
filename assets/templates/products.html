@@ -3,4 +3,12 @@
 <br>
 <md-divider></md-divider>
 
-<div data-product-list data-products="products" data-usage="selecting" class="product-list" data-activate="onSetEnable" data-edit="onEdit" data-show-switch-price="true"></div>
+<ng-switch on="selectedTab" class="tabpanel-container">
+  <md-content ng-switch-when="list-on-sale-product">
+    <div data-product-list data-products="products" data-usage="selecting" class="product-list" data-activate="onSetEnable" data-edit="onEdit"
+         data-show-switch-price="true"></div>
+  </md-content>
+  <md-content ng-switch-when="list-stock-product">
+    <div data-product-list data-products="productsStock" data-usage="selecting" class="product-list" data-activate="onSetEnable" data-edit="onEdit"></div>
+  </md-content>
+</ng-switch>

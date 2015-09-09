@@ -8,3 +8,6 @@ angular.module('stofmaApp.controllers', [
   'stofmaApp.services',
   'mdPickers'
 ]);
+
+angular.module('stofmaApp')
+    .constant('version', '1.0.0.0');
