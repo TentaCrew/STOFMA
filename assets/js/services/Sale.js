@@ -71,8 +71,8 @@ angular.module('stofmaApp.services')
           typePayment: type
         }).success(function (data) {
           defer.resolve(data);
-        }).error(function (err) {
-          defer.reject(false);
+        }).error(function (err, status) {
+          defer.reject(status);
         });
         return defer.promise;
       }

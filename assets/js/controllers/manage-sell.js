@@ -123,12 +123,20 @@ angular.module('stofmaApp.controllers')
                     $scope.guest = false;
                   }
                 });
-              }).catch(function () {
-                SweetAlert.swal({
-                  title: 'La vente n\'a pas réussi.',
-                  text: 'Merci de recréditer le solde de ' + customerName + '.',
-                  type: 'error'
-                });
+              }).catch(function (status) {
+                if(status == 406) {
+                  SweetAlert.swal({
+                    title: 'La vente n\'a pas réussi.',
+                    text: 'Merci de recréditer le solde de ' + customerName + '.',
+                    type: 'error'
+                  });
+                } else if(status == 407) {
+                  SweetAlert.swal({
+                    title: 'La vente n\'a pas réussi.',
+                    text: 'L\'un des produits n\'est plus disponible.',
+                    type: 'error'
+                  });
+                }
               })
             } else {
               SaleService.editSale($scope.editSaleId, customerId, products, response.paymentMode).then(function (newSale) {

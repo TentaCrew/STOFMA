@@ -41,7 +41,7 @@ angular.module('stofmaApp.services')
             else
               return 1;
           }).sort(function (u) {
-            return u.isActive ? -1 : 1;
+            return !u.isActive;
           });
           defer.resolve(users);
         }).error(function (err) {
@@ -124,7 +124,7 @@ angular.module('stofmaApp.services')
         var defer = $q.defer();
 
         $http.post('/user', formData).success(function (result) {
-          defer.resolve(result);
+          defer.resolve(UserFactory.remap(result));
         }).error(function (err) {
           defer.reject(err);
         });

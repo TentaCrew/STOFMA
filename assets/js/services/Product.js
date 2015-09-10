@@ -6,6 +6,7 @@ angular.module('stofmaApp.services')
     .service('ProductService', ['$q', '$http', 'ProductFactory', function ($q, $http, ProductFactory) {
       this.getProducts = getProducts;
       this.getProductsInStock = getProductsInStock;
+      this.getProductByShortName = getProductByShortName;
       this.getCategories = getCategories;
       this.createProduct = createProduct;
       this.setProductEnable = setProductEnable;
@@ -54,6 +55,24 @@ angular.module('stofmaApp.services')
               });
 
               defer.resolve(r);
+            }
+        ).
+            error(function (err) {
+              defer.reject();
+            });
+
+        return defer.promise;
+      }
+
+      function getProductByShortName(shortName) {
+        var defer = $q.defer();
+
+        $http.get('/product?shortName=' + shortName).success(function (data) {
+              var r = data;
+
+              r = r.map(ProductFactory.remapProducts);
+
+              defer.resolve(r[0]);
             }
         ).
             error(function (err) {

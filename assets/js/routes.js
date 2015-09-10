@@ -36,6 +36,11 @@ angular.module('stofmaApp')
             data: {
               name: 'Inscription',
               icon: 'assignment_ind'
+            },
+            resolve : {
+              isManager: function () {
+                return false;
+              }
             }
           })
           .state('anon.mentions', {
@@ -273,6 +278,20 @@ angular.module('stofmaApp')
               usersData: function (usersProvider) {
                 return usersProvider.getAll(true);
               }
+            }
+          })
+          .state('manager.registeruser', {
+            url: '/user/register',
+            controller: 'RegisterCtrl',
+            templateUrl: 'assets/templates/register.html',
+            resolve : {
+              isManager: function () {
+                return true;
+              }
+            },
+            data: {
+              name: 'Inscrire un nouvel utilisateur',
+              hidden: true
             }
           })
           .state('manager.credit', {

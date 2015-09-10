@@ -1,5 +1,5 @@
 <div class="">
-  <p class="md-body-2">Inscrivez-vous en renseignant vos informations personnelles.</p>
+  <p class="md-body-2" ng-if="!registerByManager">Inscrivez-vous en renseignant vos informations personnelles.</p>
 
   <form name="registerUser" layout-padding>
     <md-input-container>
@@ -61,7 +61,7 @@
         <div ng-message="pattern">Le numéro n'est pas correct</div>
       </div>
     </md-input-container>
-    <div layout-gt-sm="row">
+    <div layout-gt-sm="row" layout-padding>
       <md-input-container flex>
         <label>Mot de passe</label>
         <input type="password" name="userPassword" ng-model="userPassword" required>

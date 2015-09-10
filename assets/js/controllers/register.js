@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('stofmaApp.controllers')
-    .controller('RegisterCtrl', ['$scope', 'Auth', '$state', '$mdDialog', '$mdDatePicker', function ($scope, Auth, $state, $mdDialog, $mdDatePicker) {
+    .controller('RegisterCtrl', ['$scope', 'isManager', 'Auth', '$state', '$mdDialog', '$mdToast', function ($scope, isManager, Auth, $state, $mdDialog, $mdToast) {
+
+      $scope.registerByManager = isManager;
 
       $scope.register = function ($event) {
         var form = $scope.registerUser,
@@ -39,8 +41,18 @@ angular.module('stofmaApp.controllers')
             password: password,
             phoneNumber: phoneNumber
           }).then(function (userLogin) {
-            $scope.setCurrentUser(userLogin);
-            $state.go('user.home');
+            if (!isManager) {
+              $scope.setCurrentUser(userLogin);
+              $state.go('user.home');
+            } else {
+              $mdToast.show(
+                  $mdToast.simple()
+                      .content(userLogin.getName() + ' enregistré' + (sex ? '' : 'e') + ' avec succès.')
+                      .position("bottom right")
+                      .hideDelay(3000)
+              );
+              $state.go('manager.users');
+            }
           }).catch(function (err) {
             switch (err.status) {
               case 400:

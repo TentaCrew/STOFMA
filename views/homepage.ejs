@@ -36,16 +36,19 @@
 </md-sidenav>
 
 <div layout="column" layout-fill style="overflow: hidden;">
-  <md-toolbar class="md-whiteframe-z2" md-scroll-shrink>
+  <md-toolbar class="md-whiteframe-z2" ng-class="{'have-fab': fabbutton != null}">
     <div class="md-toolbar-tools" ng-if="onSearch == null">
       <md-button class="md-icon-button" hide-gt-md ng-click="main.toggleMenu()" aria-label="Afficher le menu">
         <md-icon>menu</md-icon>
       </md-button>
       <h2 ng-bind="pageTitle" class="page-title"></h2>
+      <md-button class="md-icon-button" ng-repeat="btn in iconToolbarButtons" ng-click="btn.onclick()" aria-label="btn.name">
+        <md-icon>{{btn.icon}}</md-icon>
+      </md-button>
       <md-button class="md-icon-button" ng-click="searchIcon()" ng-if="searchIcon" aria-label="Recherche">
         <md-icon>search</md-icon>
       </md-button>
-      <md-button ng-show="fabbutton != null" class="md-fab md-fab-top-right md-accent" ng-click="fabbutton.handler()">
+      <md-button ng-show="fabbutton != null" class="md-fab md-fab-{{fabbutton.top}}-right md-accent" ng-click="fabbutton.handler()">
         <md-icon>{{fabbutton.icon}}</md-icon>
       </md-button>
     </div>
@@ -66,7 +69,7 @@
 
   <md-content layout-align="center start" role="main" flex>
     <div ui-view class="stofma-content md-whiteframe-z1" layout-padding></div>
-    <footer layout-align="center center" layout="column">
+    <footer layout-align="center center" layout="column" layout-margin>
       <div layout-padding>
         <a ui-sref="anon.mentions">Mentions légales</a>
       </div>

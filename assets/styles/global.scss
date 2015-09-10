@@ -127,3 +127,9 @@ md-toolbar .md-toolbar-tools {
 md-list-item.isInactive .md-list-item-text {
   opacity: 0.4;
 }
+
+.have-fab .md-button.md-fab.md-fab-bottom-right {
+  bottom: auto;
+  top: 75%;
+  right: 50px;
+}

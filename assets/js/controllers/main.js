@@ -21,6 +21,7 @@ angular.module('stofmaApp.controllers')
           $scope.setFabButton(false);
           $scope.setTabMenu(false);
         }
+        $scope.setIconToolbarButtons(false);
         $scope.setSearchIcon(false);
       });
 
@@ -72,12 +73,13 @@ angular.module('stofmaApp.controllers')
 
       $scope.fabbutton = null;
 
-      $scope.setFabButton = function (icon, onclickcb) {
+      $scope.setFabButton = function (icon, onclickcb, topposition) {
         if (angular.isUndefined(icon) || icon === false)
           $scope.fabbutton = null;
         else {
           $scope.fabbutton = {
             icon: icon,
+            top: topposition ? topposition : 'top',
             handler: onclickcb
           }
         }
@@ -116,6 +118,30 @@ angular.module('stofmaApp.controllers')
           }
         }
       };
+
+      $scope.iconToolbarButtons = [];
+
+      $scope.setIconToolbarButtons = function (buttonsOrName, icon, callback) {
+        if (angular.isUndefined(buttonsOrName) || buttonsOrName === false) {
+          $scope.iconToolbarButtons = [];
+        } else {
+          if (angular.isArray(buttonsOrName)) {
+            angular.forEach(buttonsOrName, function (btn) {
+              addToolbarButton(btn.name, btn.icon, btn.callback);
+            })
+          } else {
+            addToolbarButton(buttonsOrName, icon, callback);
+          }
+        }
+      };
+
+      function addToolbarButton(name, icon, callback) {
+        $scope.iconToolbarButtons.unshift({
+          icon: icon,
+          name: name,
+          onclick: callback
+        })
+      }
 
       $scope.getVersion = function () {
         return version;
