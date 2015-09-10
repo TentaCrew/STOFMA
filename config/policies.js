@@ -30,7 +30,7 @@ module.exports.policies = {
 
   'UserController': {
     '*':         false,
-    'signup':    'unauthenticated',
+    'signup':    true,
     'login':     'unauthenticated',
     'logout':    'authenticated',
     'update':    'authenticated',

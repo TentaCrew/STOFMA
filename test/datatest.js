@@ -77,6 +77,15 @@ module.exports = {
       sex:        true,
       password:   'cash'
     },
+    user_customer_06: {
+      id:         16,
+      firstname:  'Jean',
+      name:       'Dujardin',
+      email:      'jean@dujardin.fr',
+      sex:        true,
+      credit:     1000,       //won't be considered during sign up
+      password:   'jardin'
+    },
     //create the payments for their credit
     payment_credit_user_admin_01: {
       id:          -1,

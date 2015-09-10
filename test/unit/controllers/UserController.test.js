@@ -53,6 +53,58 @@ describe('UsersController', function() {
     });
   });
 
+  describe('#signup() as manager', function() {
+    //login as manager before test
+    before(function(done) {
+      agent
+      .put('/user/login')
+      .send({
+        email: data.user_manager_01.email,
+        password: data.user_manager_01.password
+      })
+      .end(done);
+    });
+    //log out after the test
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .end(function(err, res) {
+        done(err);
+      });
+    });
+    //test
+    it('should create an user by a manager and not login it', function (done) {
+      agent
+      .post('/user')
+      .send({
+        id:          data.user_customer_06.id,
+        firstname:   data.user_customer_06.firstname,
+        name:        data.user_customer_06.name,
+        email:       data.user_customer_06.email,
+        sex:         data.user_customer_06.sex,
+        password:    data.user_customer_06.password,
+        credit:      data.user_customer_06.credit,  //won't be considered
+        role:        data.user_customer_06.role     //won't be considered
+      })
+      .expect(200)
+      .end(function(err, res){
+        User.findOne({id: data.user_customer_06.id}, function(err,user){
+          assert.equal(user.credit, 0, 'The initial account should be equal to 0');
+          assert.equal(user.role, 'USER', 'Before a sign up, the role should be USER');
+
+          agent
+          .get('/session')
+          .expect(200)
+          .end(function (err, res) {
+            assert.equal(res.body.id, data.user_manager_01.id, 'The id from session must be the id of manager.');
+
+            done();
+          });
+        });
+      });
+    });
+  });
+
   describe('#login()', function() {
     it('should respond with a 404 status because credentials are invalid', function (done) {
       agent
