@@ -24,9 +24,12 @@ angular.module('stofmaApp.auth')
         },
         register: function (formData) {
           var defer = $q.defer();
-          UserService.register(formData).then(function(){
+          UserService.register(formData).then(function(newUser){
             UserService.getCurrentSession().then(function(session){
-              defer.resolve();
+              defer.resolve({
+                session: session,
+                newUser: newUser
+              });
             });
           }).catch(function(err){
             defer.reject(err);

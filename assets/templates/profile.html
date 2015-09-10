@@ -1,11 +1,11 @@
 <div class="">
 
   <div ng-if="updateHimSelf">
-    <h2>Bienvenue sur votre profil {{user.firstname}} {{user.name}}</h2>
-    <h3>Vous avez un solde de {{user.credit}}€ sur votre compte.</h3>
+    <h2>Bienvenue sur votre profil, {{user.getName()}}.</h2>
+    <h3>Votre solde s'élève à <em>{{user.credit | currency:''}} €</em>.</h3>
   </div>
   <div ng-if="!updateHimSelf">
-    <h2>Édition du profil de {{user.firstname}} {{user.name}}</h2>
+    <h2>Édition du profil de {{user.getName()}}</h2>
   </div>
 
   <form name="updateUser">
@@ -43,6 +43,7 @@
       </div>
     </md-input-container>
 
-    <md-button ng-click="update($event)" class="md-primary">Enregitrer les modifications</md-button>
+    <md-button ng-click="update($event)" class="md-primary md-raised">Enregitrer les modifications</md-button>
+    <md-button ng-hide="updateHimSelf" ng-click="cancel()" class="md-accent">Enregitrer les modifications</md-button>
   </form>
 </div>

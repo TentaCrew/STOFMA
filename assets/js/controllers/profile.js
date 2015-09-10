@@ -4,7 +4,6 @@ angular.module('stofmaApp.controllers')
     .controller('ProfileCtrl', ['$q', '$scope', 'updateHimSelf', 'userData', '$state', 'Auth', 'UserService', 'SweetAlert', function ($q, $scope, updateHimSelf, userData, $state, Auth, UserService, SweetAlert) {
 
       $scope.user = userData;
-      $scope.user.credit = Number($scope.user.credit).toFixed(2);
       $scope.updateHimSelf = updateHimSelf;
 
       $scope.update = function ($event) {

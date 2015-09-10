@@ -22,7 +22,7 @@ angular.module('stofmaApp.services')
         var defer = $q.defer();
 
         $http.get('/session').success(function (data) {
-          defer.resolve(data);
+          defer.resolve(UserFactory.remap(data));
         }).error(function (err) {
           defer.reject(false);
         });

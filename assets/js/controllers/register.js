@@ -31,7 +31,7 @@ angular.module('stofmaApp.controllers')
         }
 
         if (form.$valid) {
-          phoneNumber = ('' + phoneNumber).replace(/ /, '');
+          phoneNumber = phoneNumber ? ('' + phoneNumber).replace(/ /, '') : '';
 
           Auth.register({
             sex: sex,
@@ -42,12 +42,12 @@ angular.module('stofmaApp.controllers')
             phoneNumber: phoneNumber
           }).then(function (userLogin) {
             if (!isManager) {
-              $scope.setCurrentUser(userLogin);
+              $scope.setCurrentUser(userLogin.session);
               $state.go('user.home');
             } else {
               $mdToast.show(
                   $mdToast.simple()
-                      .content(userLogin.getName() + ' enregistré' + (sex ? '' : 'e') + ' avec succès.')
+                      .content(userLogin.newUser.getName() + ' enregistré' + (sex ? '' : 'e') + ' avec succès.')
                       .position("bottom right")
                       .hideDelay(3000)
               );
