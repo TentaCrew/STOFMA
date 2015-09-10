@@ -12,7 +12,6 @@ angular.module('stofmaApp.controllers')
             emailVerif = form.userMailVerif.$modelValue,
             password = form.userPassword.$modelValue,
             passwordVerif = form.userPasswordVerif.$modelValue,
-            birthday = form.userBirthday.$modelValue,
             phoneNumber = form.userPhoneNumber.$modelValue;
 
         if (!angular.equals(email, emailVerif)) {
@@ -38,8 +37,7 @@ angular.module('stofmaApp.controllers')
             name: name,
             email: email,
             password: password,
-            phoneNumber: phoneNumber,
-            birthdate: moment(birthday).local()
+            phoneNumber: phoneNumber
           }).then(function (userLogin) {
             $scope.setCurrentUser(userLogin);
             $state.go('user.home');
@@ -64,19 +62,4 @@ angular.module('stofmaApp.controllers')
           });
         }
       };
-
-      var tempo = null;
-      $scope.showPicker = function (ev) {
-        console.log(moment().diff(moment(tempo), 'seconds'));
-        if (tempo == null || moment().diff(moment(tempo), 'seconds') >= 2) {
-          tempo = new Date();
-          if (!$scope.userBirthday)
-            $scope.userBirthday = moment().subtract(24, 'years').toDate(); // Go 24 years before
-
-          $mdDatePicker(ev, $scope.userBirthday).then(function (selectedDate) {
-            $scope.userBirthday = selectedDate;
-            tempo = new Date();
-          });
-        }
-      }
     }]);

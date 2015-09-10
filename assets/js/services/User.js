@@ -30,10 +30,20 @@ angular.module('stofmaApp.services')
         return defer.promise;
       }
 
-      function getAll() {
+      function getAll(withInactive) {
         var defer = $q.defer();
-        $http.get('/user?isActive=true').success(function (data) {
-          defer.resolve(data.map(UserFactory.remap));
+        $http.get('/user' + (withInactive ? '' : '?isActive=true')).success(function (data) {
+          var users = data.map(UserFactory.remap);
+
+          users = users.sort(function (u1, u2) {
+            if (u1.getName(true) < u2.getName(true))
+              return -1;
+            else
+              return 1;
+          }).sort(function (u) {
+            return u.isActive ? -1 : 1;
+          });
+          defer.resolve(users);
         }).error(function (err) {
           defer.reject(err.status);
         });

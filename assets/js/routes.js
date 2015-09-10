@@ -1,22 +1,14 @@
 angular.module('stofmaApp')
     .config(['$stateProvider', '$urlRouterProvider', 'AccessLevels', function ($stateProvider, $urlRouterProvider, AccessLevels) {
 
-      var timeRetrieve = new Date(),
-          currentSession = null;
       var authenticated = ['$q', 'UserService', function ($q, UserService) {
         var defer = $q.defer();
-        if (currentSession !== null && (timeRetrieve.getTime() + 60 * 1000) > new Date().getTime()) {
-          defer.resolve(currentSession);
-        } else {
-          UserService.getCurrentSession()
-              .then(function (session) {
-                currentSession = session;
-                timeRetrieve = new Date();
-                defer.resolve(currentSession);
-              }).catch(function () {
-                defer.reject('Non connecté');
-              });
-        }
+        UserService.getCurrentSession()
+            .then(function (session) {
+              defer.resolve(session);
+            }).catch(function () {
+              defer.reject('Non connecté');
+            });
         return defer.promise;
       }];
 
@@ -279,7 +271,7 @@ angular.module('stofmaApp')
               usersProvider: 'UserService',
 
               usersData: function (usersProvider) {
-                return usersProvider.getAll();
+                return usersProvider.getAll(true);
               }
             }
           })
@@ -405,4 +397,5 @@ angular.module('stofmaApp')
           });
 
       $urlRouterProvider.otherwise('/home');
-    }]);
+    }])
+;

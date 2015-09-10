@@ -3,18 +3,26 @@
 angular.module('stofmaApp.controllers')
     .controller('UserCtrl', ['$q', '$scope', 'usersData', '$state', 'UserFactory', 'UserService', 'SweetAlert', '$mdBottomSheet', '$mdToast', function ($q, $scope, usersData, $state, UserFactory, UserService, SweetAlert, $mdBottomSheet, $mdToast) {
 
-      $scope.users = UserFactory.onlyRealUsers(usersData).sort(function (u1, u2) {
-        if (u1.getName(true) < u2.getName(true))
-          return -1;
-        else
-          return 1;
-      });
+      var cacheUser = $scope.users = UserFactory.onlyRealUsers(usersData);
 
       function goProfileEditor(id) {
         $state.go('admin.profile', {
           id: id
         });
       }
+
+      $scope.setSearchIcon(true,
+          function (search) {
+            if (search == null || search == '') {
+              $scope.users = cacheUser;
+              $scope.searchUser = '';
+            } else {
+              $scope.searchUser = search;
+              $scope.users = $scope.users.filter(function (u) {
+                return u.getName().toLowerCase().indexOf(search.toLowerCase()) >= 0;
+              });
+            }
+          });
 
       $scope.action = function (id, index) {
         $scope.getCurrentUser().then(function (u) {
@@ -26,7 +34,7 @@ angular.module('stofmaApp.controllers')
                 locals: {
                   data: {
                     user: user,
-                    manager : u
+                    manager: u
                   }
                 }
               }).then(function (response) {
@@ -41,6 +49,7 @@ angular.module('stofmaApp.controllers')
                         type: 'success'
                       });
                       $scope.users[index] = user;
+                      cacheUser = angular.copy($scope.users);
                     });
                     break;
                   case 'delete':

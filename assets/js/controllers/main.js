@@ -21,6 +21,7 @@ angular.module('stofmaApp.controllers')
           $scope.setFabButton(false);
           $scope.setTabMenu(false);
         }
+        $scope.setSearchIcon(false);
       });
 
       $scope.user = null;
@@ -91,6 +92,27 @@ angular.module('stofmaApp.controllers')
           $scope.tabmenu = {
             ontabchange: ontabchange,
             tabs: tabs
+          }
+        }
+      };
+
+      $scope.searchIcon = null;
+
+      $scope.setSearchIcon = function (enable, onSearch) {
+        if (angular.isUndefined(enable) || enable === false) {
+          $scope.searchIcon = false;
+          $scope.onSearch = null;
+        } else {
+          $scope.searchIcon = function (enable) {
+            if (angular.isDefined(enable) && !enable) {
+              $scope.onSearch(null);
+              $scope.onSearch = null;
+            } else {
+              $scope.onSearch = onSearch;
+              $timeout(function () {
+                angular.element(document.querySelector('#searchToolbar input')).focus();
+              });
+            }
           }
         }
       };
