@@ -41,4 +41,8 @@ angular.module('stofmaApp.controllers')
         }
       };
 
+      $scope.cancel = function () {
+        $state.go('manager.users');
+      }
+
     }]);
