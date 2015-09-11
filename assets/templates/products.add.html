@@ -1,5 +1,6 @@
 <form name="createProduct">
   <br/><br/><br/>
+
   <h1 class="md-title">Création d'un produit</h1>
 
   <md-input-container>
@@ -53,6 +54,12 @@
   <md-input-container>
     <md-checkbox name="forSale" ng-init="forSale = true" ng-model="forSale">Stocké pour la vente</md-checkbox>
   </md-input-container>
+
+  <md-input-container ng-if="!forSale">
+    <label>Quantité stockée</label>
+    <input type="number" ng-model="quantity" name="quantity" required>
+  </md-input-container>
+
   <md-button class="md-button md-primary md-raised" ng-click="addProduct()">
     <md-icon>done</md-icon>
     Créer le nouveau produit

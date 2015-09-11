@@ -25,7 +25,7 @@ angular.module('stofmaApp.components')
             if (angular.isDefined(n))
               computeSum();
           });
-          
+
 
           $scope.$watch('showMemberPrice', function (n) {
             if (angular.isDefined(n)) {
@@ -80,10 +80,12 @@ angular.module('stofmaApp.components')
           $scope.edit = function (product) {
             if ($scope.canBeEdit) {
               $scope.editHandler(product).then(function (productEdited) {
-                for (var i = 0; i < $scope.products.length; i++) {
-                  if ($scope.products[i].id == product.id) {
-                    $scope.products[i] = productEdited;
-                    break;
+                if (productEdited) {
+                  for (var i = 0; i < $scope.products.length; i++) {
+                    if ($scope.products[i].id == product.id) {
+                      $scope.products[i] = productEdited;
+                      break;
+                    }
                   }
                 }
               });
@@ -111,7 +113,7 @@ angular.module('stofmaApp.components')
                 $scope.$parent.setFabButton(false);
             }
 
-            // Go to category on adding or removing (in selecting mode only)
+            // Go to category on adding (in selecting mode only)
             if ($scope.isSelectingMode && angular.isArray(nv) && angular.isArray(ov) && nv.length != ov.length) {
               var categoryToGo;
               if (nv.length > ov.length) {
@@ -121,18 +123,12 @@ angular.module('stofmaApp.components')
                         return e.id;
                       }).indexOf(i.id) < 0;
                 })[0].category;
-              } else {
-                // Removing a product
-                categoryToGo = ov.filter(function (i) {
-                  return nv.map(function (e) {
-                        return e.id;
-                      }).indexOf(i.id) < 0;
-                })[0].category;
-              }
-              for (var i = 0; i < $scope.categories.length; i++) {
-                if ($scope.categories[i].id == categoryToGo) {
-                  $scope.tabSelected = i;
-                  break;
+
+                for (var i = 0; i < $scope.categories.length; i++) {
+                  if ($scope.categories[i].id == categoryToGo) {
+                    $scope.tabSelected = i;
+                    break;
+                  }
                 }
               }
             }

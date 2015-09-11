@@ -20,6 +20,10 @@ angular.module('stofmaApp.controllers')
             urlImage = form.urlImage.$modelValue,
             forSale = form.forSale.$modelValue;
 
+        if (!forSale) {
+          var quantity = form.quantity.$modelValue;
+        }
+
         if (isNaN(price) || price < 0)
           form.unitPrice.$setValidity('notaprice', false);
         else
@@ -31,7 +35,7 @@ angular.module('stofmaApp.controllers')
           form.minimum.$setValidity('notanumber', true);
 
         if (form.$valid) {
-          ProductService.createProduct({
+          var data = {
             category: category,
             name: name,
             shortName: shortName,
@@ -40,7 +44,13 @@ angular.module('stofmaApp.controllers')
             minimum: minimum,
             urlImage: urlImage,
             forSale: forSale
-          }).then(function (newProduct) {
+          };
+
+          if(!forSale){
+            data.quantity = quantity;
+          }
+
+          ProductService.createProduct(data).then(function (newProduct) {
             if(newProduct.forSale)
               $scope.products.push(newProduct);
             else

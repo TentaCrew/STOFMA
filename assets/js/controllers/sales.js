@@ -12,6 +12,7 @@ angular.module('stofmaApp.controllers')
           headerTitles = {
             today: 'aujourd\'hui',
             yesterday: 'hier',
+            thisWeek: 'cette semaine',
             week: 'la semaine dernière',
             past: 'il y a plus d\'une semaine'
           };
@@ -28,15 +29,18 @@ angular.module('stofmaApp.controllers')
           });
         });
 
-        var date = moment(sale.saleDate);
+        var date = moment(sale.saleDate).startOf('day'),
+            now = moment().startOf('day');
 
-        if (moment().diff(date, 'days') == 0 && headerDate != 'today') {
+        if (now.isSame(date, 'day') && headerDate != 'today') {
           h = 'today';
-        } else if (moment().diff(date, 'days') == 1 && headerDate != 'yesterday') {
+        } else if (now.isSame(angular.copy(date).add(1, 'day')) && headerDate != 'yesterday') {
           h = 'yesterday';
-        } else if (moment().diff(date, 'days') > 1 && moment().diff(date, 'days') <= 7 && headerDate != 'week') {
+        } else if (angular.copy(now).startOf('week').isSame(angular.copy(date).startOf('week')) && !now.isSame(angular.copy(date).add(1, 'day')) && headerDate != 'thisWeek') {
+          h = 'thisWeek';
+        } else if (angular.copy(now).startOf('week').subtract(1, 'week').isSame(angular.copy(date).startOf('week')) && headerDate != 'week') {
           h = 'week';
-        } else if (moment().diff(date, 'days') > 7 && headerDate != 'past') {
+        } else if (now.diff(date, 'days') > 7 && headerDate != 'past') {
           h = 'past';
         }
 

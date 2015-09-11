@@ -76,13 +76,34 @@ angular.module('stofmaApp.controllers')
         })
             .then(function (productForm) {
               ProductService.editProduct(product.id, productForm).then(function (newProduct) {
+                if (product.forSale != newProduct.forSale) {
+                  if (product.forSale) {
+                    for (var i = 0; i < $scope.products.length; i++) {
+                      if ($scope.products[i].id == newProduct.id) {
+                        $scope.products.splice(i, 1);
+                        break;
+                      }
+                    }
+                    $scope.productsStock.push(newProduct);
+                  } else {
+                    for (var j = 0; j < $scope.productsStock.length; j++) {
+                      if ($scope.productsStock[j].id == newProduct.id) {
+                        $scope.productsStock.splice(j, 1);
+                        break;
+                      }
+                    }
+                    $scope.products.push(newProduct);
+                  }
+                  defer.resolve(null);
+                } else {
+                  defer.resolve(newProduct);
+                }
                 $mdToast.show(
                     $mdToast.simple()
                         .content('Produit mis à jour.')
                         .position("bottom right")
                         .hideDelay(3000)
                 );
-                defer.resolve(newProduct);
               }).catch(function (err) {
                 $mdToast.show(
                     $mdToast.simple()
