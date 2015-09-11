@@ -2,7 +2,7 @@
 
 angular.module('stofmaApp.controllers')
 
-    .controller('SalesCtrl', ['$scope', '$state', 'salesData', 'SaleService', 'UserService', '$mdBottomSheet', '$mdToast', 'isManager', function ($scope, $state, salesData, SaleService, UserService, $mdBottomSheet, $mdToast, isManager) {
+    .controller('SalesCtrl', ['$scope', '$state', 'salesData', 'SaleService', 'UserService', '$mdBottomSheet', '$mdToast', 'DateUtils', 'isManager', function ($scope, $state, salesData, SaleService, UserService, $mdBottomSheet, $mdToast, DateUtils, isManager) {
       $scope.sales = salesData;
       $scope.isManager = isManager;
 
@@ -29,19 +29,28 @@ angular.module('stofmaApp.controllers')
           });
         });
 
-        var date = moment(sale.saleDate).startOf('day'),
-            now = moment().startOf('day');
+        var date = sale.saleDate;
 
-        if (now.isSame(date, 'day') && headerDate != 'today') {
-          h = 'today';
-        } else if (now.isSame(angular.copy(date).add(1, 'day')) && headerDate != 'yesterday') {
-          h = 'yesterday';
-        } else if (angular.copy(now).startOf('week').isSame(angular.copy(date).startOf('week')) && !now.isSame(angular.copy(date).add(1, 'day')) && headerDate != 'thisWeek') {
-          h = 'thisWeek';
-        } else if (angular.copy(now).startOf('week').subtract(1, 'week').isSame(angular.copy(date).startOf('week')) && headerDate != 'week') {
-          h = 'week';
-        } else if (now.diff(date, 'days') > 7 && headerDate != 'past') {
-          h = 'past';
+        if (DateUtils.isToday(date)) {
+          if (headerDate != 'today') {
+            h = 'today';
+          }
+        } else if (DateUtils.isYesterday(date)) {
+          if (headerDate != 'yesterday') {
+            h = 'yesterday';
+          }
+        } else if (DateUtils.isThisWeek(date)) {
+          if (headerDate != 'thisWeek') {
+            h = 'thisWeek';
+          }
+        } else if (DateUtils.isLastWeek(date)) {
+          if (headerDate != 'week') {
+            h = 'week';
+          }
+        } else if (DateUtils.isPast(date)) {
+          if (headerDate != 'past') {
+            h = 'past';
+          }
         }
 
         if (h !== headerDate) {
