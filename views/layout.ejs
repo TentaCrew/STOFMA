@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <!--[if lt IE 7]>
-<html lang="en" ng-app="stofmaApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<html lang="fr" ng-app="stofmaApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>
-<html lang="en" ng-app="stofmaApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<html lang="fr" ng-app="stofmaApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>
-<html lang="en" ng-app="stofmaApp" class="no-js lt-ie9"> <![endif]-->
+<html lang="fr" ng-app="stofmaApp" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html lang="en" ng-app="stofmaApp" ng-strict-di class="no-js"> <!--<![endif]-->
+<html lang="fr" ng-app="stofmaApp" ng-strict-di class="no-js"> <!--<![endif]-->
   <head>
     <base href="/">
     <meta charset="utf-8">
@@ -20,47 +20,11 @@
       }
     </style>
 
-    <!--
-      TODO Change before production
-    -->
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">
 
-    <!-- Add to homescreen for Safari on iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Material Design Lite">
-    <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png">
-
-    <!-- Tile icon for Win8 (144x144 + tile color) -->
-    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
-    <meta name="msapplication-TileColor" content="#3372DF">
-
-    <!--
-        Stylesheets and Preprocessors
-        ==============================
-
-        You can always bring in CSS files manually with `<link>` tags, or asynchronously
-        using a solution like AMD (RequireJS).  Or, if you like, you can take advantage
-        of Sails' conventional asset pipeline (boilerplate Gruntfile).
-
-        By default, stylesheets from your `assets/styles` folder are included
-        here automatically (between STYLES and STYLES END). Both CSS (.css) and LESS (.less)
-        are supported. In production, your styles will be minified and concatenated into
-        a single file.
-
-        To customize any part of the built-in behavior, just edit `tasks/pipeline.js`.
-        For example, here are a few things you could do:
-
-            + Change the order of your CSS files
-            + Import stylesheets from other directories
-            + Use a different or additional preprocessor, like SASS, SCSS or Stylus
-    -->
     <link
-      href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"
-      rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          rel="stylesheet">
+      href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!--STYLES-->
     <!--STYLES END-->
@@ -69,33 +33,14 @@
   <body ng-controller="MainCtrl as main">
     <div class="screen-intro" layout="column" layout-align="center center" ng-hide="appLoaded">
       <h1 class="md-display-1">Student Office Manager</h1>
-      <h2 class="md-title">Faites affaire sereinement.</h2>
+
+      <h2 hide-sm class="md-title">Faites affaire sereinement.</h2>
       <img src="/images/logo_stofma.png" alt="Logo for intro" class="text-center">
-      <md-progress-circular class="md-warn" md-diameter="32" md-mode="indeterminate"></md-progress-circular>
+      <md-progress-circular class="md-accent" md-diameter="32" md-mode="indeterminate"></md-progress-circular>
     </div>
     <div class="wrap" layout="row" ng-cloak>
       <%- body %>
     </div>
-    <!--
-        Client-side Templates
-        ========================
-
-        HTML templates are important prerequisites of modern, rich client applications.
-        To work their magic, frameworks like Backbone, Angular, Ember, and Knockout require
-        that you load these templates client-side.
-
-        By default, your Gruntfile is configured to automatically load and precompile
-        client-side JST templates in your `assets/templates` folder, then
-        include them here automatically (between TEMPLATES and TEMPLATES END).
-
-        To customize this behavior to fit your needs, just edit `tasks/pipeline.js`.
-        For example, here are a few things you could do:
-
-            + Import templates from other directories
-            + Use a different template engine (handlebars, jade, dust, etc.)
-            + Internationalize your client-side templates using a server-side
-              stringfile before they're served.
-    -->
 
     <script> /* To prevent error on underscore */
       var _ = {escape: null}; </script>
@@ -103,29 +48,6 @@
     <script type="text/javascript" src="/jst.js"></script>
     <!--TEMPLATES END-->
 
-
-    <!--
-
-      Client-side Javascript
-      ========================
-
-      You can always bring in JS files manually with `script` tags, or asynchronously
-      on the client using a solution like AMD (RequireJS).  Or, if you like, you can
-      take advantage of Sails' conventional asset pipeline (boilerplate Gruntfile).
-
-      By default, files in your `assets/js` folder are included here
-      automatically (between SCRIPTS and SCRIPTS END).  Both JavaScript (.js) and
-      CoffeeScript (.coffee) are supported. In production, your scripts will be minified
-      and concatenated into a single file.
-
-      To customize any part of the built-in behavior, just edit `tasks/pipeline.js`.
-      For example, here are a few things you could do:
-
-          + Change the order of your scripts
-          + Import scripts from other directories
-          + Use a different preprocessor, like TypeScript
-
-    -->
 
     <!--SCRIPTS-->
     <!--SCRIPTS END-->

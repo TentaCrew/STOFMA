@@ -5,17 +5,6 @@ angular.module('stofmaApp.controllers')
     .controller('PurchaseCtrl', ['$scope', 'purchasesData', 'PurchaseService', '$state', '$mdBottomSheet', '$mdToast', 'DateUtils', function ($scope, purchasesData, PurchaseService, $state, $mdBottomSheet, $mdToast, DateUtils) {
       $scope.purchases = purchasesData;
 
-      // Possible header title : today, yesterday, week, past
-      var headerDate = '',
-          h = headerDate,
-          headerTitles = {
-            today: 'aujourd\'hui',
-            yesterday: 'hier',
-            thisweek: 'cette semaine',
-            week: 'la semaine dernière',
-            past: 'il y a plus d\'une semaine'
-          };
-
       for (var i = 0; i < $scope.purchases.length; i++) {
         var purchase = $scope.purchases[i];
 
@@ -27,39 +16,14 @@ angular.module('stofmaApp.controllers')
             price: pair.quantity * pair.unitPrice
           });
         });
-
-        var date = purchase.saleDate;
-
-        if (DateUtils.isToday(date)) {
-          if (headerDate != 'today') {
-            h = 'today';
-          }
-        } else if (DateUtils.isYesterday(date)) {
-          if (headerDate != 'yesterday') {
-            h = 'yesterday';
-          }
-        } else if (DateUtils.isThisWeek(date)) {
-          if (headerDate != 'thisWeek') {
-            h = 'thisWeek';
-          }
-        } else if (DateUtils.isLastWeek(date)) {
-          if (headerDate != 'week') {
-            h = 'week';
-          }
-        } else if (DateUtils.isPast(date)) {
-          if (headerDate != 'past') {
-            h = 'past';
-          }
-        }
-
-        if (h !== headerDate) {
-          headerDate = h;
-          $scope.purchases.splice(i++, 0, {
-            'title': headerTitles[h],
-            'type': 'header'
-          });
-        }
       }
+
+      DateUtils.addDateSubHeader($scope.purchases, 'purchaseDate', function (type, title) {
+        return {
+          'title': title,
+          'type': 'header'
+        }
+      });
 
       $scope.setFabButton('add', function () {
         $state.go('manager.addpurchase');

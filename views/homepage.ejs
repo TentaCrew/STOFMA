@@ -3,16 +3,16 @@
             md-is-locked-open="$mdMedia('gt-md')" ng-cloak>
   <section ng-controller="NavCtrl" layout="column" layout-fill layout-align="center space-between">
     <md-toolbar class="md-tall md-hue-2" ng-if="isUser">
-      <span flex></span>
 
       <div layout="column" layout-align="center center" class="md-toolbar-tools-bottom inset text-center">
+        <md-icon ng-if="user.isMember">card_membership</md-icon>
         <div>{{user.getName()}}</div>
         <div class="md-caption">{{user.email}}</div>
         <div layout="row" layout="center center">
           <md-button aria-label="Accueil" class="md-icon-button" ui-sref-active="active" ui-sref="user.home">
             <md-icon>home</md-icon>
           </md-button>
-          <md-button aria-label="DÈconnexion" class="md-icon-button" ng-click="logout()">
+          <md-button aria-label="Déconnexion" class="md-icon-button" ng-click="logout()">
             <md-icon>power_settings_new</md-icon>
           </md-button>
         </div>

@@ -6,7 +6,7 @@
     <md-list-item class="md-3-line md-no-proxy" role="listitem" ng-if="sale.type != 'header'">
       <div class="md-list-item-text" layout="row" layout-align="space-between center">
         <div layout="column">
-          <h3 title="{{sale.saleDate | amDateFormat:'LLLL'}}" ng-if="isManager"><strong>{{sale.customer.firstname}} {{sale.customer.name}}</strong><span ng-show="$mdMedia('gt-sm') || seeMore">, le <em>{{sale.saleDate | amDateFormat:'LLL'}} </em></span></h3>
+          <h3 title="{{sale.saleDate | amDateFormat:'L'}}"><strong ng-if="isManager">{{sale.customer.firstname}} {{sale.customer.name}}</strong><span ng-show="$mdMedia('gt-sm') || seeMore"><strong ng-if="isManager"> – </strong><em>{{sale.saleDate | amDateFormat:'LLLL'}} </em></span></h3>
           <h4>Vendu par <strong>{{sale.manager.firstname}} {{sale.manager.name}}</strong> </h4>
 
           <p>Montant : <strong>{{ sale.totalPrice | currency:''}} €</strong> – <strong>{{ sale.payment.name }}</strong></p>
