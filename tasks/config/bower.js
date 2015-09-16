@@ -3,18 +3,35 @@
  *
  * ---------------------------------------------------------------
  *
- * This grunt task is configured to put front-end dependencies to the better place (css in css folder, javascript in js folder)
+ * This grunt task is configured to put front-end dependencies to the better place (css in css folder, js in js folder)
  *
  */
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
-	grunt.config.set('bower', {
-		dev: {
-			dest: '.tmp/public',
-			js_dest: '.tmp/public/js/lib',
-			css_dest: '.tmp/public/styles/lib'
-		}
-	});
+  var path = require('path');
 
-	grunt.loadNpmTasks('grunt-bower');
+  grunt.config.set('bower', {
+    dev: {
+      options: {
+        targetDir: './.tmp/public/lib',
+        cleanTargetDir: true,
+        layout: function (type, component, source) {
+          /* workaround for https://github.com/yatskevich/grunt-bower-task/issues/121 */
+          if (type === '__untyped__') {
+            type = source.substring(source.lastIndexOf('.') + 1);
+          }
+
+          var renamedType = type;
+
+          if (type === 'js') renamedType = './js';
+          else if (type === 'css') renamedType = './css';
+
+          return path.join(renamedType, component);
+        },
+        verbose: true
+      }
+    }
+  });
+
+  grunt.loadNpmTasks('grunt-bower-task');
 };

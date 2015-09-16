@@ -82,4 +82,6 @@ module.exports = {
 
    // environment: process.env.NODE_ENV || 'development'
 
+  hookTimeout: 180000 // 3 minutes for building production tasks
+
 };

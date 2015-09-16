@@ -5,15 +5,28 @@
   "homepage": "https://github.com/ciaa-cnam/STOFMA",
   "dependencies": {
     "angular": "1.4.4",
-    "angular-ui-router": "~0.2.15",
     "angular-material": "~0.11.0",
-    "angular-sweetalert": "~1.1.0",
     "angular-messages": "~1.3.13",
     "angular-moment": "~0.10.2",
-    "mdPickers": "~0.3.0"
+    "angular-sweetalert": "~1.1.0",
+    "angular-ui-router": "~0.2.15"
   },
   "resolutions": {
     "angular": "1.4.5",
     "angular-material": "~0.11.0"
+  },
+  "exportsOverride": {
+    "moment": {
+      "js": "min/moment-with-locales.min.js"
+    },
+    "*": {
+      "js": [
+        "*.min.js",
+        "dist/*.min.js",
+        "min/*.min.js",
+        "release/*.min.js"
+      ],
+      "css": "*.css"
+    }
   }
 }

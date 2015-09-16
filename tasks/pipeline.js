@@ -13,6 +13,7 @@
 // CSS files to inject in order
 //
 var cssFilesToInject = [
+  'lib/css/**/*.css',
   'styles/**/*.css'
 ];
 
@@ -21,15 +22,12 @@ var cssFilesToInject = [
 // (uses Grunt-style wildcard/glob/splat expressions)
 var jsFilesToInject = [
 
-  // Load sails.io before everything else
-  'js/dependencies/sails.io.js',
-
   // Angular and moment dependency
-  'js/lib/**/angular.js',
-  'js/lib/**/moment.js',
+  'lib/js/**/angular.min.js',
+  'lib/js/**/moment*.min.js',
 
   // Other dependencies
-  'js/lib/**/*.js',
+  'lib/js/**/*.js',
 
   // Adds app.js and routes.js.
   'js/*.js',

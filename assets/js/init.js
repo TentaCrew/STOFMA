@@ -5,8 +5,7 @@ angular.module('stofmaApp.services', []);
 angular.module('stofmaApp.components', []);
 
 angular.module('stofmaApp.controllers', [
-  'stofmaApp.services',
-  'mdPickers'
+  'stofmaApp.services'
 ]);
 
 angular.module('stofmaApp')
