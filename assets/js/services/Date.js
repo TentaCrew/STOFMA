@@ -14,7 +14,7 @@ angular.module('stofmaApp.services')
           , headerTitles = {
             today: 'aujourd\'hui',
             yesterday: 'hier',
-            thisweek: 'cette semaine',
+            thisWeek: 'cette semaine',
             week: 'la semaine dernière',
             past: 'il y a plus d\'une semaine'
           };
