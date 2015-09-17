@@ -42,8 +42,13 @@ angular.module('stofmaApp.controllers')
             phoneNumber: phoneNumber
           }).then(function (userLogin) {
             if (!isManager) {
-              $scope.setCurrentUser(userLogin.session);
-              $state.go('user.home');
+              $mdToast.show(
+                  $mdToast.simple()
+                      .content('Inscription réalisée avec succès.')
+                      .position("bottom right")
+                      .hideDelay(3000)
+              );
+              $state.go('anon.login');
             } else {
               $mdToast.show(
                   $mdToast.simple()

@@ -46,6 +46,17 @@ describe('UsersController', function() {
   });
 
   describe('#logout()', function() {
+    //login as manager before test
+    before(function(done) {
+      agent
+      .put('/user/login')
+      .send({
+        email: data.user_manager_01.email,
+        password: data.user_manager_01.password
+      })
+      .end(done);
+    });
+    //test
     it('should log out an user', function (done) {
       agent
       .put('/user/logout')
@@ -151,7 +162,7 @@ describe('UsersController', function() {
   });
 
   describe('#delete() as manager', function() {
-    //sign up as manager before test
+    //sign up as manager before test and login
     before(function(done) {
       agent
       .post('/user')
@@ -164,7 +175,17 @@ describe('UsersController', function() {
         role:       data.user_manager_02.role,
         password:   data.user_manager_02.password
       })
-      .end(done);
+      .end(function(){
+        agent
+          .put('/user/login')
+          .send({
+            email: data.user_manager_02.email,
+            password: data.user_manager_02.password
+          })
+          .end(function(err, res) {
+            done(err);
+          });
+      });
     });
     //log out after the test
     after(function(done) {

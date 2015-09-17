@@ -74,7 +74,6 @@ module.exports = {
         if(req.session.user && (req.session.user.isAdmin || req.session.user.isManager)){
           sails.log.debug("User " + req.param('email') + " has been register as " + newUser.role);
         } else {
-          updateSession(req.session, newUser);
           sails.log.debug("User " + req.param('email') + " signed up and logged in as " + newUser.role);
         }
         return res.send(200, newUser);
