@@ -7,7 +7,7 @@ angular.module('stofmaApp.controllers')
 
       $scope.register = function ($event) {
         var form = $scope.registerUser,
-            sex = form.userSex.$modelValue === 0,
+            sex = form.userSex.$modelValue == 0,
             firstName = form.userFirstName.$modelValue,
             name = form.userName.$modelValue,
             email = form.userMail.$modelValue,
@@ -46,7 +46,7 @@ angular.module('stofmaApp.controllers')
                   $mdToast.simple()
                       .content('Inscription réalisée avec succès.')
                       .position("bottom right")
-                      .hideDelay(3000)
+                      .hideDelay(5000)
               );
               $state.go('anon.login');
             } else {
