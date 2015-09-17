@@ -8,6 +8,8 @@ angular.module('stofmaApp.controllers')
 
       $scope.update = function ($event) {
         var form = $scope.updateUser,
+            name = form.userName.$modelValue,
+            firstname = form.userFirstName.$modelValue,
             email = form.userMail.$modelValue,
             password = form.userPassword.$modelValue,
             passwordVerif = form.userPasswordVerif.$modelValue,
@@ -23,6 +25,8 @@ angular.module('stofmaApp.controllers')
           phoneNumber = ('' + phoneNumber).replace(/ /, '');
           UserService.get($scope.user.id).then(function (user) {
             Auth.update(user.id, {
+              name: name,
+              firstname: firstname,
               email: email,
               password: password,
               phoneNumber: phoneNumber

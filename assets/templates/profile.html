@@ -9,6 +9,26 @@
   </div>
 
   <form name="updateUser">
+    <div ng-if="!updateHimSelf">
+      <div layout-gt-sm="row" layout-padding>
+        <md-input-container flex>
+          <label>Prénom</label>
+          <input type="text" name="userFirstName" ng-model="user.firstname" ng-model="userFirstName" required>
+
+          <div ng-messages="registerUser.userFirstName.$error" ng-show="registerUser.userFirstName.$dirty">
+            <div ng-message="required">Ce champ est obligatoire</div>
+          </div>
+        </md-input-container>
+        <md-input-container flex>
+          <label>Nom</label>
+          <input type="text" name="userName" ng-model="user.name" ng-model="userName" required>
+
+          <div ng-messages="registerUser.userName.$error" ng-show="registerUser.userName.$dirty">
+            <div ng-message="required">Ce champ est obligatoire</div>
+          </div>
+        </md-input-container>
+      </div>
+    </div>
     <md-input-container class="md-icon-float">
       <label>Adresse e-mail</label>
       <md-icon>email</md-icon>
