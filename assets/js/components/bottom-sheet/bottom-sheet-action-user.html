@@ -16,13 +16,13 @@
         <span class="md-inline-list-icon-label">Déclarer <span ng-if="user.isMember">non-</span>membre</span>
       </md-button>
     </md-list-item>
-    <md-list-item ng-show="manager.isAdmin()">
+    <md-list-item ng-show="manager.isManager(true)">
       <md-button class="md-list-item-content md-primary" ng-click="confirm('edit')">
         <md-icon>create</md-icon>
         <span class="md-inline-list-icon-label">Editer</span>
       </md-button>
     </md-list-item>
-    <md-list-item ng-show="manager.isAdmin()">
+    <md-list-item ng-show="manager.isManager(true)">
       <md-button tabindex="-1" class="md-list-item-content md-accent" ng-click="confirm('delete')">
         <md-icon>clear</md-icon>
         <span class="md-inline-list-icon-label">{{user.isActive ? 'Désactiver' : 'Ré-activer'}}</span>

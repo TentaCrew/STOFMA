@@ -7,13 +7,21 @@ angular.module('stofmaApp.controllers')
       $scope.updateHimSelf = updateHimSelf;
 
       $scope.update = function ($event) {
-        var form = $scope.updateUser,
-            name = form.userName.$modelValue,
-            firstname = form.userFirstName.$modelValue,
-            email = form.userMail.$modelValue,
-            password = form.userPassword.$modelValue,
-            passwordVerif = form.userPasswordVerif.$modelValue,
-            phoneNumber = form.userPhoneNumber.$modelValue;
+        var form = $scope.updateUser;
+        var name, firstname;
+        if(!updateHimSelf) {
+          name      = form.userName.$modelValue;
+          firstname = form.userFirstName.$modelValue;
+        }
+        else {
+          name      = userData.name;
+          firstname = userData.firstname;
+        }
+
+        var email         = form.userMail.$modelValue;
+        var password      = form.userPassword.$modelValue;
+        var passwordVerif = form.userPasswordVerif.$modelValue;
+        var phoneNumber   = form.userPhoneNumber.$modelValue;
 
         if (!angular.equals(password, passwordVerif)) {
           form.userPasswordVerif.$setValidity('equals', false);

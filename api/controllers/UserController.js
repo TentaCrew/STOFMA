@@ -85,8 +85,8 @@ module.exports = {
 
     var updateHimSelf = req.param('id') == req.session.user.id;
 
-    // only admin can update other users
-    if(!req.session.user.isAdmin && !updateHimSelf) {
+    // only managers and admins can update other users
+    if(!req.session.user.isManager && !updateHimSelf) {
       return res.send(401, 'You do not have sufficient privileges to update other users.');
     }
 

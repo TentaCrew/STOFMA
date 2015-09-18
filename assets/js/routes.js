@@ -329,6 +329,25 @@ angular.module('stofmaApp')
               }
             }
           })
+          .state('manager.profile', {
+            url: '/profile/{id:int}',
+            controller: 'ProfileCtrl',
+            templateUrl: 'assets/templates/profile.html',
+            data: {
+              name: 'Édition du profil',
+              hidden: true
+            },
+            resolve: {
+              userProvider: 'UserService',
+              updateHimSelf: function () {
+                return false;
+              },
+
+              userData: function (userProvider, $stateParams) {
+                return userProvider.get($stateParams.id, true);
+              }
+            }
+          })
           .state('manager.products.add', {
             url: '/add',
             controller: 'AddProductCtrl',
@@ -377,25 +396,6 @@ angular.module('stofmaApp')
                   defer.reject();
                 return defer.promise;
               }]
-            }
-          })
-          .state('admin.profile', {
-            url: '/profile/{id:int}',
-            controller: 'ProfileCtrl',
-            templateUrl: 'assets/templates/profile.html',
-            data: {
-              name: 'Édition du profil',
-              hidden: true
-            },
-            resolve: {
-              userProvider: 'UserService',
-              updateHimSelf: function () {
-                return false;
-              },
-
-              userData: function (userProvider, $stateParams) {
-                return userProvider.get($stateParams.id);
-              }
             }
           })
           .state('admin.role', {

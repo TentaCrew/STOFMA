@@ -6,7 +6,7 @@ angular.module('stofmaApp.controllers')
       var cacheUser = $scope.users = UserFactory.onlyRealUsers(usersData);
 
       function goProfileEditor(id) {
-        $state.go('admin.profile', {
+        $state.go('manager.profile', {
           id: id
         });
       }
