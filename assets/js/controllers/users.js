@@ -3,7 +3,7 @@
 angular.module('stofmaApp.controllers')
     .controller('UserCtrl', ['$q', '$scope', 'usersData', '$state', 'UserFactory', 'UserService', 'ProductService', 'SaleService', 'SweetAlert', '$mdBottomSheet', '$mdToast', function ($q, $scope, usersData, $state, UserFactory, UserService, ProductService, SaleService, SweetAlert, $mdBottomSheet, $mdToast) {
 
-      var cacheUser = $scope.users = UserFactory.onlyRealUsers(usersData);
+      $scope.users = UserFactory.onlyRealUsers(usersData);
 
       function goProfileEditor(id) {
         $state.go('manager.profile', {
@@ -15,20 +15,25 @@ angular.module('stofmaApp.controllers')
         $state.go('manager.registeruser');
       });
 
-      $scope.setSearchIcon(true,
+      $scope.setSearchIcon(true, 'Recherche d\'un utilisateur',
           function (search) {
-            if (search == null || search == '') {
-              $scope.users = cacheUser;
+            if (search === null || search === '') {
               $scope.searchUser = '';
             } else {
               $scope.searchUser = search;
-              $scope.users = $scope.users.filter(function (u) {
-                return u.getName().toLowerCase().indexOf(search.toLowerCase()) >= 0;
-              });
             }
           });
 
-      $scope.action = function (id, index) {
+      $scope.action = function (id) {
+        var index;
+        
+        for(var i = 0; i < $scope.users.length; i++) {
+          if($scope.users[i].id == id){
+            index = i;
+            break;
+          }
+        }
+        
         $scope.getCurrentUser().then(function (u) {
               if (u.isManager(true)) {
                 UserService.get(id, true).then(function (user) {
@@ -100,7 +105,6 @@ angular.module('stofmaApp.controllers')
                                   type: 'success'
                                 });
                                 $scope.users[index] = user;
-                                cacheUser = angular.copy($scope.users);
                               });
                             }).catch(function (err) {
                               SweetAlert.swal({

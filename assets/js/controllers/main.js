@@ -100,7 +100,7 @@ angular.module('stofmaApp.controllers')
 
       $scope.searchIcon = null;
 
-      $scope.setSearchIcon = function (enable, onSearch) {
+      $scope.setSearchIcon = function (enable, title, onSearch) {
         if (angular.isUndefined(enable) || enable === false) {
           $scope.searchIcon = false;
           $scope.onSearch = null;
@@ -111,6 +111,7 @@ angular.module('stofmaApp.controllers')
               $scope.onSearch = null;
             } else {
               $scope.onSearch = onSearch;
+              $scope.searchLabel = title;
               $timeout(function () {
                 angular.element(document.querySelector('#searchToolbar input')).focus();
               });

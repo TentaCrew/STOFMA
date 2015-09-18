@@ -150,7 +150,7 @@ angular.module('stofmaApp.services')
         $http.patch('/user/' + userId + '/active', {
           isActive: !disable
         }).success(function (result) {
-          defer.resolve(result);
+          defer.resolve(result.map(UserFactory.remap)[0]);
         }).error(function (err) {
           defer.reject(err);
         });
