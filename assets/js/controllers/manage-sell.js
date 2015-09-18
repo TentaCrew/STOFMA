@@ -148,15 +148,22 @@ angular.module('stofmaApp.controllers')
                     $state.go('manager.sales');
                   }
                 });
-              }).catch(function () {
-                SweetAlert.swal({
+              }).catch(function (status) {
+                if(status == 406) {
+                  SweetAlert.swal({
                   title: 'La vente n\'a pas été modifiée.',
-                  text: 'Merci de recréditer le solde de ' + customerName + '.',
-                  type: 'error'
-                });
+                    text: 'Merci de recréditer le solde de ' + customerName + '.',
+                    type: 'error'
+                  });
+                } else if(status == 407) {
+                  SweetAlert.swal({
+                  title: 'La vente n\'a pas été modifiée.',
+                    text: 'L\'un des produits n\'est plus disponible.',
+                    type: 'error'
+                  });
+                }
               })
             }
-
           }
         });
       }
