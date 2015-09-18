@@ -260,7 +260,13 @@ module.exports = {
           var stockOut = false;
           async.each(pairs, function(pair, cb) {
             Product.findOne(pair.product, function(err,product){
-              if(Number(product.quantity) < 0) {    //the stock has already been updated in createPairs
+              var previousQuantity = 0;   // previous quantity of product bought in the sale to update
+              for (var i = 0; i < saleToUpdate.products.length; i++) {
+                if(saleToUpdate.products[i].product == pair.product){
+                    previousQuantity += saleToUpdate.products[i].quantity;
+                }
+              }
+              if(Number(product.quantity)+previousQuantity < 0) {    //the stock has already been updated in createPairs
                 stockOut = true;
               }
               cb();
