@@ -238,8 +238,6 @@ module.exports = {
     updatedValues.manager =  req.session.user.id;
     if(req.param('saleDate'))
       updatedValues.saleDate = req.param('saleDate');
-    else
-      updatedValues.saleDate = new Date();
 
     //get the sale to update
     Sale.findOne(req.param('id')).populate('products').populate('payment').exec(function(err,saleToUpdate){

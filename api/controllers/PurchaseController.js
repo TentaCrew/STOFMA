@@ -182,8 +182,6 @@ module.exports = {
     updatedValues.manager = req.session.user.id;
     if(req.param('purchaseDate'))
       updatedValues.purchaseDate = req.param('purchaseDate');
-    else
-      updatedValues.purchaseDate = new Date();
 
     Purchase.findOne(req.param('id')).populate('products').populate('payment').exec(function(err,purchaseToUpdate){
       //create the pairs
