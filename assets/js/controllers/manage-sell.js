@@ -24,7 +24,6 @@ angular.module('stofmaApp.controllers')
 
       if (angular.isDefined($stateParams.id)) {
         // If edit
-
         $scope.isEditing = true;
         $scope.editSaleId = $stateParams.id;
 
@@ -39,6 +38,7 @@ angular.module('stofmaApp.controllers')
           angular.forEach(s.products, function (sp) {
             for (var i = 0; i < $scope.products.length; i++) {
               if ($scope.products[i].id == sp.product.id) {
+                $scope.products[i].quantity += sp.quantity;
                 $scope.products[i].selected = sp.quantity;
                 break;
               }
