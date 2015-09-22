@@ -357,12 +357,12 @@ angular.module('stofmaApp')
               hidden: true
             }
           })
-          .state('manager.accountStatement', {
-            url: '/balance',
+          .state('manager.results', {
+            url: '/results',
             controller: 'AccountStatementCtrl',
-            templateUrl: 'assets/templates/accountStatement.html',
+            templateUrl: 'assets/templates/results.html',
             data: {
-              name: 'Bilan financier',
+              name: 'Bilan',
               icon: 'equalizer'
             },
             resolve: {

@@ -3,7 +3,6 @@
             md-is-locked-open="$mdMedia('gt-md')" ng-cloak>
   <section ng-controller="NavCtrl" layout="column" layout-fill layout-align="center space-between">
     <md-toolbar class="md-tall md-hue-2" ng-if="isUser">
-
       <div layout="column" layout-align="center center" class="md-toolbar-tools-bottom inset text-center">
         <md-icon ng-if="user.isMember">card_membership</md-icon>
         <div>{{user.getName()}}</div>
@@ -62,7 +61,7 @@
     </div>
     <div ng-if="tabmenu != null">
       <md-tabs md-center-tabs="true" class="md-primary" md-selected="tabmenu.selected">
-        <md-tab id="{{tab.id}}" ng-repeat="tab in tabmenu.tabs" ng-click="tabmenu.ontabchange(tab)" aria-controls="{{tab.id}}-content">{{tab.name}}</md-tab>
+        <md-tab id="tb-{{tab.id}}" ng-repeat="tab in tabmenu.tabs" aria-controls="{{tab.id}}-content">{{tab.name}}</md-tab>
       </md-tabs>
     </div>
   </md-toolbar>

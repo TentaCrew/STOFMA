@@ -199,7 +199,7 @@ angular.module('stofmaApp.services')
     .factory('UserFactory', ['AccessLevels', function (AccessLevels) {
       var guestUserId = -1;
 
-      return {
+      var that = {
         remap: function (o) {
           o.getName = function (nameFirst) {
             if (angular.isDefined(nameFirst))
@@ -228,6 +228,19 @@ angular.module('stofmaApp.services')
         },
         getGuestUserId: function () {
           return guestUserId;
+        },
+        filterByName: function (u1, u2) {
+          if (angular.isUndefined(u1.getName) || angular.isUndefined(u2.getName)) {
+            u1 = that.remap(u1);
+            u2 = that.remap(u2);
+          }
+
+          if (u1.getName(true) < u2.getName(true))
+            return -1;
+          else
+            return 1;
         }
-      }
+      };
+
+      return that;
     }]);

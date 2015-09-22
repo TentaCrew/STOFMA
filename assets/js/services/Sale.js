@@ -4,6 +4,7 @@ angular.module('stofmaApp.services')
     .service('SaleService', ['$q', '$http', 'UserService', 'SaleFactory', 'ProductFactory', function ($q, $http, UserService, SaleFactory, ProductFactory) {
       this.getSales = getSales;
       this.getSale = getSale;
+      this.getSalesOfProduct = getSalesOfProduct;
       this.getOwnSales = getOwnSales;
       this.doSale = doSale;
       this.editSale = editSale;
@@ -37,6 +38,29 @@ angular.module('stofmaApp.services')
             defer.reject(err);
           });
         }
+
+        return defer.promise;
+      }
+
+      function getSalesOfProduct(productId) {
+        var defer = $q.defer();
+
+        getSales().then(function(sales){
+          var r = sales.filter(function(s){
+            return s.products.map(function(p){
+              return p.product.id
+            }).indexOf(productId) >= 0;
+          }).map(function(s){
+            s.products = s.products[0];
+            s.product = s.products.product;
+            s.product.quantity = s.products.quantity;
+            s.product.price = s.products.unitPrice;
+            s.totalPrice = s.product.quantity * s.product.price;
+            delete s.products;
+            return s;
+          });
+          defer.resolve(r);
+        });
 
         return defer.promise;
       }
@@ -109,12 +133,12 @@ angular.module('stofmaApp.services')
         return defer.promise;
       }
     }])
-    .factory('SaleFactory', ['$q', 'amMoment', function ($q, amMoment) {
+    .factory('SaleFactory', ['$q', '$filter', function ($q, $filter) {
       return {
         remap: function (o) {
           if(angular.isDefined(o)){
             o.getDate = function () {
-              return amMoment.amDateFormat(o.saleDate, 'LLLL')();
+              return $filter('amDateFormat')(o.saleDate, 'LLLL');
             };
           }
           return o;

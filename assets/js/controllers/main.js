@@ -87,13 +87,34 @@ angular.module('stofmaApp.controllers')
 
       $scope.tabmenu = null;
 
-      $scope.setTabMenu = function (tabs, ontabchange) {
+      $scope.setTabMenu = function (tabs, ontabchangeFn, defaultTab) {
         if (angular.isUndefined(tabs) || tabs === false)
           $scope.tabmenu = null;
         else {
           $scope.tabmenu = {
-            ontabchange: ontabchange,
+            current: undefined,
+            ontabchange: function (tab, forceSelected) {
+              if (angular.isDefined(forceSelected) && forceSelected >= 0) {
+                $scope.tabmenu.selected = forceSelected;
+              } else {
+                if(angular.equals($scope.tabmenu.current, tab))
+                  return;
+                $scope.tabmenu.current = tab;
+                ontabchangeFn(tab);
+              }
+            },
             tabs: tabs
+          };
+          $scope.$watch('tabmenu.selected', function (n, o) {
+            if (angular.isDefined(n) && n >= 0 && n !== o) {
+              $scope.tabmenu.ontabchange($scope.tabmenu.tabs[n]);
+            }
+          });
+          if (defaultTab) {
+            var index = $scope.tabmenu.tabs.map(function (t) {
+              return t.id;
+            }).indexOf(defaultTab);
+            $scope.tabmenu.ontabchange($scope.tabmenu.tabs[index], index);
           }
         }
       };
