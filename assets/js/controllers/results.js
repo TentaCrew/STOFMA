@@ -137,7 +137,7 @@ angular.module('stofmaApp.controllers')
             defer.resolve({
               ok: false,
               data: {
-                message: "Pas de vente pour ce produit."s
+                message: "Pas de vente pour ce produit."
               }
             });
             return;
