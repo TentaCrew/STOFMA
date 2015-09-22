@@ -51,7 +51,9 @@ angular.module('stofmaApp.services')
               return p.product.id
             }).indexOf(productId) >= 0;
           }).map(function(s){
-            s.products = s.products[0];
+            s.products = s.products.filter(function(p) {
+              return p.id == productId;
+            })[0];
             s.product = s.products.product;
             s.product.quantity = s.products.quantity;
             s.product.price = s.products.unitPrice;

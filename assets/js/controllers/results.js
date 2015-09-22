@@ -118,14 +118,14 @@ angular.module('stofmaApp.controllers')
               $scope.messageError = stats.data;
             }
             $scope.setFabButton('clear', function () {
-              $scope.productStats = null;
-              $scope.messageError = null;
+              $scope.doStat(null);
               $scope.productSelected = null;
               $scope.searchProductText = '';
             });
           });
         } else {
           $scope.productStats = null;
+          $scope.messageError = null;
         }
       };
 

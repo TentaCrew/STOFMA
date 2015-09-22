@@ -36,7 +36,7 @@ angular.module('stofmaApp.services')
       }
 
       function isPast(date) {
-        return now('week').subtract(1, 'week').isBefore(startOf(date, 'week'));
+        return now('week').subtract(1, 'week').isAfter(startOf(date, 'week'));
       }
 
       function addDateSubHeader(list, dateAttributeName, callbackWhenInsert) {
