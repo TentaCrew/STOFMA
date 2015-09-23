@@ -75,6 +75,7 @@ module.exports = {
                   manager:  req.session.user.id,
                   products: pairs,
                   totalPrice: totalPrice,
+                  commentSale: req.param('commentSale'),
                   payment: newPayment
                 }, function (err, newSale) {
 

@@ -30,6 +30,9 @@ module.exports = {
     },
     payment:{
       model: 'Payment'
+    },
+    commentSale:{
+      type: 'STRING'
     }
   },
 

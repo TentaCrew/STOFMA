@@ -158,9 +158,16 @@ angular.module('stofmaApp.controllers')
 
           angular.forEach(sales, function (s) {
             var c = s.customer;
+            if(c.id == -1 && s.commentSale) {
+              c.name = s.commentSale;
+              c.firstname = '';
+            }
             var iU = users.map(function (u) {
               return u.id;
             }).indexOf(c.id);
+            if(c.id==-1){
+              iU = -1;
+            }
             if (iU == -1) {
               c.count = s.product.quantity;
               users.push(c);

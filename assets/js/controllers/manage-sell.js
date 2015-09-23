@@ -81,7 +81,7 @@ angular.module('stofmaApp.controllers')
       };
 
       $scope.confirmSelling = function ($event) {
-        if ($scope.customer === null && !$scope.guest) {
+        if (($scope.customer === null && !$scope.guest) || ($scope.guest && angular.isUndefined($scope.commentSale))) {
           $mdToast.show(
               $mdToast.simple()
                   .content('Veuillez sélectionner la personne à servir.')
@@ -111,7 +111,7 @@ angular.module('stofmaApp.controllers')
                 customerName = customerId == UserFactory.getGuestUserId() ? 'votre invité' : $scope.customer.getName();
 
             if (!$scope.isEditing) {
-              SaleService.doSale(customerId, products, response.paymentMode).then(function (newSale) {
+              SaleService.doSale(customerId, products, response.paymentMode, $scope.commentSale). then(function (newSale) {
                 SweetAlert.swal({
                   title: 'Vente terminée pour ' + customerName + '!',
                   type: 'success'
@@ -121,6 +121,7 @@ angular.module('stofmaApp.controllers')
                     $scope.customer = undefined;
                     $scope.searchUserText = '';
                     $scope.guest = false;
+                    $scope.commentSale = '';
                   }
                 });
               }).catch(function (status) {
