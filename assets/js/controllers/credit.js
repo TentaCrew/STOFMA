@@ -59,11 +59,11 @@ angular.module('stofmaApp.controllers')
             credit: amount,
             typePayment: $scope.payment
           })
-              .then(function (newPaym) {
+              .then(function (newCredit) {
                 loadPayments();
                 SweetAlert.swal({
                   title: 'Le compte de ' + user.firstname + ' ' + user.name + ' a été crédité de ' + Number(amount).toFixed(2) + '€',
-                  text: 'Ancien solde : ' + Number(user.credit).toFixed(2) + '€\nNouveau solde : ' + Number(Number(user.credit) + Number(amount)).toFixed(2) + '€',
+                  text: 'Ancien solde : ' + Number(Number(newCredit)-Number(amount)).toFixed(2) + '€\nNouveau solde : ' + Number(newCredit).toFixed(2) + '€',
                   type: 'success'
                 }, function (ok) {
                   if (ok) {

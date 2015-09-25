@@ -47,7 +47,7 @@ angular.module('stofmaApp.auth')
         credit: function (userId, formData) {
           var defer = $q.defer();
           UserService.credit(userId, formData).then(function(user){
-            defer.resolve(user);
+            defer.resolve(user.credit);
           }).catch(function(err){
             defer.reject(err);
           });
