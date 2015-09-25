@@ -22,6 +22,12 @@ angular.module('stofmaApp.controllers')
         });
       }
 
+      function loadUsers() {
+        UserService.getAll(false).then(function (users) {
+          $scope.users = UserFactory.onlyRealUsers(users);
+        });
+      }
+
       loadPayments();
 
       $scope.payment = null;
@@ -61,6 +67,7 @@ angular.module('stofmaApp.controllers')
           })
               .then(function (newCredit) {
                 loadPayments();
+                loadUsers();
                 SweetAlert.swal({
                   title: 'Le compte de ' + user.firstname + ' ' + user.name + ' a été crédité de ' + Number(amount).toFixed(2) + '€',
                   text: 'Ancien solde : ' + Number(Number(newCredit)-Number(amount)).toFixed(2) + '€\nNouveau solde : ' + Number(newCredit).toFixed(2) + '€',
@@ -71,7 +78,7 @@ angular.module('stofmaApp.controllers')
                     form.$setUntouched();
                     $scope.payment = null;
                     $scope.searchUserText = '';
-                    $scope.amountToCredit = '';
+                    $scope  .amountToCredit = '';
                   }
                 });
               }).catch(function (err) {
