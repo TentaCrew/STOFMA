@@ -2,12 +2,20 @@
 
 angular.module('stofmaApp.controllers')
     .controller('AddProductCtrl', ['$scope', '$state', 'ProductService', 'SweetAlert', function ($scope, $state, ProductService, SweetAlert) {
-      $scope.setFabButton('clear', function () {
-        $state.go('^');
-        $scope.setFabButton('add', function () {
-          $state.go('manager.products.add');
-        });
-      });
+      $scope.setIconToolbarButtons([{
+        name: 'Annuler',
+        icon: 'clear',
+        callback: function () {
+          $state.go('^');
+          $scope.setIconToolbarButtons([{
+            name: 'Ajouter un produit',
+            icon: 'add',
+            callback: function () {
+              $state.go('manager.products.add');
+            }
+          }], true);
+        }
+      }], true);
 
       $scope.addProduct = function () {
         var form = $scope.createProduct,

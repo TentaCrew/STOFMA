@@ -11,6 +11,7 @@ angular.module('stofmaApp.services')
       this.createProduct = createProduct;
       this.setProductEnable = setProductEnable;
       this.editProduct = editProduct;
+      this.editStock = editStock;
 
       function getProducts(forSelling) {
         var defer = $q.defer();
@@ -134,6 +135,24 @@ angular.module('stofmaApp.services')
         }).error(function (err) {
           defer.reject();
         });
+        return defer.promise;
+      }
+
+      function editStock(id, amountStock) {
+        var defer = $q.defer();
+        amountStock = parseInt(amountStock);
+        if (!isNaN(amountStock)) {
+          $http.patch('/product/' + id, {
+            quantity: amountStock
+          }).success(function (np) {
+            np = np.map(ProductFactory.remapProducts).map(ProductFactory.remapForSelling);
+            defer.resolve(np[0]);
+          }).error(function (err) {
+            defer.reject();
+          });
+        } else {
+          defer.reject();
+        }
         return defer.promise;
       }
     }])

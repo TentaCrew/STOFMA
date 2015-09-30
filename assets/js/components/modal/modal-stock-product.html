@@ -1,0 +1,33 @@
+<md-dialog aria-label="{{title}}">
+  <form name="stockProduct">
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>{{title}}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon aria-label="Close dialog">clear</md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content style="min-width:400px;max-width:800px;max-height:810px;">
+      <div>
+        <md-input-container>
+          <label>Quantité du produit</label>
+          <input type="number" ng-model="quantity" name="amountStock" required>
+
+          <div ng-messages="stockProduct.amountStock.$error" ng-show="stockProduct.amountStock.$dirty">
+            <div ng-message="notanumber">La quantité doit être un entier positif.</div>
+          </div>
+        </md-input-container>
+      </div>
+    </md-dialog-content>
+    <div class="md-actions" layout="row" layout-margin>
+      <md-button class="md-accent" ng-click="cancel()" flex>
+        Annuler
+      </md-button>
+      <md-button class="md-raised md-primary" ng-click="submit()" flex>
+        Mettre à jour le stock
+      </md-button>
+    </div>
+  </form>
+</md-dialog>

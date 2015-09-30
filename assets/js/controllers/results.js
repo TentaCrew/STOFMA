@@ -111,21 +111,24 @@ angular.module('stofmaApp.controllers')
 
       $scope.doStat = function (product) {
         if (product !== null) {
+          $scope.setLoading(true);
           computeStats(product.id).then(function (stats) {
-            if (stats.ok) {
-              $scope.productStats = stats.data;
-            } else {
-              $scope.messageError = stats.data;
-            }
+            $scope.productStats = stats;
             $scope.setFabButton('clear', function () {
               $scope.doStat(null);
               $scope.productSelected = null;
               $scope.searchProductText = '';
             });
+          }).catch(function (msg) {
+            $scope.messageError = msg;
+          }).finally(function () {
+            $scope.setLoading(false);
           });
         } else {
           $scope.productStats = null;
           $scope.messageError = null;
+          $scope.setFabButton(false);
+          $scope.setLoading(false);
         }
       };
 
@@ -134,12 +137,7 @@ angular.module('stofmaApp.controllers')
 
         SaleService.getSalesOfProduct(productId).then(function (salesData) {
           if (salesData.length === 0) {
-            defer.resolve({
-              ok: false,
-              data: {
-                message: "Pas de vente pour ce produit."
-              }
-            });
+            defer.reject("Pas de vente pour ce produit.");
             return;
           }
 
@@ -158,14 +156,14 @@ angular.module('stofmaApp.controllers')
 
           angular.forEach(sales, function (s) {
             var c = s.customer;
-            if(c.id == -1 && s.commentSale) {
+            if (c.id == -1 && s.commentSale) {
               c.name = s.commentSale;
               c.firstname = '';
             }
             var iU = users.map(function (u) {
               return u.id;
             }).indexOf(c.id);
-            if(c.id==-1){
+            if (c.id == -1) {
               iU = -1;
             }
             if (iU == -1) {
@@ -194,16 +192,13 @@ angular.module('stofmaApp.controllers')
           });
 
           defer.resolve({
-            ok: true,
-            data: {
-              users: users,
-              sales: sales,
-              price: {
-                total: price.total,
-                mean: price.getMean()
-              },
-              count: count
-            }
+            users: users,
+            sales: sales,
+            price: {
+              total: price.total,
+              mean: price.getMean()
+            },
+            count: count
           });
         });
 

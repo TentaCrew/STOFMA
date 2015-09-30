@@ -8,6 +8,7 @@ angular.module('stofmaApp.components')
           sellHandler: "=sell", // Must be an function.
           activateHandler: "=activate", // Must be an function returning a promise.
           editHandler: "=edit", // Must be an function returning a promise.
+          updateStockHandler: "=updateStock", // Must be an function returning a promise.
           getSum: '=',
           showSwitchPrice: '=',
           levelPrice: "="
@@ -86,6 +87,20 @@ angular.module('stofmaApp.components')
                       $scope.products[i] = productEdited;
                       break;
                     }
+                  }
+                }
+              });
+            }
+          };
+
+          $scope.updateStock = function (product) {
+            var m = $scope.updateStockHandler;
+            if (angular.isDefined(m) && angular.isFunction(m)) {
+              m(product).then(function (stockEdited) {
+                for (var i = 0; i < $scope.products.length; i++) {
+                  if ($scope.products[i].id == product.id) {
+                    $scope.products[i].quantity = stockEdited;
+                    break;
                   }
                 }
               });

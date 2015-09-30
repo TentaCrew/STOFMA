@@ -77,6 +77,10 @@ md-sidenav md-list-item {
   min-height: 0;
 }
 
+md-toolbar {
+  min-height: initial !important;
+}
+
 .screen-intro {
   position: fixed;
   top: 0;

@@ -1,11 +1,33 @@
 'use strict';
 
 angular.module('stofmaApp.controllers')
-    .controller('MainCtrl', ['$scope', '$rootScope', 'version', '$state', '$q', '$mdBottomSheet', '$mdSidenav', '$timeout', 'UserService', function ($scope, $rootScope, version, $state, $q, $mdBottomSheet, $mdSidenav, $timeout, UserService) {
+    .controller('MainCtrl', ['$scope', '$rootScope', 'version', '$state', '$q', '$mdBottomSheet', '$mdSidenav', '$timeout', 'UserService', '$mdMedia', function ($scope, $rootScope, version, $state, $q, $mdBottomSheet, $mdSidenav, $timeout, UserService, $mdMedia) {
       var that = this;
       $scope.pageTitle = "";
 
+      $scope.loadingPage = false;
+      var timeoutLoading;
+      $scope.setLoading = function (loading, timeout) {
+        $scope.loadingPage = loading;
+
+        if (loading) {
+          if(timeoutLoading) {
+            timeoutLoading.cancel();
+          }
+
+          timeoutLoading = $timeout(function () {
+            console.log('LOL');
+            $scope.loadingPage = false;
+          }, timeout ? timeout : 4000);
+        } else {
+          if(timeoutLoading) {
+            timeoutLoading.cancel();
+          }
+        }
+      };
+
       $rootScope.$on("$stateChangeStart", function (event, toState, data, fromState) {
+        $scope.loadingPage = true;
         $scope.pageTitle = toState.data.name;
         if ($mdSidenav('left').isOpen())
           that.toggleMenu();
@@ -26,6 +48,8 @@ angular.module('stofmaApp.controllers')
       });
 
       $scope.user = null;
+
+      $scope.$mdMedia = $mdMedia;
 
       $scope.setCurrentUser = function (u) {
         $scope.user = u;
@@ -51,6 +75,12 @@ angular.module('stofmaApp.controllers')
       $rootScope.$on("$stateChangeError", function (event, toState, d, fromState) {
         if (fromState.data)
           $scope.pageTitle = fromState.data.name;
+
+        $scope.loadingPage = false;
+      });
+
+      $rootScope.$on("$stateChangeSuccess", function (event, toState, d, fromState) {
+        $scope.loadingPage = false;
       });
 
       var timeoutAppLoaded = null;
@@ -97,7 +127,7 @@ angular.module('stofmaApp.controllers')
               if (angular.isDefined(forceSelected) && forceSelected >= 0) {
                 $scope.tabmenu.selected = forceSelected;
               } else {
-                if(angular.equals($scope.tabmenu.current, tab))
+                if (angular.equals($scope.tabmenu.current, tab))
                   return;
                 $scope.tabmenu.current = tab;
                 ontabchangeFn(tab);
@@ -143,16 +173,21 @@ angular.module('stofmaApp.controllers')
 
       $scope.iconToolbarButtons = [];
 
-      $scope.setIconToolbarButtons = function (buttonsOrName, icon, callback) {
+      $scope.setIconToolbarButtons = function (buttonsOrName, iconOrClear, callback, clear) {
         if (angular.isUndefined(buttonsOrName) || buttonsOrName === false) {
           $scope.iconToolbarButtons = [];
         } else {
           if (angular.isArray(buttonsOrName)) {
+            if (iconOrClear === true)
+              $scope.iconToolbarButtons = [];
             angular.forEach(buttonsOrName, function (btn) {
               addToolbarButton(btn.name, btn.icon, btn.callback);
             })
           } else {
-            addToolbarButton(buttonsOrName, icon, callback);
+            if (clear === true)
+              $scope.iconToolbarButtons = [];
+
+            addToolbarButton(buttonsOrName, iconOrClear, callback);
           }
         }
       };

@@ -3,7 +3,7 @@
   <div class="md-list-item-text">
     <h3 hide-sm>{{product.name}}</h3>
     <h3 hide-gt-sm show-sm>{{product.shortName}}</h3>
-    <h4><em ng-if="$parent.isSelectingMode">{{product.quantity}} x </em><strong>{{product.getPrice($parent.levelPrice) | currency:''}} €</strong></h4>
+    <h4><em ng-if="$parent.isSelectingMode || $parent.isSellingMode">{{product.quantity}} x </em><strong>{{product.getPrice($parent.levelPrice) | currency:''}} €</strong></h4>
   </div>
   <div ng-if="$parent.isSellingMode" layout="row" layout-align="end center" class="btn-product-action">
     <md-button class="md-icon-button md-accent" ng-click="remove(product.id)">
@@ -18,12 +18,15 @@
   </div>
   <div ng-if="product.isOut()">
     <strong hide-sm>Le produit est en rupture de stock.</strong>
-    <strong hide-gt-sm>Rupture de stock.</strong>
+    <strong hide-gt-sm>Plus en stock.</strong>
   </div>
   <div ng-if="$parent.isSelectingMode" layout="row" layout-align="end center">
     <md-button class="md-icon-button" ng-if="!product.forSale">
       <md-tooltip md-direction="top">Pas à la vente</md-tooltip>
       <md-icon>directions</md-icon>
+    </md-button>
+    <md-button class="md-icon-button" ng-click="updateStock(product)">
+      <md-icon>tune</md-icon>
     </md-button>
     <md-button class="md-icon-button md-primary" ng-if="$parent.$parent.canBeEdit" ng-click="edit(product)">
       <md-icon>edit</md-icon>

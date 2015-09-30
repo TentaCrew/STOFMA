@@ -53,24 +53,24 @@
       </md-not-found>
     </md-autocomplete>
     <section ng-if="productStats != null">
-      <md-toolbar layout="row" layout-align="space-around center">
-        <div>Total : <strong>{{productStats.price.total |currency:''}} €</strong></div>
-        <div>Moyenne : <strong>{{productStats.price.mean |currency:''}} €</strong></div>
-        <div>Nombre de vente : <strong>{{productStats.count}}</strong></div>
+      <md-toolbar layout="row" layout-sm="column" layout-align="space-around center">
+        <div layout-padding>Total : <strong>{{productStats.price.total |currency:''}} €</strong></div>
+        <div layout-padding>Moyenne : <strong>{{productStats.price.mean |currency:''}} €</strong></div>
+        <div layout-padding>Nombre de vente : <strong>{{productStats.count}}</strong></div>
       </md-toolbar>
       <div>
         <md-tabs md-center-tabs="true" class="md-primary" md-dynamic-height="true">
           <md-tab id="tb-sales" aria-controls="sales-content">
             <md-tab-label>Ventes</md-tab-label>
-            <md-tab-body layout-padding>
-              <md-list ng-hide="productStats.sales.length == 0">
+            <md-tab-body>
+              <md-list ng-hide="productStats.sales.length == 0" layout-padding>
                 <section ng-repeat="sale in productStats.sales">
                   <div ng-if="sale.type == 'header'">
                     <md-subheader class="md-no-sticky">{{sale.title}}</md-subheader>
                   </div>
                   <md-list-item class="md-2-line" role="listitem" ng-if="sale.type != 'header'">
-                    <div class="md-list-item-text" layout="row" layout-align="space-between center">
-                      <div>
+                    <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="space-between center" layout-align-sm="">
+                      <div ng-class="{'text-center': $mdMedia('sm')}">
                         <h3 title="{{sale.saleDate | amDateFormat:'L'}}"><strong>{{sale.customer.firstname}} {{sale.customer.name}}</strong></h3>
                         <h4>Vendeur: <strong>{{sale.manager.firstname}} {{sale.manager.name}}</strong></h4>
 
@@ -89,18 +89,18 @@
           </md-tab>
           <md-tab id="tb-users" aria-controls="users-content">
             <md-tab-label>Acheteurs</md-tab-label>
-            <md-tab-body layout-padding>
-              <md-list>
+            <md-tab-body>
+              <md-list layout-padding>
                 <md-list-item class="md-2-line" ng-repeat="u in productStats.users">
                   <div class="md-list-item-text" layout="row" layout-align="space-between center">
-                    <div flex="75">
+                    <div flex="70" flex-sm="60">
                       <h3><strong>{{u.getName(true)}}</strong></h3>
                       <h4><em>{{u.email}}</em></h4>
                     </div>
-                    <div flex="10">
+                    <div flex="10" flex-sm="20" class="text-center">
                       <md-button class="sum md-icon-button md-raised md-primary"><strong>{{u.count}}</strong></md-button>
                     </div>
-                    <div flex="15">
+                    <div flex="20" flex-sm="20" class="text-center">
                       <span ng-if="u.isMember"><md-icon class="material-icons md-accent">card_membership</md-icon> <span hide-sm>Membre</span></span>
                       <span ng-if="!u.isMember"><md-icon class="material-icons md-default">card_membership</md-icon> <span hide-sm>Non-membre</span></span>
                     </div>

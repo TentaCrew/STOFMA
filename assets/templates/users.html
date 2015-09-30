@@ -1,5 +1,5 @@
 <md-list>
-  <md-list-item class="md-2-line" ng-repeat="u in users | filter:searchUser" ng-click="action(u.id)" ng-class="{'isInactive': !u.isActive}">
+  <md-list-item class="md-2-line" ng-repeat="u in users | filter:searchUser" ng-click="action(u.id)" ng-class="{'isInactive': !u.isActive}" layout-padding>
     <div class="md-list-item-text" layout="row" layout-align="space-between center">
       <div flex="40" flex-sm="70">
         <h3><strong>{{u.getName(true)}}</strong></h3>

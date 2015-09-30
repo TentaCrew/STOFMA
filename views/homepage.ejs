@@ -1,4 +1,4 @@
-<md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z3"
+<md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-3dp"
             md-component-id="left"
             md-is-locked-open="$mdMedia('gt-md')" ng-cloak>
   <section ng-controller="NavCtrl" layout="column" layout-fill layout-align="center space-between">
@@ -64,10 +64,11 @@
         <md-tab id="tb-{{tab.id}}" ng-repeat="tab in tabmenu.tabs" aria-controls="{{tab.id}}-content">{{tab.name}}</md-tab>
       </md-tabs>
     </div>
+    <md-progress-linear ng-show="loadingPage" md-mode="indeterminate"></md-progress-linear>
   </md-toolbar>
 
-  <md-content layout-align="center start" role="main" flex>
-    <div ui-view class="stofma-content md-whiteframe-z1" layout-padding></div>
+  <md-content layout-align="center start" role="main">
+    <div ui-view class="stofma-content md-whiteframe-3dp" layout-padding></div>
     <footer layout-align="center center" layout="column" layout-margin>
       <div layout-padding>
         <a ui-sref="anon.mentions">Mentions légales</a>

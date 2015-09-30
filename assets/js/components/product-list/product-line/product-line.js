@@ -25,6 +25,10 @@ angular.module('stofmaApp.components')
           $scope.edit = function (product) {
             $scope.$parent.edit(product);
           };
+
+          $scope.updateStock = function (product) {
+            $scope.$parent.updateStock(product);
+          };
         }],
         link: function (scope, element, attrs) {
           element.addClass('product-list-line');
