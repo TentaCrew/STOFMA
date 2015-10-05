@@ -11,7 +11,7 @@ angular.module('stofmaApp.controllers')
         });
       }
 
-      $scope.setIconToolbarButtons('Ajouter un utilisateur', 'person_user', function () {
+      $scope.setIconToolbarButtons('Ajouter un utilisateur', 'person_add', function () {
         $state.go('manager.registeruser');
       });
 

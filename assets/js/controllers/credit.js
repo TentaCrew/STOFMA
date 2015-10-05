@@ -37,8 +37,9 @@ angular.module('stofmaApp.controllers')
 
       $scope.credit = function ($event) {
         var form = $scope.creditAccount,
-            amount = form.amountToCredit.$modelValue,
+            amount = parseFloat(form.amountToCredit.$modelValue),
             user = $scope.selectedUser;
+
 
         if ($scope.user === undefined) {
           $mdToast.show(
@@ -58,6 +59,15 @@ angular.module('stofmaApp.controllers')
                   .hideDelay(5000)
           );
           return;
+        } else if (isNaN(amount)) {
+          $mdToast.show(
+              $mdToast.simple()
+                  .content('Veuillez renseigner un moment corrent.')
+                  .position("bottom right")
+                  .hideDelay(5000)
+          );
+          return;
+
         }
 
         if (form.$valid) {
@@ -70,7 +80,7 @@ angular.module('stofmaApp.controllers')
                 loadUsers();
                 SweetAlert.swal({
                   title: 'Le compte de ' + user.firstname + ' ' + user.name + ' a été crédité de ' + Number(amount).toFixed(2) + '€',
-                  text: 'Ancien solde : ' + Number(Number(newCredit)-Number(amount)).toFixed(2) + '€\nNouveau solde : ' + Number(newCredit).toFixed(2) + '€',
+                  text: 'Ancien solde : ' + Number(Number(newCredit) - Number(amount)).toFixed(2) + '€\nNouveau solde : ' + Number(newCredit).toFixed(2) + '€',
                   type: 'success'
                 }, function (ok) {
                   if (ok) {
@@ -78,7 +88,7 @@ angular.module('stofmaApp.controllers')
                     form.$setUntouched();
                     $scope.payment = null;
                     $scope.searchUserText = '';
-                    $scope  .amountToCredit = '';
+                    $scope.amountToCredit = '';
                   }
                 });
               }).catch(function (err) {

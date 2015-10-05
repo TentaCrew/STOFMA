@@ -21,7 +21,7 @@
     <md-list>
       <md-list>
         <md-list-item ng-repeat="page in pages">
-          <md-button class="md-list-item-content" ng-hide="page.isHeader" ui-sref-active="active" ui-sref="{{page.name}}">
+          <md-button class="md-list-item-content" ng-hide="page.isHeader" md-no-ink ui-sref-active="active" ui-sref="{{page.name}}">
             <md-icon>{{page.data.icon}}</md-icon>
             {{page.data.name}}
           </md-button>

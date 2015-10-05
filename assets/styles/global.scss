@@ -26,6 +26,8 @@ md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
   display: inline-block;
   width: 100%;
   text-align: left;
+  padding: 2px 10px;
+  margin: 0 0 2px;
 }
 
 .md-sidenav-left .md-list-item-content.md-button.active {
@@ -118,6 +120,7 @@ md-toolbar .md-toolbar-tools {
   max-width: 1080px;
   margin: 0 auto;
   width: 100%;
+  padding: 0;
 }
 
 #searchToolbar md-input-container {
