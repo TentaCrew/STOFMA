@@ -128,6 +128,13 @@ md-toolbar .md-toolbar-tools {
   }
 }
 
+.stofma-content md-list-item {
+  height: auto;
+  .md-list-item-text {
+    padding: 10px 0;
+  }
+}
+
 md-list-item.isInactive .md-list-item-text {
   opacity: 0.4;
 }
