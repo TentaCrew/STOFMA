@@ -8,12 +8,33 @@ angular.module('stofmaApp.services')
       this.editPurchase = editPurchase;
       this.deletePurchase = deletePurchase;
 
-      function getPurchases() {
-        var defer = $q.defer();
+      var purchasesStep = 10,
+          currentPage,
+          startPage = 1;
 
-        $http.get('/purchase').success(function (purchases) {
+      if ($mdMedia('gt-sm'))
+        purchasesStep = 30;
+
+      function getPurchases(page, noFilter) {
+        if (angular.isUndefined(page))
+          currentPage = startPage;
+        else if (page === false)
+          currentPage += 1;
+        else
+          currentPage = page;
+
+        var defer = $q.defer(),
+            filter = noFilter ? '' : '?page=' + currentPage + '&limit=' + purchasesStep;
+
+        $http.get('/purchase' + filter).success(function (purchases) {
+          if (!noFilter && purchases.length == 0) {
+            currentPage -= 1;
+            defer.reject();
+          }
+
           defer.resolve(purchases);
         }).error(function (err) {
+          currentPage -= 1;
           defer.reject(err);
         });
 

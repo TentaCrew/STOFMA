@@ -18,12 +18,14 @@ angular.module('stofmaApp.controllers')
         });
       }
 
-      DateUtils.addDateSubHeader($scope.purchases, 'purchaseDate', function (type, title) {
+      var subHeaderHandler =DateUtils.instanceDateSubHeader($scope.purchases, 'purchaseDate', function (type, title) {
         return {
           'title': title,
           'type': 'header'
         }
       });
+
+      subHeaderHandler();
 
       $scope.setFabButton('add', function () {
         $state.go('manager.addpurchase');
@@ -62,5 +64,37 @@ angular.module('stofmaApp.controllers')
         $state.go('manager.editpurchase', {
           id: id
         });
-      }
+      };
+
+      var timeout;
+      $scope.onScroll = function () {
+        if (timeout)
+          return;
+
+        PurchaseService.getPurchases(false).then(function (ss) {
+
+          subHeaderHandler(ss);
+
+          angular.forEach(ss, function (v, k) {
+            v.pairs = [];
+            angular.forEach(v.products, function (pair) {
+              v.pairs.push({
+                name: pair.product.name,
+                quantity: pair.quantity,
+                price: pair.quantity * pair.unitPrice
+              });
+            });
+
+            ss[k] = v;
+
+            $scope.purchases.push(ss[k]);
+          });
+        }).catch(function(){
+          $scope.stopInfinite = true;
+        });
+
+        timeout = $timeout(function () {
+          timeout = false;
+        }, 500);
+      };
     }]);

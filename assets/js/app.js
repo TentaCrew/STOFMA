@@ -9,7 +9,8 @@ angular.module('stofmaApp', [
   'angularMoment',
   'ngMessages',
   'ui.router',
-  'oitozero.ngSweetAlert'
+  'oitozero.ngSweetAlert',
+  'infinite-scroll'
 ])
     .config(['$urlRouterProvider', '$locationProvider', '$mdThemingProvider', function ($urlRouterProvider, $locationProvider, $mdThemingProvider) {
       $locationProvider.hashPrefix('!');

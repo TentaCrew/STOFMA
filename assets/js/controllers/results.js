@@ -184,12 +184,12 @@ angular.module('stofmaApp.controllers')
             return u1.count > u2.count ? -1 : 1;
           });
 
-          DateUtils.addDateSubHeader(sales, 'saleDate', function (type, title) {
+          DateUtils.instanceDateSubHeader(sales, 'saleDate', function (type, title) {
             return {
               'title': title,
               'type': 'header'
             }
-          });
+          })();
 
           defer.resolve({
             users: users,

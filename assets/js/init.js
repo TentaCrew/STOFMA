@@ -9,4 +9,4 @@ angular.module('stofmaApp.controllers', [
 ]);
 
 angular.module('stofmaApp')
-    .constant('version', '1.1.1');
+    .constant('version', '1.1.2');

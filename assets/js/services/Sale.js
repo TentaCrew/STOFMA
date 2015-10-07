@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('stofmaApp.services')
-    .service('SaleService', ['$q', '$http', 'UserService', 'UserFactory', 'SaleFactory', function ($q, $http, UserService, UserFactory, SaleFactory) {
+    .service('SaleService', ['$q', '$http', 'UserService', 'UserFactory', 'SaleFactory', '$mdMedia', function ($q, $http, UserService, UserFactory, SaleFactory, $mdMedia) {
       this.getSales = getSales;
       this.getSale = getSale;
       this.getSalesOfProduct = getSalesOfProduct;
@@ -10,12 +10,33 @@ angular.module('stofmaApp.services')
       this.editSale = editSale;
       this.deleteSale = deleteSale;
 
-      function getSales() {
-        var defer = $q.defer();
+      var salesStep = 10,
+          currentPage,
+          startPage = 1;
 
-        $http.get('/sale').success(function (sales) {
+      if ($mdMedia('gt-sm'))
+        salesStep = 30;
+
+      function getSales(page, noFilter) {
+        if (angular.isUndefined(page))
+          currentPage = startPage;
+        else if (page === false)
+          currentPage += 1;
+        else
+          currentPage = page;
+
+        var defer = $q.defer(),
+            filter = noFilter ? '' : '?page=' + currentPage + '&limit=' + salesStep;
+
+        $http.get('/sale' + filter).success(function (sales) {
+          if (!noFilter && sales.length == 0) {
+            currentPage -= 1;
+            defer.reject();
+          }
+
           defer.resolve(sales.map(SaleFactory.remap));
         }).error(function (err) {
+          currentPage -= 1;
           defer.reject([]);
         });
 
@@ -26,7 +47,7 @@ angular.module('stofmaApp.services')
         var defer = $q.defer();
 
         if (!uniq) {
-          getSales().then(function (ss) {
+          getSales(null, true).then(function (ss) {
             defer.resolve(ss.filter(function (s) {
               return s.id == id;
             })[0]);
@@ -45,7 +66,7 @@ angular.module('stofmaApp.services')
       function getSalesOfProduct(productId) {
         var defer = $q.defer();
 
-        getSales().then(function (sales) {
+        getSales(null, true).then(function (sales) {
           var r = sales.filter(function (s) {
             return s.products.map(function (p) {
                   return p.product.id
@@ -101,7 +122,7 @@ angular.module('stofmaApp.services')
             UserService.get(data.customer, true).then(function (u) {
               data.customer = u;
               defer.resolve(data);
-            }).catch(function(){
+            }).catch(function () {
               defer.reject(500);
             });
           } else {

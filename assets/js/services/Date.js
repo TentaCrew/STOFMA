@@ -7,9 +7,11 @@ angular.module('stofmaApp.services')
       this.isThisWeek = isThisWeek;
       this.isLastWeek = isLastWeek;
       this.isPast = isPast;
-      this.addDateSubHeader = addDateSubHeader;
+      this.instanceDateSubHeader = instanceDateSubHeader;
 
-      // Possible header title : today, yesterday, thisweek, week, past
+      var instance = null;
+
+      // Possible header title : today, yesterday, thisWeek, week, past
       var lastHeaderType = null
           , headerTitles = {
             today: 'aujourd\'hui',
@@ -39,17 +41,27 @@ angular.module('stofmaApp.services')
         return now('week').subtract(1, 'week').isAfter(startOf(date, 'week'));
       }
 
-      function addDateSubHeader(list, dateAttributeName, callbackWhenInsert) {
-        var h = lastHeaderType = '';
-        for (var i = 0; i < list.length; i++) {
-          h = getDateSubHeader(list[i][dateAttributeName], lastHeaderType);
+      function instanceDateSubHeader(list, dateAttributeName, callbackWhenInsert) {
+        instance = {
+          lastHeaderType : ''
+        };
 
-          if (h !== lastHeaderType) {
-            lastHeaderType = h;
-            list.splice(i++, 0, callbackWhenInsert(h, headerTitles[h]));
+        return function(oList){
+          if(oList)
+            list = oList;
+
+          console.log(instance.lastHeaderType);
+
+          var h = '';
+          for (var i = 0; i < list.length; i++) {
+            h = getDateSubHeader(list[i][dateAttributeName], instance.lastHeaderType);
+
+            if (h !== instance.lastHeaderType) {
+              instance.lastHeaderType = h;
+              list.splice(i++, 0, callbackWhenInsert(h, headerTitles[h]));
+            }
           }
-        }
-        lastHeaderType = null;
+        };
       }
 
       function getDateSubHeader(date, headerType) {

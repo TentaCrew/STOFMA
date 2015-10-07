@@ -2,7 +2,7 @@
 
 angular.module('stofmaApp.controllers')
 
-    .controller('SalesCtrl', ['$scope', '$state', 'salesData', 'SaleService', 'UserService', '$mdBottomSheet', '$mdToast', 'DateUtils', 'isManager', function ($scope, $state, salesData, SaleService, UserService, $mdBottomSheet, $mdToast, DateUtils, isManager) {
+    .controller('SalesCtrl', ['$scope', '$timeout', '$state', 'salesData', 'SaleService', 'UserService', '$mdBottomSheet', '$mdToast', 'DateUtils', 'isManager', function ($scope, $timeout, $state, salesData, SaleService, UserService, $mdBottomSheet, $mdToast, DateUtils, isManager) {
       $scope.sales = salesData;
       $scope.isManager = isManager;
 
@@ -19,12 +19,14 @@ angular.module('stofmaApp.controllers')
         });
       }
 
-      DateUtils.addDateSubHeader($scope.sales, 'saleDate', function (type, title) {
+      var subHeaderHandler = DateUtils.instanceDateSubHeader($scope.sales, 'saleDate', function (type, title) {
         return {
           'title': title,
           'type': 'header'
         }
       });
+
+      subHeaderHandler();
 
       $scope.remove = function (id, index) {
         $mdBottomSheet.show({
@@ -59,5 +61,37 @@ angular.module('stofmaApp.controllers')
         $state.go('manager.editsale', {
           id: id
         });
-      }
+      };
+
+      var timeout;
+      $scope.onScroll = function () {
+        if (timeout)
+          return;
+
+        SaleService.getSales(false).then(function (ss) {
+
+          subHeaderHandler(ss);
+
+          angular.forEach(ss, function (v, k) {
+            v.pairs = [];
+            angular.forEach(v.products, function (pair) {
+              v.pairs.push({
+                name: pair.product.name,
+                quantity: pair.quantity,
+                price: pair.quantity * pair.unitPrice
+              });
+            });
+
+            ss[k] = v;
+
+            $scope.sales.push(ss[k]);
+          });
+        }).catch(function(){
+          $scope.stopInfinite = true;
+        });
+
+        timeout = $timeout(function () {
+          timeout = false;
+        }, 500);
+      };
     }]);

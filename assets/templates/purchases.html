@@ -1,35 +1,39 @@
 <md-list ng-hide="purchases.length == 0">
-  <section ng-repeat="purchase in purchases">
-    <div ng-if="purchase.type == 'header'">
-      <md-subheader class="md-no-sticky">{{purchase.title}}</md-subheader>
-    </div>
-    <md-list-item class="md-3-line md-no-proxy" role="listitem" ng-if="purchase.type != 'header'">
-      <div class="md-list-item-text" layout="row" layout-align="space-between center">
-        <div layout="column">
-          <h3 title="{{purchase.purchaseDate | amDateFormat:'LLLL'}}"><strong>{{purchase.manager.firstname}} {{purchase.manager.name}}</strong><span ng-show="$mdMedia('gt-sm') || seeMore">, le <em>{{purchase.purchaseDate | amDateFormat:'LLL'}}</em></span></h3>
-
-          <p>Montant : <strong>{{ purchase.totalPrice | currency:''}} €</strong> – <strong>{{ purchase.payment.name }}</strong></p>
-          <ul ng-show="seeMore">
-            <li ng-repeat="pair in purchase.pairs">
-              <em><strong>{{pair.name}}</strong></em> x {{pair.quantity}} – <strong>{{pair.price|currency:''}} €</strong>
-            </li>
-          </ul>
-        </div>
-        <div layout="row" layout-sm="column" layout-align="end center">
-          <md-button class="md-fab md-mini" ng-click="seeMore=!seeMore">
-            <md-icon ng-if="!seeMore">visibility</md-icon>
-            <md-icon ng-if="seeMore">visibility_off</md-icon>
-          </md-button>
-          <md-button class="md-fab md-mini md-primary" ng-click="amend(purchase.id, $index)">
-            <md-icon>create</md-icon>
-          </md-button>
-          <md-button class="md-fab md-mini md-warn" ng-click="remove(purchase.id, $index)">
-            <md-icon>clear</md-icon>
-          </md-button>
-        </div>
+  <div infinite-scroll="onScroll()" infinite-scroll-distance="3" infinite-scroll-immediate-check="false" infinite-scroll-container="'#mainContent'"
+       infinite-scroll-disabled="stopInfinite">
+    <section ng-repeat="purchase in purchases">
+      <div ng-if="purchase.type == 'header'">
+        <md-subheader class="md-no-sticky">{{purchase.title}}</md-subheader>
       </div>
-    </md-list-item>
-    <md-divider ng-if="!$last"></md-divider>
-  </section>
+      <md-list-item class="md-3-line md-no-proxy" role="listitem" ng-if="purchase.type != 'header'">
+        <div class="md-list-item-text" layout="row" layout-align="space-between center">
+          <div layout="column">
+            <h3 title="{{purchase.purchaseDate | amDateFormat:'LLLL'}}"><strong>{{purchase.manager.firstname}} {{purchase.manager.name}}</strong><span
+                ng-show="$mdMedia('gt-sm') || seeMore">, le <em>{{purchase.purchaseDate | amDateFormat:'LLL'}}</em></span></h3>
+
+            <p>Montant : <strong>{{ purchase.totalPrice | currency:''}} €</strong> – <strong>{{ purchase.payment.name }}</strong></p>
+            <ul ng-show="seeMore">
+              <li ng-repeat="pair in purchase.pairs">
+                <em><strong>{{pair.name}}</strong></em> x {{pair.quantity}} – <strong>{{pair.price|currency:''}} €</strong>
+              </li>
+            </ul>
+          </div>
+          <div layout="row" layout-sm="column" layout-align="end center">
+            <md-button class="md-fab md-mini" ng-click="seeMore=!seeMore" aria-label="Montrer les informations">
+              <md-icon ng-if="!seeMore">visibility</md-icon>
+              <md-icon ng-if="seeMore">visibility_off</md-icon>
+            </md-button>
+            <md-button class="md-fab md-mini md-primary" ng-click="amend(purchase.id, $index)" aria-label="Modifier">
+              <md-icon>create</md-icon>
+            </md-button>
+            <md-button class="md-fab md-mini md-warn" ng-click="remove(purchase.id, $index)" aria-label="Supprimer">
+              <md-icon>clear</md-icon>
+            </md-button>
+          </div>
+        </div>
+      </md-list-item>
+      <md-divider ng-if="!$last"></md-divider>
+    </section>
+  </div>
 </md-list>
 <h2 class="text-center" ng-show="purchases.length == 0">Aucun achat n'a été enregistré pour le moment.</h2>
