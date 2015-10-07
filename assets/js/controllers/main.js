@@ -11,17 +11,16 @@ angular.module('stofmaApp.controllers')
         $scope.loadingPage = loading;
 
         if (loading) {
-          if(timeoutLoading) {
-            timeoutLoading.cancel();
+          if (timeoutLoading) {
+            $timeout.cancel(timeoutLoading);
           }
 
           timeoutLoading = $timeout(function () {
-            console.log('LOL');
             $scope.loadingPage = false;
           }, timeout ? timeout : 4000);
         } else {
-          if(timeoutLoading) {
-            timeoutLoading.cancel();
+          if (timeoutLoading) {
+            $timeout.cancel(timeoutLoading);
           }
         }
       };
