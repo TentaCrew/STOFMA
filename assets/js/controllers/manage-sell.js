@@ -111,11 +111,17 @@ angular.module('stofmaApp.controllers')
                 customerName = customerId == UserFactory.getGuestUserId() ? 'votre invité' : $scope.customer.getName();
 
             if (!$scope.isEditing) {
-              SaleService.doSale(customerId, products, response.paymentMode, $scope.commentSale). then(function (newSale) {
-                SweetAlert.swal({
+              SaleService.doSale(customerId, products, response.paymentMode, $scope.commentSale).then(function (newSale) {
+                var alertData = {
                   title: 'Vente terminée pour ' + customerName + '!',
                   type: 'success'
-                }, function (ok) {
+                };
+
+                if (response.paymentMode == 'IN_CREDIT') {
+                  alertData.text = 'Le nouveau solde de ' + newSale.customer.getName() + ' est de ' + Number(newSale.customer.credit).toFixed(2) + ' €.';
+                }
+
+                SweetAlert.swal(alertData, function (ok) {
                   if (ok) {
                     $scope.refreshProduct();
                     $scope.customer = undefined;
@@ -125,16 +131,22 @@ angular.module('stofmaApp.controllers')
                   }
                 });
               }).catch(function (status) {
-                if(status == 406) {
+                if (status == 406) {
                   SweetAlert.swal({
                     title: 'La vente n\'a pas réussi.',
                     text: 'Merci de recréditer le solde de ' + customerName + '.',
                     type: 'error'
                   });
-                } else if(status == 407) {
+                } else if (status == 407) {
                   SweetAlert.swal({
                     title: 'La vente n\'a pas réussi.',
                     text: 'L\'un des produits n\'est plus disponible.',
+                    type: 'error'
+                  });
+                } else if (status == 500) {
+                  SweetAlert.swal({
+                    title: 'La vente n\'a pas réussi.',
+                    text: 'Une erreur est survenue.',
                     type: 'error'
                   });
                 }
@@ -150,15 +162,15 @@ angular.module('stofmaApp.controllers')
                   }
                 });
               }).catch(function (status) {
-                if(status == 406) {
+                if (status == 406) {
                   SweetAlert.swal({
-                  title: 'La vente n\'a pas été modifiée.',
+                    title: 'La vente n\'a pas été modifiée.',
                     text: 'Merci de recréditer le solde de ' + customerName + '.',
                     type: 'error'
                   });
-                } else if(status == 407) {
+                } else if (status == 407) {
                   SweetAlert.swal({
-                  title: 'La vente n\'a pas été modifiée.',
+                    title: 'La vente n\'a pas été modifiée.',
                     text: 'L\'un des produits n\'est plus disponible.',
                     type: 'error'
                   });

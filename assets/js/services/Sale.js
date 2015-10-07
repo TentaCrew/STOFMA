@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('stofmaApp.services')
-    .service('SaleService', ['$q', '$http', 'UserService', 'SaleFactory', 'ProductFactory', function ($q, $http, UserService, SaleFactory, ProductFactory) {
+    .service('SaleService', ['$q', '$http', 'UserService', 'UserFactory', 'SaleFactory', function ($q, $http, UserService, UserFactory, SaleFactory) {
       this.getSales = getSales;
       this.getSale = getSale;
       this.getSalesOfProduct = getSalesOfProduct;
@@ -45,13 +45,13 @@ angular.module('stofmaApp.services')
       function getSalesOfProduct(productId) {
         var defer = $q.defer();
 
-        getSales().then(function(sales){
-          var r = sales.filter(function(s){
-            return s.products.map(function(p){
-              return p.product.id
-            }).indexOf(productId) >= 0;
-          }).map(function(s){
-            s.products = s.products.filter(function(p) {
+        getSales().then(function (sales) {
+          var r = sales.filter(function (s) {
+            return s.products.map(function (p) {
+                  return p.product.id
+                }).indexOf(productId) >= 0;
+          }).map(function (s) {
+            s.products = s.products.filter(function (p) {
               return p.product.id == productId;
             })[0];
             s.product = s.products.product;
@@ -70,8 +70,8 @@ angular.module('stofmaApp.services')
       function getOwnSales() {
         var defer = $q.defer();
 
-        UserService.getCurrentSession().then(function(session){
-          $http.get('/sale?customer='+session.id).success(function (data) {
+        UserService.getCurrentSession().then(function (session) {
+          $http.get('/sale?customer=' + session.id).success(function (data) {
             defer.resolve(data.map(SaleFactory.remap));
           }).error(function (err) {
             defer.reject([]);
@@ -97,7 +97,16 @@ angular.module('stofmaApp.services')
           typePayment: type,
           commentSale: commentSale
         }).success(function (data) {
-          defer.resolve(data);
+          if (customerId != UserFactory.getGuestUserId()) {
+            UserService.get(data.customer, true).then(function (u) {
+              data.customer = u;
+              defer.resolve(data);
+            }).catch(function(){
+              defer.reject(500);
+            });
+          } else {
+            defer.resolve(data);
+          }
         }).error(function (err, status) {
           defer.reject(status);
         });
@@ -139,7 +148,7 @@ angular.module('stofmaApp.services')
     .factory('SaleFactory', ['$q', '$filter', function ($q, $filter) {
       return {
         remap: function (o) {
-          if(angular.isDefined(o)){
+          if (angular.isDefined(o)) {
             o.getDate = function () {
               return $filter('amDateFormat')(o.saleDate, 'LLLL');
             };
