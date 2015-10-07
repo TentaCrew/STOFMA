@@ -716,6 +716,58 @@ describe('SaleController', function() {
   });
 
   /**
+  * Get as a manager user result 3 to 5 (page=1, limit=3)
+  */
+  describe('#get() as a manager User result 3 to 5 (page=1, limit=3) and 0 to 1 (page=0, limit=2)', function() {
+
+    // Before: Log in as a manager User
+    before(function(done){
+      agent
+      .put('/user/login')
+      .send({
+        email: data.user_manager_01.email,
+        password: data.user_manager_01.password
+      })
+      .expect(200)
+      .end(done);
+    });
+
+    // After: Log out
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .end(done);
+    });
+
+    // Test
+    it('As a manager user, should get 3 sales', function (done) {
+      agent
+      .get('/sale?page=1&limit=3')
+      .send({
+        page: 1,
+        limit: 3
+      })
+      .end(function(err, res){
+        assert.equal(res.body.length, 3, 'This request should return 3 sales.');
+        done();
+      });
+    });
+    // Test
+    it('As a manager user, should get 2 sales', function (done) {
+      agent
+      .get('/sale?page=0&limit=2')
+      .send({
+        page: 0,
+        limit: 3
+      })
+      .end(function(err, res){
+        assert.equal(res.body.length, 2, 'This request should return 2 sales.');
+        done();
+      });
+    });
+  });
+
+  /**
   * Get as a regular user
   */
   describe('#get() as a regular User', function() {

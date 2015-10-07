@@ -115,12 +115,20 @@ module.exports = {
     * @param res
     */
     get: function (req, res) {
+
+      var page  = req.param('page')  || 0;
+      var limit = req.param('limit') || 999999999;
+
+      delete req.allParams().page;
+      delete req.allParams().limit;
+
       if(req.session.lazy) { // Populate everything
         Purchase
         .find(req.allParams())
         .populate('manager')
         .populate('products')
         .populate('payment')
+        .paginate({page: page, limit: limit})
         .sort('purchaseDate desc')
         .exec(function(err, foundPurchases) {
           if (err) {

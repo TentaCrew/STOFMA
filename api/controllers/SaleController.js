@@ -176,8 +176,20 @@ module.exports = {
       req.allParams().customer = req.session.user.id;
     }
 
+    var page  = req.param('page')  || 0;
+    var limit = req.param('limit') || 999999999;
+
+    delete req.allParams().page;
+    delete req.allParams().limit;
+
     if(req.session.lazy) { // Populate everything
-      Sale.find(req.allParams()).populate('manager').populate('customer').populate('products').populate('payment').sort('saleDate desc')
+      Sale.find(req.allParams())
+      .populate('manager')
+      .populate('customer')
+      .populate('products')
+      .populate('payment')
+      .paginate({page: page, limit: limit})
+      .sort('saleDate desc')
       .exec(function(err, foundSales) {
         if (err) {
           return res.negotiate(err);
