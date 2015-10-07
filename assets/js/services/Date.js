@@ -50,8 +50,6 @@ angular.module('stofmaApp.services')
           if(oList)
             list = oList;
 
-          console.log(instance.lastHeaderType);
-
           var h = '';
           for (var i = 0; i < list.length; i++) {
             h = getDateSubHeader(list[i][dateAttributeName], instance.lastHeaderType);

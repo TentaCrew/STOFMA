@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('stofmaApp.services')
-    .service('PurchaseService', ['$q', '$http', 'PurchaseFactory', function ($q, $http, PurchaseFactory) {
+    .service('PurchaseService', ['$q', '$http', 'PurchaseFactory', '$mdMedia', function ($q, $http, PurchaseFactory, $mdMedia) {
       this.getPurchases = getPurchases;
       this.getPurchase = getPurchase;
       this.doPurchase = doPurchase;
@@ -25,7 +25,6 @@ angular.module('stofmaApp.services')
 
         var defer = $q.defer(),
             filter = noFilter ? '' : '?page=' + currentPage + '&limit=' + purchasesStep;
-
         $http.get('/purchase' + filter).success(function (purchases) {
           if (!noFilter && purchases.length == 0) {
             currentPage -= 1;

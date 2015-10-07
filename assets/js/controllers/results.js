@@ -159,6 +159,7 @@ angular.module('stofmaApp.controllers')
             if (c.id == -1 && s.commentSale) {
               c.name = s.commentSale;
               c.firstname = '';
+              c.email = 'Invité';
             }
             var iU = users.map(function (u) {
               return u.id;
