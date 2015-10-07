@@ -215,6 +215,7 @@ angular.module('stofmaApp.services')
           o.isSimpleUser = function (cascade) {
             return cascade ? o.role == AccessLevels.user || o.role == AccessLevels.manager || o.role == AccessLevels.admin : o.role == AccessLevels.user;
           };
+
           return o;
         },
         onlyRealUsers: function (arrUsers, callbackIfNotReal) {

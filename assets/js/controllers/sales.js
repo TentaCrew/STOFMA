@@ -2,7 +2,7 @@
 
 angular.module('stofmaApp.controllers')
 
-    .controller('SalesCtrl', ['$scope', '$timeout', '$state', 'salesData', 'SaleService', 'UserService', '$mdBottomSheet', '$mdToast', 'DateUtils', 'isManager', function ($scope, $timeout, $state, salesData, SaleService, UserService, $mdBottomSheet, $mdToast, DateUtils, isManager) {
+    .controller('SalesCtrl', ['$scope', '$timeout', '$state', 'salesData', 'SaleService', 'UserService', '$mdBottomSheet', '$mdToast', 'DateUtils', 'isManager', 'ownSale', function ($scope, $timeout, $state, salesData, SaleService, UserService, $mdBottomSheet, $mdToast, DateUtils, isManager, ownSale) {
       $scope.sales = salesData;
       $scope.isManager = isManager;
 
@@ -68,7 +68,7 @@ angular.module('stofmaApp.controllers')
         if (timeout)
           return;
 
-        SaleService.getSales(false).then(function (ss) {
+        (ownSale ? SaleService.getOwnSales() : SaleService.getSales(false)).then(function (ss) {
 
           subHeaderHandler(ss);
 
@@ -86,7 +86,7 @@ angular.module('stofmaApp.controllers')
 
             $scope.sales.push(ss[k]);
           });
-        }).catch(function(){
+        }).catch(function () {
           $scope.stopInfinite = true;
         });
 

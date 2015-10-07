@@ -166,13 +166,14 @@ angular.module('stofmaApp.services')
         return defer.promise;
       }
     }])
-    .factory('SaleFactory', ['$q', '$filter', function ($q, $filter) {
+    .factory('SaleFactory', ['$q', '$filter', 'UserFactory', function ($q, $filter, UserFactory) {
       return {
         remap: function (o) {
           if (angular.isDefined(o)) {
             o.getDate = function () {
               return $filter('amDateFormat')(o.saleDate, 'LLLL');
             };
+            o.customer = UserFactory.remap(o.customer);
           }
           return o;
         }

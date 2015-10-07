@@ -37,7 +37,7 @@ angular.module('stofmaApp')
               name: 'Inscription',
               icon: 'assignment_ind'
             },
-            resolve : {
+            resolve: {
               isManager: function () {
                 return false;
               }
@@ -103,6 +103,9 @@ angular.module('stofmaApp')
               salesProvider: 'SaleService',
               isManager: function () {
                 return false;
+              },
+              ownSale: function () {
+                return true;
               },
               salesData: function (salesProvider) {
                 return salesProvider.getOwnSales();
@@ -210,7 +213,9 @@ angular.module('stofmaApp')
               isManager: function () {
                 return true;
               },
-
+              ownSale: function () {
+                return false;
+              },
               salesData: function (salesProvider) {
                 return salesProvider.getSales();
               }
@@ -284,7 +289,7 @@ angular.module('stofmaApp')
             url: '/user/register',
             controller: 'RegisterCtrl',
             templateUrl: 'assets/templates/register.html',
-            resolve : {
+            resolve: {
               isManager: function () {
                 return true;
               }
