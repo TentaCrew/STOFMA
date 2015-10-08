@@ -68,7 +68,7 @@ angular.module('stofmaApp.controllers')
         if (timeout)
           return;
 
-        (ownSale ? SaleService.getOwnSales() : SaleService.getSales(false)).then(function (ss) {
+        (ownSale ? SaleService.getOwnSales(false) : SaleService.getSales(false)).then(function (ss) {
 
           subHeaderHandler(ss);
 

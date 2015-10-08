@@ -88,13 +88,27 @@ angular.module('stofmaApp.services')
         return defer.promise;
       }
 
-      function getOwnSales() {
-        var defer = $q.defer();
+      function getOwnSales(page, noFilter) {
+        if (angular.isUndefined(page))
+          currentPage = startPage;
+        else if (page === false)
+          currentPage += 1;
+        else
+          currentPage = page;
+
+        var defer = $q.defer(),
+            filter = noFilter ? '' : '&page=' + currentPage + '&limit=' + salesStep;
 
         UserService.getCurrentSession().then(function (session) {
-          $http.get('/sale?customer=' + session.id).success(function (data) {
-            defer.resolve(data.map(SaleFactory.remap));
+          $http.get('/sale?customer=' + session.id + filter).success(function (sales) {
+            if (!noFilter && sales.length == 0) {
+              currentPage -= 1;
+              defer.reject();
+            }
+
+            defer.resolve(sales.map(SaleFactory.remap));
           }).error(function (err) {
+            currentPage -= 1;
             defer.reject([]);
           });
         });
