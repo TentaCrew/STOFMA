@@ -5,6 +5,11 @@
 .stofma-content {
   max-width: 1080px;
   margin: 0 auto 45px;
+  background-color: white;
+}
+
+#mainContent, #wrapMain {
+  background-color: #F9F9F9;
 }
 
 .wrap {
@@ -55,6 +60,10 @@ md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
 
 .text-center {
   text-align: center;
+}
+
+.text-justify {
+  text-align: justify;
 }
 
 .sum.selected {
