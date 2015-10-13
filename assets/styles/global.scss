@@ -37,6 +37,10 @@ md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
 
 .md-sidenav-left .md-list-item-content.md-button.active {
   background-color: #e3e3e3;
+  
+  md-icon {
+    color: rgb(21, 101, 192);
+  }
 }
 
 .md-toolbar-tools h2.page-title {
@@ -84,8 +88,14 @@ md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
   transition: 0.2s ease-in all;
 }
 
-md-sidenav md-list-item {
-  min-height: 0;
+md-sidenav {
+  md-list {
+    width: 100%;
+    
+    md-list-item {
+      min-height: 0;
+    }
+  }
 }
 
 md-toolbar {
@@ -98,20 +108,20 @@ md-toolbar {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgb(21, 101, 192);
+  background-color: rgb(21,101,192);
   z-index: 1000;
   color: white;
-  transition: 0.5s linear opacity;
+  transition: 750ms ease-out transform;
 
   img {
     width: 100%;
     height: auto;
     max-height: 350px;
-    max-width: 350px;
+    max-width: 350px; 
   }
 
   &.ng-hide-add-active {
-    opacity: 0;
+    transform: translateY(-100%);
   }
 }
 
@@ -141,6 +151,7 @@ md-toolbar .md-toolbar-tools {
 
 .stofma-content md-list-item {
   height: auto;
+  
   .md-list-item-text {
     padding: 10px 0;
   }
