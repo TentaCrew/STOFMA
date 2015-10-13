@@ -35,11 +35,30 @@ md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
   margin: 0 0 2px;
 }
 
-.md-sidenav-left .md-list-item-content.md-button.active {
-  background-color: #e3e3e3;
-  
+.md-sidenav-left .md-list-item-content.md-button {
   md-icon {
-    color: rgb(21, 101, 192);
+    margin-right: 6px;
+    -webkit-transition: color 300ms;
+    -moz-transition: color 300ms;
+    -ms-transition: color 300ms;
+    -o-transition: color 300ms;
+    transition: color 300ms;
+  }
+
+  &:hover, &:focus {
+    background-color: rgba(171, 210, 246, 0.12);
+
+    md-icon {
+      color: rgba(95, 138, 192, 0.73);
+    }
+  }
+
+  &.active {
+    background-color: rgba(171, 210, 246, 0.23);
+
+    md-icon {
+      color: rgb(21, 101, 192);
+    }
   }
 }
 
@@ -83,23 +102,18 @@ md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
   align-items: center;
 }
 
-.md-sidenav-left.md-closed-add,
-.md-sidenav-left.md-closed-remove {
-  transition: 0.2s ease-in all;
-}
-
 md-sidenav {
   md-list {
     width: 100%;
-    
+
     md-list-item {
       min-height: 0;
+
+      .md-subheader .md-subheader-inner {
+        padding-bottom: 5px;
+      }
     }
   }
-}
-
-md-toolbar {
-  min-height: initial !important;
 }
 
 .screen-intro {
@@ -108,19 +122,27 @@ md-toolbar {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgb(21,101,192);
+  background-color: rgb(21, 101, 192);
   z-index: 1000;
   color: white;
+  -webkit-transition: 750ms ease-out transform;
+  -moz-transition: 750ms ease-out transform;
+  -ms-transition: 750ms ease-out transform;
+  -o-transition: 750ms ease-out transform;
   transition: 750ms ease-out transform;
 
   img {
     width: 100%;
     height: auto;
     max-height: 350px;
-    max-width: 350px; 
+    max-width: 350px;
   }
 
   &.ng-hide-add-active {
+    -webkit-transform: translateY(-100%);
+    -moz-transform: translateY(-100%);
+    -ms-transform: translateY(-100%);
+    -o-transform: translateY(-100%);
     transform: translateY(-100%);
   }
 }
@@ -151,7 +173,7 @@ md-toolbar .md-toolbar-tools {
 
 .stofma-content md-list-item {
   height: auto;
-  
+
   .md-list-item-text {
     padding: 10px 0;
   }

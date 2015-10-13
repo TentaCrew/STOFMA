@@ -110,14 +110,12 @@ angular.module('stofmaApp.controllers')
       $scope.productStats = $scope.messageError = null;
 
       $scope.doStat = function (product) {
-        if (product !== null) {
+        if (angular.isDefined(product) && product !== null) {
           $scope.setLoading(true);
           computeStats(product.id).then(function (stats) {
             $scope.productStats = stats;
             $scope.setFabButton('clear', function () {
               $scope.doStat(null);
-              $scope.productSelected = null;
-              $scope.searchProductText = '';
             });
           }).catch(function (msg) {
             $scope.messageError = msg;
@@ -127,6 +125,8 @@ angular.module('stofmaApp.controllers')
         } else {
           $scope.productStats = null;
           $scope.messageError = null;
+          $scope.productSelected = null;
+          $scope.searchProductText = '';
           $scope.setFabButton(false);
           $scope.setLoading(false);
         }

@@ -2,7 +2,7 @@
 
 angular.module('stofmaApp.controllers')
 
-    .controller('PurchaseCtrl', ['$scope', 'purchasesData', 'PurchaseService', '$state', '$mdBottomSheet', '$mdToast', 'DateUtils', function ($scope, purchasesData, PurchaseService, $state, $mdBottomSheet, $mdToast, DateUtils) {
+    .controller('PurchaseCtrl', ['$scope', 'purchasesData', 'PurchaseService', '$state', '$mdBottomSheet', '$mdToast', 'DateUtils', '$timeout', function ($scope, purchasesData, PurchaseService, $state, $mdBottomSheet, $mdToast, DateUtils, $timeout) {
       $scope.purchases = purchasesData;
 
       for (var i = 0; i < $scope.purchases.length; i++) {
