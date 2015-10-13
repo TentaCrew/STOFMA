@@ -29,7 +29,7 @@
   <md-input-container class="md-icon-float">
     <label>Montant à créditer</label>
     <md-icon>attach_money</md-icon>
-    <input type="text" name="amountToCredit" ng-model="amountToCredit" required>
+    <input type="number" name="amountToCredit" ng-model="amountToCredit" step="0.01" required>
 
     <div ng-messages="creditAccount.amountToCredit.$error" ng-show="creditAccount.amountToCredit.$dirty">
       <div ng-message="required">Ce champ est obligatoire</div>
@@ -55,21 +55,24 @@
     </md-button>
   </div>
 </form>
-<h3 ng-if="payments.length > 0">Liste des opérations</h3>
-<md-list>
-  <section ng-repeat="payment in payments">
-    <md-list-item class="md-3-line md-no-proxy" role="listitem">
-      <div class="md-list-item-text">
-        <h3><strong>{{payment.customer.firstname}} {{payment.customer.name}}</strong></h3>
-        <h4>{{payment.amount > 0 ? 'Crédité' : 'Débité'}}<span ng-if="payment.customer.sex == false">e</span> le <em>{{payment.paymentDate |
-          amDateFormat:'DD/MM/YYYY'}}</em>
-          à <em>{{payment.paymentDate | amDateFormat:'HH:mm'}}</em> par {{ payment.manager.name }}</h4>
+<div layout-padding ng-if="payments.length > 0">
+  <h3>Liste des opérations</h3>
+  <md-list>
+    <section ng-repeat="payment in payments">
+      <md-list-item class="md-3-line md-no-proxy" role="listitem">
+        <div class="md-list-item-text">
+          <h3><strong>{{payment.customer.firstname}} {{payment.customer.name}}</strong></h3>
+          <h4>{{payment.amount > 0 ? 'Crédité' : 'Débité'}}<span ng-if="payment.customer.sex == false">e</span> le <em>{{payment.paymentDate |
+            amDateFormat:'DD/MM/YYYY'}}</em>
+            à <em>{{payment.paymentDate | amDateFormat:'HH:mm'}}</em> par {{ payment.manager.name }}</h4>
 
-        <p>Montant : <strong>{{payment.amount | currency:''}} €</strong></p>
-        <p>Moyen : <strong>{{payment.name}}</strong></p>
-      </div>
-    </md-list-item>
-    <md-divider ng-if="!$last"></md-divider>
-  </section>
-</md-list>
+          <p>Montant : <strong>{{payment.amount | currency:''}} €</strong></p>
+
+          <p>Moyen : <strong>{{payment.name}}</strong></p>
+        </div>
+      </md-list-item>
+      <md-divider ng-if="!$last"></md-divider>
+    </section>
+  </md-list>
+</div>
 <h3 class="text-center" ng-if="payments.length == 0">Aucun paiement réalisé.</h3>

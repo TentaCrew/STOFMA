@@ -26,7 +26,7 @@
   <div layout="row" layout-sm="column">
     <md-input-container flex>
       <label>Prix unitaire de vente</label>
-      <input type="text" ng-model="unitPrice" name="unitPrice" required>
+      <input type="number" ng-model="unitPrice" name="unitPrice" step="0.01" min="0" required>
 
       <div ng-messages="createProduct.unitPrice.$error" ng-show="createProduct.unitPrice.$dirty">
         <div ng-message="notaprice">Le prix doit respecter le format monétaire et doit être positif.</div>
@@ -34,7 +34,7 @@
     </md-input-container>
     <md-input-container flex>
       <label>Prix unitaire de vente pour les membres</label>
-      <input type="text" ng-model="unitPriceMember" name="unitPriceMember">
+      <input type="number" ng-model="unitPriceMember" step="0.01" min="0" name="unitPriceMember">
 
       <div ng-messages="createProduct.unitPriceMember.$error" ng-show="createProduct.unitPriceMember.$dirty">
         <div ng-message="notaprice">Le prix doit respecter le format monétaire et doit être positif.</div>
