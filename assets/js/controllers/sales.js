@@ -3,32 +3,25 @@
 angular.module('stofmaApp.controllers')
 
     .controller('SalesCtrl', ['$scope', '$timeout', '$state', 'salesData', 'SaleService', 'UserService', '$mdBottomSheet', '$mdToast', 'DateUtils', 'isManager', 'ownSale', function ($scope, $timeout, $state, salesData, SaleService, UserService, $mdBottomSheet, $mdToast, DateUtils, isManager, ownSale) {
-      $scope.sales = salesData;
       $scope.isManager = isManager;
 
-      for (var i = 0; i < $scope.sales.length; i++) {
-        var sale = $scope.sales[i];
-
-        $scope.sales[i].pairs = [];
+      var subHeaderHandler = DateUtils.setDateSubHeader(salesData, 'saleDate', function (sale) {
+        sale.pairs = [];
         angular.forEach(sale.products, function (pair) {
-          $scope.sales[i].pairs.push({
+          sale.pairs.push({
             name: pair.product.name,
             quantity: pair.quantity,
             price: pair.quantity * pair.unitPrice
           });
         });
-      }
-
-      var subHeaderHandler = DateUtils.instanceDateSubHeader($scope.sales, 'saleDate', function (type, title) {
-        return {
-          'title': title,
-          'type': 'header'
-        }
+        return sale;
+      }, function (list) {
+        $scope.sales = list;
       });
 
       subHeaderHandler();
 
-      $scope.remove = function (id, index) {
+      $scope.remove = function (id, index, header) {
         $mdBottomSheet.show({
           templateUrl: 'assets/js/components/bottom-sheet/bottom-sheet-confirm-remove-sale.html',
           controller: 'BottomSheetConfirmCtrl',
@@ -44,7 +37,9 @@ angular.module('stofmaApp.controllers')
                       .position("bottom right")
                       .hideDelay(3000)
               );
-              $scope.sales.splice(index, 1);
+              $scope.sales[header].list.splice(index, 1);
+              if ($scope.sales[header].list.length == 0)
+                delete $scope.sales[header];
             }).catch(function (err) {
               $mdToast.show(
                   $mdToast.simple()
@@ -69,23 +64,7 @@ angular.module('stofmaApp.controllers')
           return;
 
         (ownSale ? SaleService.getOwnSales(false) : SaleService.getSales(false)).then(function (ss) {
-
           subHeaderHandler(ss);
-
-          angular.forEach(ss, function (v, k) {
-            v.pairs = [];
-            angular.forEach(v.products, function (pair) {
-              v.pairs.push({
-                name: pair.product.name,
-                quantity: pair.quantity,
-                price: pair.quantity * pair.unitPrice
-              });
-            });
-
-            ss[k] = v;
-
-            $scope.sales.push(ss[k]);
-          });
         }).catch(function () {
           $scope.stopInfinite = true;
         });
@@ -94,4 +73,6 @@ angular.module('stofmaApp.controllers')
           timeout = false;
         }, 500);
       };
-    }]);
+    }
+    ])
+;

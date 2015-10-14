@@ -64,11 +64,10 @@
             <md-tab-label>Ventes</md-tab-label>
             <md-tab-body>
               <md-list ng-hide="productStats.sales.length == 0" layout-padding>
-                <section ng-repeat="sale in productStats.sales">
-                  <div ng-if="sale.type == 'header'">
-                    <md-subheader class="md-no-sticky">{{sale.title}}</md-subheader>
-                  </div>
-                  <md-list-item class="md-2-line" role="listitem" ng-if="sale.type != 'header'">
+                <section ng-repeat="saleHeader in productStats.sales">
+                  <md-subheader class="md-no-sticky">{{saleHeader.title}}</md-subheader>
+                  <md-divider></md-divider>
+                  <md-list-item class="md-3-line md-no-proxy" role="listitem" ng-repeat="sale in saleHeader.list">
                     <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="space-between center" layout-align-sm="">
                       <div ng-class="{'text-center': $mdMedia('sm')}">
                         <h3 title="{{sale.saleDate | amDateFormat:'L'}}"><strong>{{sale.customer.firstname}} {{sale.customer.name}}</strong></h3>
@@ -80,8 +79,8 @@
                       </div>
                       <div>{{sale.getDate()}}</div>
                     </div>
+                    <md-divider ng-if="!$last"></md-divider>
                   </md-list-item>
-                  <md-divider ng-if="!$last"></md-divider>
                 </section>
               </md-list>
               <h2 class="text-center" ng-show="productStats.sales.length == 0 && isManager">Aucune vente n'a été enregistrée pour le moment.</h2>

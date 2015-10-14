@@ -141,8 +141,7 @@ angular.module('stofmaApp.controllers')
             return;
           }
 
-          var sales = salesData,
-              users = [],
+          var users = [],
               price = {
                 total: 0,
                 list: [],
@@ -154,7 +153,8 @@ angular.module('stofmaApp.controllers')
               },
               count = 0;
 
-          angular.forEach(sales, function (s) {
+
+          DateUtils.setDateSubHeader(salesData, 'saleDate', function (s) {
             var c = s.customer;
             if (c.id == -1 && s.commentSale) {
               c.name = s.commentSale;
@@ -180,27 +180,24 @@ angular.module('stofmaApp.controllers')
             }
 
             price.total += s.totalPrice;
-          });
-          users = users.map(UserFactory.remap).sort(function (u1, u2) {
-            return u1.count > u2.count ? -1 : 1;
-          });
 
-          DateUtils.instanceDateSubHeader(sales, 'saleDate', function (type, title) {
-            return {
-              'title': title,
-              'type': 'header'
-            }
+            return s;
+          }, function (sales) {
+            users = users.map(UserFactory.remap).sort(function (u1, u2) {
+              return u1.count > u2.count ? -1 : 1;
+            });
+
+            defer.resolve({
+              users: users,
+              sales: sales,
+              price: {
+                total: price.total,
+                mean: price.getMean()
+              },
+              count: count
+            });
           })();
 
-          defer.resolve({
-            users: users,
-            sales: sales,
-            price: {
-              total: price.total,
-              mean: price.getMean()
-            },
-            count: count
-          });
         });
 
         return defer.promise;

@@ -1,11 +1,11 @@
 <md-list ng-hide="purchases.length == 0">
   <div infinite-scroll="onScroll()" infinite-scroll-distance="3" infinite-scroll-immediate-check="false" infinite-scroll-container="'#mainContent'"
        infinite-scroll-disabled="stopInfinite">
-    <section ng-repeat="purchase in purchases">
-      <div ng-if="purchase.type == 'header'">
-        <md-subheader class="md-no-sticky">{{purchase.title}}</md-subheader>
-      </div>
-      <md-list-item class="md-3-line md-no-proxy" role="listitem" ng-if="purchase.type != 'header'">
+
+    <section ng-repeat="purchaseHeader in purchases">
+      <md-subheader class="md-no-sticky">{{purchaseHeader.title}}</md-subheader>
+      <md-divider></md-divider>
+      <md-list-item class="md-3-line md-no-proxy" role="listitem" ng-repeat="purchase in purchaseHeader.list">
         <div class="md-list-item-text" layout="row" layout-align="space-between center">
           <div layout="column">
             <h3 title="{{purchase.purchaseDate | amDateFormat:'LLLL'}}"><strong>{{purchase.manager.firstname}} {{purchase.manager.name}}</strong><span
@@ -26,13 +26,13 @@
             <md-button class="md-fab md-mini md-primary" ng-click="amend(purchase.id, $index)" aria-label="Modifier">
               <md-icon>create</md-icon>
             </md-button>
-            <md-button class="md-fab md-mini md-warn" ng-click="remove(purchase.id, $index)" aria-label="Supprimer">
+            <md-button class="md-fab md-mini md-warn" ng-click="remove(purchase.id, $index, purchaseHeader.id)" aria-label="Supprimer">
               <md-icon>clear</md-icon>
             </md-button>
           </div>
         </div>
+        <md-divider ng-if="!$last"></md-divider>
       </md-list-item>
-      <md-divider ng-if="!$last"></md-divider>
     </section>
   </div>
 </md-list>

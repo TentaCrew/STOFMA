@@ -1,10 +1,11 @@
 <md-list ng-hide="sales.length == 0">
-  <div infinite-scroll="onScroll()" infinite-scroll-distance="3" infinite-scroll-immediate-check="false" infinite-scroll-container="'#mainContent'" infinite-scroll-disabled="stopInfinite">
-    <section ng-repeat="sale in sales">
-      <div ng-if="sale.type == 'header'">
-        <md-subheader class="md-no-sticky">{{sale.title}}</md-subheader>
-      </div>
-      <md-list-item class="md-3-line md-no-proxy" role="listitem" ng-if="sale.type != 'header'">
+  <div infinite-scroll="onScroll()" infinite-scroll-distance="3" infinite-scroll-immediate-check="false" infinite-scroll-container="'#mainContent'"
+       infinite-scroll-disabled="stopInfinite">
+
+    <section ng-repeat="saleHeader in sales">
+      <md-subheader class="md-no-sticky">{{saleHeader.title}}</md-subheader>
+      <md-divider></md-divider>
+      <md-list-item class="md-3-line md-no-proxy" role="listitem" ng-repeat="sale in saleHeader.list">
         <div class="md-list-item-text" layout="row" layout-align="space-between center">
           <div layout="column">
             <h3 title="{{sale.saleDate | amDateFormat:'L'}}"><strong ng-if="isManager">{{sale.customer.firstname}} {{sale.customer.name}}</strong><span
@@ -26,13 +27,13 @@
             <md-button class="md-fab md-mini md-primary" ng-click="amend(sale.id, $index)" ng-hide="!isManager" aria-label="Modifier">
               <md-icon>create</md-icon>
             </md-button>
-            <md-button class="md-fab md-mini md-warn" ng-click="remove(sale.id, $index)" ng-hide="!isManager" aria-label="Supprimer">
+            <md-button class="md-fab md-mini md-warn" ng-click="remove(sale.id, $index, saleHeader.id)" ng-hide="!isManager" aria-label="Supprimer">
               <md-icon>clear</md-icon>
             </md-button>
           </div>
         </div>
+        <md-divider ng-if="!$last"></md-divider>
       </md-list-item>
-      <md-divider ng-if="!$last"></md-divider>
     </section>
   </div>
 </md-list>

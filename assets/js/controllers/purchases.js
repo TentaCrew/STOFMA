@@ -3,26 +3,18 @@
 angular.module('stofmaApp.controllers')
 
     .controller('PurchaseCtrl', ['$scope', 'purchasesData', 'PurchaseService', '$state', '$mdBottomSheet', '$mdToast', 'DateUtils', '$timeout', function ($scope, purchasesData, PurchaseService, $state, $mdBottomSheet, $mdToast, DateUtils, $timeout) {
-      $scope.purchases = purchasesData;
-
-      for (var i = 0; i < $scope.purchases.length; i++) {
-        var purchase = $scope.purchases[i];
-
-        $scope.purchases[i].pairs = [];
+      var subHeaderHandler = DateUtils.setDateSubHeader(purchasesData, 'purchaseDate', function (purchase) {
+        purchase.pairs = [];
         angular.forEach(purchase.products, function (pair) {
-          $scope.purchases[i].pairs.push({
+          purchase.pairs.push({
             name: pair.product.name,
             quantity: pair.quantity,
             price: pair.quantity * pair.unitPrice
           });
         });
-      }
-
-      var subHeaderHandler =DateUtils.instanceDateSubHeader($scope.purchases, 'purchaseDate', function (type, title) {
-        return {
-          'title': title,
-          'type': 'header'
-        }
+        return purchase;
+      }, function (list) {
+        $scope.purchases = list;
       });
 
       subHeaderHandler();
@@ -31,7 +23,7 @@ angular.module('stofmaApp.controllers')
         $state.go('manager.addpurchase');
       });
 
-      $scope.remove = function (id, index) {
+      $scope.remove = function (id, index, header) {
         $mdBottomSheet.show({
           templateUrl: 'assets/js/components/bottom-sheet/bottom-sheet-confirm-remove-purchase.html',
           controller: 'BottomSheetConfirmCtrl',
@@ -47,7 +39,9 @@ angular.module('stofmaApp.controllers')
                       .position("bottom right")
                       .hideDelay(3000)
               );
-              $scope.purchases.splice(index, 1);
+              $scope.purchases[header].list.splice(index, 1);
+              if($scope.purchases[header].list.length == 0)
+                delete $scope.purchases[header];
             }).catch(function (err) {
               $mdToast.show(
                   $mdToast.simple()
@@ -72,24 +66,8 @@ angular.module('stofmaApp.controllers')
           return;
 
         PurchaseService.getPurchases(false).then(function (ss) {
-
           subHeaderHandler(ss);
-
-          angular.forEach(ss, function (v, k) {
-            v.pairs = [];
-            angular.forEach(v.products, function (pair) {
-              v.pairs.push({
-                name: pair.product.name,
-                quantity: pair.quantity,
-                price: pair.quantity * pair.unitPrice
-              });
-            });
-
-            ss[k] = v;
-
-            $scope.purchases.push(ss[k]);
-          });
-        }).catch(function(){
+        }).catch(function () {
           $scope.stopInfinite = true;
         });
 

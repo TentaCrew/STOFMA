@@ -17,7 +17,7 @@ angular.module('stofmaApp.controllers')
 
           timeoutLoading = $timeout(function () {
             $scope.loadingPage = false;
-          }, timeout ? timeout : 4000);
+          }, timeout ? timeout : 10000);
         } else {
           if (timeoutLoading) {
             $timeout.cancel(timeoutLoading);

@@ -7,7 +7,7 @@ angular.module('stofmaApp.services')
       this.isThisWeek = isThisWeek;
       this.isLastWeek = isLastWeek;
       this.isPast = isPast;
-      this.instanceDateSubHeader = instanceDateSubHeader;
+      this.setDateSubHeader = setDateSubHeader;
 
       var instance = null;
 
@@ -41,24 +41,34 @@ angular.module('stofmaApp.services')
         return now('week').subtract(1, 'week').isAfter(startOf(date, 'week'));
       }
 
-      function instanceDateSubHeader(list, dateAttributeName, callbackWhenInsert) {
+      function setDateSubHeader(list, dateAttributeName, map, callback) {
         instance = {
-          lastHeaderType : ''
+          lastHeaderType: '',
+          finalList: {}
         };
 
-        return function(oList){
-          if(oList)
+        return function (oList) {
+          if (oList)
             list = oList;
 
           var h = '';
           for (var i = 0; i < list.length; i++) {
             h = getDateSubHeader(list[i][dateAttributeName], instance.lastHeaderType);
 
-            if (h !== instance.lastHeaderType) {
-              instance.lastHeaderType = h;
-              list.splice(i++, 0, callbackWhenInsert(h, headerTitles[h]));
+            instance.finalList[h] = instance.finalList[h] ? instance.finalList[h] : {
+              id: h,
+              title: headerTitles[h],
+              list: []
+            };
+            var r = (map !== null && angular.isFunction(map)) ? map(list[i]) : list[i];
+
+            if (r) {
+              instance.finalList[h].list.push(r);
             }
+            instance.lastHeaderType = h;
           }
+
+          callback(instance.finalList);
         };
       }
 
