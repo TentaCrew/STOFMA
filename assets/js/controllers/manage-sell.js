@@ -28,10 +28,12 @@ angular.module('stofmaApp.controllers')
         $scope.editSaleId = $stateParams.id;
 
         SaleService.getSale($scope.editSaleId, true).then(function (s) {
-          if (s.customer.id == UserFactory.getGuestUserId())
+          if (s.customer.id == UserFactory.getGuestUserId()) {
             $scope.guest = true;
-          else
+            $scope.commentSale = s.commentSale;
+          } else {
             $scope.customer = UserFactory.remap(s.customer);
+          }
 
           paymentModeSale = s.payment.type;
 

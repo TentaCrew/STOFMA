@@ -188,6 +188,11 @@ angular.module('stofmaApp.services')
               return $filter('amDateFormat')(o.saleDate, 'LLLL');
             };
             o.customer = UserFactory.remap(o.customer);
+            if (o.customer.id == UserFactory.getGuestUserId() && o.commentSale) {
+              o.customer.name = o.commentSale;
+              o.customer.firstname = '';
+              o.customer.email = 'Invité(e)';
+            }
           }
           return o;
         }

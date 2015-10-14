@@ -1,5 +1,5 @@
 <div ng-hide="products.length == 0">
-  <form layout="row" layout-align="center center" layout-padding>
+  <form layout="row" layout-align="center start" layout-padding>
     <md-autocomplete flex="90" flex-sm="65" md-menu-class="autocomplete-select-user" ng-hide="guest" required md-selected-item="customer" md-floating-label="Personne à servir" md-autofocus="true" md-autoselect="true" md-select-on-match="true" md-search-text="searchUserText" md-items="user in getMatches(searchUserText)" md-item-text="user.getName()">
       <md-item-template>
         <div layout="row">
