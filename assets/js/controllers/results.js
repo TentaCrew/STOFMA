@@ -99,6 +99,9 @@ angular.module('stofmaApp.controllers')
       $scope.getMatches = getMatches;
       $scope.searchProductText = '';
 
+      $scope.maxDate = new Date();
+      var beginDate, endDate;
+
       function getMatches(query) {
         return query ? $scope.products.filter(function (p) {
           return angular.lowercase(p.name).indexOf(angular.lowercase(query)) >= 0;
@@ -110,7 +113,11 @@ angular.module('stofmaApp.controllers')
       $scope.productStats = $scope.messageError = null;
 
       $scope.doStat = function (product) {
+        if (angular.isUndefined(product) && angular.isDefined($scope.productSelected))
+          product = $scope.productSelected;
+
         if (angular.isDefined(product) && product !== null) {
+          $scope.productSelected = product;
           $scope.setLoading(true);
           computeStats(product.id).then(function (stats) {
             $scope.productStats = stats;
@@ -120,22 +127,34 @@ angular.module('stofmaApp.controllers')
           }).catch(function (msg) {
             $scope.messageError = msg;
           }).finally(function () {
-            $scope.setLoading(false);
+            setTimeout(function () {
+              $scope.setLoading(false);
+            }, 0);
           });
         } else {
           $scope.productStats = null;
           $scope.messageError = null;
-          $scope.productSelected = null;
           $scope.searchProductText = '';
           $scope.setFabButton(false);
           $scope.setLoading(false);
         }
       };
 
+      $scope.changeDateMin = function (date) {
+        beginDate = date;
+        $scope.doStat();
+      };
+
+      $scope.changeDateMax = function (date) {
+        endDate = date;
+        $scope.maxDate = date ? date : new Date();
+        $scope.doStat();
+      };
+
       function computeStats(productId) {
         var defer = $q.defer();
 
-        SaleService.getSalesOfProduct(productId).then(function (salesData) {
+        SaleService.getSalesOfProduct(productId, beginDate, endDate).then(function (salesData) {
           if (salesData.length === 0) {
             defer.reject("Pas de vente pour ce produit.");
             return;
@@ -155,15 +174,10 @@ angular.module('stofmaApp.controllers')
 
 
           DateUtils.setDateSubHeader(salesData, 'saleDate', function (s) {
-            var c = s.customer;
-            if (c.id == -1 && s.commentSale) {
-              c.name = s.commentSale;
-              c.firstname = '';
-              c.email = 'Invité(e)';
-            }
-            var iU = users.map(function (u) {
-              return u.id;
-            }).indexOf(c.id);
+            var c = s.customer,
+                iU = users.map(function (u) {
+                  return u.id;
+                }).indexOf(c.id);
             if (c.id == -1) {
               iU = -1;
             }

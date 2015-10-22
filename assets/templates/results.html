@@ -37,6 +37,14 @@
   <md-content ng-switch-when="products-stats">
     <p class="text-center">Cette page permet d'afficher les statistiques du produit que vous sélectionnez.</p>
 
+
+    <div layout="row" layout-sm="column" layout-align="space-around center">
+      <md-datepicker ng-model="beginDate" md-placeholder="Début" ng-change="changeDateMin(beginDate)"
+                     md-max-date="maxDate"></md-datepicker>
+      <h4>Interval de temps</h4>
+      <md-datepicker ng-model="endDate" md-placeholder="Fin" ng-change="changeDateMax(endDate)"
+                     md-max-date="maxDate"></md-datepicker>
+    </div>
     <md-autocomplete md-menu-class="autocomplete-select-user" required md-selected-item="product" md-selected-item-change="doStat(product)"
                      placeholder="Sélection du produit"
                      md-autofocus="true" md-autoselect="true" md-select-on-match="true" md-search-text="searchProductText"

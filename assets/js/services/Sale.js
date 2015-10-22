@@ -17,7 +17,7 @@ angular.module('stofmaApp.services')
       if ($mdMedia('gt-sm'))
         salesStep = 30;
 
-      function getSales(page, noFilter) {
+      function getSales(page, noFilter, parameters) {
         if (angular.isUndefined(page))
           currentPage = startPage;
         else if (page === false)
@@ -27,6 +27,13 @@ angular.module('stofmaApp.services')
 
         var defer = $q.defer(),
             filter = noFilter ? '' : '?page=' + currentPage + '&limit=' + salesStep;
+
+        if (parameters) {
+          for (var kp in parameters) {
+            if (parameters.hasOwnProperty(kp))
+              filter += (filter == '' ? '?' : '&') + kp + '=' + parameters[kp];
+          }
+        }
 
         $http.get('/sale' + filter).success(function (sales) {
           if (!noFilter && sales.length == 0) {
@@ -63,10 +70,18 @@ angular.module('stofmaApp.services')
         return defer.promise;
       }
 
-      function getSalesOfProduct(productId) {
+      function getSalesOfProduct(productId, beginDate, endDate) {
         var defer = $q.defer();
 
-        getSales(null, true).then(function (sales) {
+        var parameters = {};
+
+        if (beginDate)
+          parameters.saleDateMin = moment(beginDate).format("YYYY/MM/DD");
+
+        if (endDate)
+          parameters.saleDateMax = moment(endDate).format("YYYY/MM/DD");
+
+        getSales(null, true, parameters).then(function (sales) {
           var r = sales.filter(function (s) {
             return s.products.map(function (p) {
                   return p.product.id
