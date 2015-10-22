@@ -449,7 +449,7 @@ module.exports = {
       payment:      6,
       products:     [20,18],
       totalPrice:   2,
-      saleDate:     '2015-02-18T21:38:52.750Z'
+      saleDate:     '2015-08-19T21:38:52.750Z'
     },
     sale_07: {
       id:           7,
@@ -458,6 +458,6 @@ module.exports = {
       payment:      7,
       products:     [21],
       totalPrice:   2.5,
-      saleDate:     '2014-08-18T21:38:52.750Z'
+      saleDate:     '2014-08-19T21:38:52.750Z'
     }
 };

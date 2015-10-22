@@ -178,19 +178,43 @@ module.exports = {
 
     var page  = req.param('page')  || 0;
     var limit = req.param('limit') || 999999999;
+    var saleDateRange = {
+      min: false,
+      max: false
+    };
+
+    var fetchCriterias = req.allParams();
+
+    if (req.param('saleDateMin')) {
+      var dmin = new Date(req.param('saleDateMin'));
+      dmin.setHours(0, 0); // Set hours to midnight.
+      saleDateRange.min = dmin;
+      fetchCriterias['saleDate'] = {};
+      fetchCriterias['saleDate']['>='] = saleDateRange.min;
+      delete req.allParams().saleDateMin;
+    }
+
+    if (req.param('saleDateMax')) {
+      var dmax = new Date(req.param('saleDateMax'));
+      dmax.setHours(23, 59); // Set hours to midnight.
+      saleDateRange.max = dmax;
+      fetchCriterias['saleDate'] = fetchCriterias['saleDate'] ? fetchCriterias['saleDate'] : {};
+      fetchCriterias['saleDate']['<='] = saleDateRange.max;
+      delete req.allParams().saleDateMax;
+    }
 
     delete req.allParams().page;
     delete req.allParams().limit;
 
     if(req.session.lazy) { // Populate everything
-      Sale.find(req.allParams())
-      .populate('manager')
-      .populate('customer')
-      .populate('products')
-      .populate('payment')
-      .paginate({page: page, limit: limit})
-      .sort('saleDate desc')
-      .exec(function(err, foundSales) {
+      Sale.find(fetchCriterias)
+          .populate('manager')
+          .populate('customer')
+          .populate('products')
+          .populate('payment')
+          .paginate({page: page, limit: limit})
+          .sort('saleDate desc')
+          .exec(function(err, foundSales) {
         if (err) {
           return res.negotiate(err);
         }
