@@ -23,6 +23,7 @@ module.exports = {
       forSale:      req.param('forSale')
     }, function (err, newProduct) {
       if (err) {
+        sails.log.debug("Error during product addition");
         return res.negotiate(err);
       }
       else {
@@ -36,9 +37,12 @@ module.exports = {
     // Updating a Product
     Product.update({id: req.param('id')}, req.allParams(), function(err, product) {
       if (err) {
+        sails.log.debug("Error during product update");
         return res.negotiate(err);
       }
       else {
+        sails.log.debug("Product " + product.name + " has been update by "
+                        + req.session.user.firstname + " " + req.session.user.name);
         return res.send(product);
       }
     });
@@ -48,9 +52,12 @@ module.exports = {
     // Deleting a Product
     Product.destroy({id: req.param('id')}, function(err, product) {
       if (err) {
+        sails.log.debug("Error during product deletion");
         return res.negotiate(err);
       }
       else {
+        sails.log.debug("Product " + product.name + " has been removed by "
+                        + req.session.user.firstname + " " + req.session.user.name);
         return res.send(200);
       }
     });

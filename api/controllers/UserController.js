@@ -87,6 +87,7 @@ module.exports = {
 
     // only managers and admins can update other users
     if(!req.session.user.isManager && !updateHimSelf) {
+      sails.log.debug("You do not have sufficient privileges to update other users");
       return res.send(401, 'You do not have sufficient privileges to update other users.');
     }
 
@@ -105,12 +106,14 @@ module.exports = {
     // Updating an User
     User.update({id: req.param('id')}, req.allParams(), function(err, user) {
       if (err) {
+        sails.log.debug("Error during user update");
         return res.negotiate(err);
       }
       else {
         if(updateHimSelf){
           updateSession(req.session, user[0]);
         }
+        sails.log.debug("User updated : "+user);
         return res.send(user);
       }
     });
@@ -121,9 +124,11 @@ module.exports = {
     User.findOne({id: req.param('id')}, function(err, user) {
       User.update(user, {role: req.param('role')}, function(err,user){
         if (err) {
+          sails.log.debug("Error during role attribution");
           return res.negotiate(err);
         }
         else {
+          sails.log.debug("Role "+req.param('role')+" attributed to "+user);
           return res.send(user);
         }
       });
@@ -135,9 +140,11 @@ module.exports = {
     User.findOne({id: req.param('id')}, function(err, user) {
       User.update(user, {isMember: req.param('isMember')}, function(err,user){
         if (err) {
+          sails.log.debug("Error during attribution of the member status");
           return res.negotiate(err);
         }
         else {
+          sails.log.debug(user.firstname + " " + user.name + " is now a member");
           return res.send(user);
         }
       });
@@ -149,9 +156,11 @@ module.exports = {
     User.findOne({id: req.param('id')}, function(err, user) {
       User.update(user, {isActive: req.param('isActive')}, function(err,user){
         if (err) {
+          sails.log.debug("Error during activation of a member");
           return res.negotiate(err);
         }
         else {
+          sails.log.debug(user + " is now active");
           return res.send(user);
         }
       });
@@ -175,9 +184,11 @@ module.exports = {
             creditMode  : true
           }, function (err, newPayment) {
             if (err) {
+              sails.log.debug("Payment not created");
               return res.send(400, 'Payment not created.');
             }
             else {
+              sails.log.debug("Payment created (credit)");
               return res.send(user);
             }
           });

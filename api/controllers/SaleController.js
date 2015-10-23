@@ -43,6 +43,7 @@ module.exports = {
           if(stockOut === true){
             Pair.deletePairs(pairs,true)
             .then(function(){
+              sails.log.debug("Not enough items");
               return res.send(407, "Not enough items");
             });
           }
@@ -51,6 +52,7 @@ module.exports = {
             //destroy the new pairs if he hasn't
             Pair.deletePairs(pairs,true)
             .then(function(){
+              sails.log.debug("Not enough credit");
               return res.send(406, "You don't have enough credit.");
             });
           }
@@ -64,6 +66,7 @@ module.exports = {
               type        : req.param('typePayment')
             }, function (err, newPayment) {
               if (err) {
+                sails.log.debug("Payment not created");
                 return res.send(400,'Payment not created.');
               }
               else {
@@ -91,10 +94,12 @@ module.exports = {
                       if(req.param('typePayment') === 'IN_CREDIT'){
                         customer.credit -= Number(newSale.totalPrice);
                         customer.save(function(){
+                          sails.log.debug("Sale added");
                           return res.send(200, newSale);
                         });
                       }
                       else{
+                        sails.log.debug("Sale added");
                         return res.send(200, newSale);
                       }
                     });
@@ -151,9 +156,11 @@ module.exports = {
           //delete related payment
           Payment.destroy(sale.payment.id, function(err,deletedPmt){
             if(err){
+              sails.log.debug("Payment not deleted");
               return res.send(400,'Payment not deleted.');
             }
             else {
+              sails.log.debug("Sale deleted with success : "+deletedSale);
               return res.send(200,'Sale deleted with success');
             }
           });
@@ -268,8 +275,6 @@ module.exports = {
    */
   update: function(req, res) {
 
-    // TODO Verify parameters
-
     var updatedValues = {};
     if(req.param('customerId')) updatedValues.customer = req.param('customerId');
     updatedValues.manager =  req.session.user.id;
@@ -311,6 +316,7 @@ module.exports = {
             if(stockOut === true){
               Pair.deletePairs(pairs,true)
               .then(function(){
+                sails.log.debug("Not enough items");
                 return res.send(407, "Not enough items");
               });
             }
@@ -322,6 +328,7 @@ module.exports = {
               //destroy the new pairs if he hasn't
               Pair.deletePairs(pairs,true)
               .then(function(){
+                sails.log.debug("Not enough credit");
                 return res.send(406, "You don't have enough credit.");
               });
             }
@@ -361,11 +368,13 @@ module.exports = {
                     type        : req.param('typePayment') || saleToUpdate.payment.type
                   }, function (err, newPayment) {
                     if(err){
+                      sails.log.debug("Payment not created (update)");
                       return res.send(400, 'Payment not created.');
                     }
                     else {
                       Payment.destroy(saleToUpdate.payment, function(err,p){
                         if(err){
+                          sails.log.debug("Payment not deleted (update)");
                           return res.send(400,'Payment not deleted.');
                         }
                         else {
@@ -374,6 +383,7 @@ module.exports = {
                           updatedSale.save(function(){
                             newPayment.save(function(){
                               customer.save(function(){
+                                sails.log.debug("Sale updated : "+updatedSale);
                                 return res.send(200, updatedSale);
                               });
                             });

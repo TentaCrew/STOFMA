@@ -22,6 +22,7 @@ module.exports = {
     var products = req.param('products');
     for(var i=0;i<products.length;i++){
       if(typeof products[i].unitPrice === 'undefined'){
+        sails.log.debug("Unit price must be provided");
         return res.send(400, 'Unit price must be provided');
       }
     }
@@ -43,6 +44,7 @@ module.exports = {
         type        : req.param('typePayment')
       }, function (err, newPayment) {
         if (err) {
+          sails.log.debug("Payment not created");
           return res.send(400,'Payment not created.');
         }
         else {
@@ -55,12 +57,14 @@ module.exports = {
             payment:      newPayment
           }, function (err, newPurchase) {
             if (err) {
+              sails.log.debug("Error during purchase addition");
               return res.negotiate(err);
             }
             else {
               //update the amount of the Payment if the totalPrice of the Purchase
               newPayment.amount = Number(newPurchase.totalPrice);
               newPayment.save(function(){
+                sails.log.debug("Purchase created with success : " + newPurchase);
                 return res.send(200, newPurchase);
               });
             }
@@ -96,9 +100,11 @@ module.exports = {
         .exec(function(err, deletedPurchase) {
           Payment.destroy(purchase.payment.id, function(err,deletedPmt){
             if(err){
+              sails.log.debug("Error during Payment deletion");
               return res.send(400,'Payment not deleted.');
             }
             else{
+              sails.log.debug("Purchase deleted with success : "+deletedPurchase);
               return res.send(200,'Purchase deleted with success');
             }
           });
@@ -184,8 +190,6 @@ module.exports = {
    */
   update: function(req, res) {
 
-    // TODO Verify parameters
-
     var updatedValues = {};
     updatedValues.manager = req.session.user.id;
     if(req.param('purchaseDate'))
@@ -221,11 +225,13 @@ module.exports = {
                 type        : req.param('typePayment') || purchaseToUpdate.payment.type
               }, function (err, newPayment) {
                 if(err){
+                  sails.log.debug("Error during purchase update (payment)");
                   return res.send(400,'Payment not created.');
                 }
                 else {
                   Payment.destroy(purchaseToUpdate.payment, function(err,p){
                     if(err){
+                      sails.log.debug("Error during purchase update");
                       return res.send(400,'Payment not deleted.');
                     }
                     else{
@@ -233,6 +239,7 @@ module.exports = {
                       updatedPurchase.payment = newPayment;
                       updatedPurchase.save(function(){
                         newPayment.save(function(){
+                          sails.log.debug("Purchase updated : "+updatedPurchase);
                           return res.send(200, updatedPurchase);
                         });
                       });
