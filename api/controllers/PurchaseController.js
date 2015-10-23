@@ -64,7 +64,11 @@ module.exports = {
               //update the amount of the Payment if the totalPrice of the Purchase
               newPayment.amount = Number(newPurchase.totalPrice);
               newPayment.save(function(){
-                sails.log.debug("Purchase created with success : " + newPurchase);
+                var s = [];
+                for(var i = 0; i < pairs.length; i++){
+                  s.push(pairs[i].quantity + "x " + pairs[i].product + " (" + pairs[i].unitPrice + "€/u)");
+                }
+                sails.log.debug("Purchase created with success : " + s.join(', '));
                 return res.send(200, newPurchase);
               });
             }
@@ -239,7 +243,11 @@ module.exports = {
                       updatedPurchase.payment = newPayment;
                       updatedPurchase.save(function(){
                         newPayment.save(function(){
-                          sails.log.debug("Purchase updated : "+updatedPurchase);
+                          var s = [];
+                          for(var i = 0; i < pairs.length; i++){
+                            s.push(pairs[i].quantity + "x " + pairs[i].product + " (" + pairs[i].unitPrice + "€/u)");
+                          }
+                          sails.log.debug("Purchase updated : " + s.join(', '));
                           return res.send(200, updatedPurchase);
                         });
                       });

@@ -22,14 +22,14 @@ module.exports = {
         return res.send(404);
       }
       else {
-        sails.log.debug("Found user " + foundUser.email + ".");
+        var s = "Found user " + foundUser.email + " and ";
         if(sha1(req.param('password')) == foundUser.password) {
           updateSession(req.session, foundUser);
-          sails.log.debug(foundUser.email + " credentials are valid.");
+          sails.log.debug(s + "credentials are valid.");
           return res.send(200, foundUser);
         }
         else {
-          sails.log.debug(foundUser.email + " credentials are invalid.");
+          sails.log.debug(s + "credentials are invalid.");
           return res.send(404);
         }
       }
@@ -113,7 +113,7 @@ module.exports = {
         if(updateHimSelf){
           updateSession(req.session, user[0]);
         }
-        sails.log.debug("User updated : "+user);
+        sails.log.debug("User updated : " + user.firstname + " " + user.name);
         return res.send(user);
       }
     });
@@ -122,14 +122,14 @@ module.exports = {
   setRole: function(req, res) {
 
     User.findOne({id: req.param('id')}, function(err, user) {
-      User.update(user, {role: req.param('role')}, function(err,user){
+      User.update(user, {role: req.param('role')}, function(err,userUpdated){
         if (err) {
           sails.log.debug("Error during role attribution");
           return res.negotiate(err);
         }
         else {
-          sails.log.debug("Role "+req.param('role')+" attributed to "+user);
-          return res.send(user);
+          sails.log.debug("Role "+req.param('role')+" attributed to " + user.firstname + " " + user.name);
+          return res.send(userUpdated);
         }
       });
     });
@@ -138,14 +138,14 @@ module.exports = {
   setMember: function(req, res) {
 
     User.findOne({id: req.param('id')}, function(err, user) {
-      User.update(user, {isMember: req.param('isMember')}, function(err,user){
+      User.update(user, {isMember: req.param('isMember')}, function(err,userUpdated){
         if (err) {
           sails.log.debug("Error during attribution of the member status");
           return res.negotiate(err);
         }
         else {
-          sails.log.debug(user.firstname + " " + user.name + " is now a member");
-          return res.send(user);
+          sails.log.debug(user.firstname + " " + user.name + " is now a " + (userUpdated[0].isMember ? '' : 'non-') + "member");
+          return res.send(userUpdated);
         }
       });
     });
@@ -154,14 +154,14 @@ module.exports = {
   setActive: function(req, res) {
 
     User.findOne({id: req.param('id')}, function(err, user) {
-      User.update(user, {isActive: req.param('isActive')}, function(err,user){
+      User.update(user, {isActive: req.param('isActive')}, function(err,userUpdated){
         if (err) {
           sails.log.debug("Error during activation of a member");
           return res.negotiate(err);
         }
         else {
-          sails.log.debug(user + " is now active");
-          return res.send(user);
+          sails.log.debug(user.firstname + " " + user.name + " is now " + (userUpdated[0].isActive ? 'active' : 'disabled'));
+          return res.send(userUpdated);
         }
       });
     });

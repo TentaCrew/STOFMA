@@ -90,17 +90,23 @@ module.exports = {
                     //update the amount of the Payment if the totalPrice of the Sale
                     newPayment.amount = Number(newSale.totalPrice);
                     newPayment.save(function(){
+                      var s = [];
+                      for(var i = 0; i < pairs.length; i++){
+                        s.push(pairs[i].quantity + "x " + pairs[i].product + " (" + pairs[i].unitPrice + "€/u)");
+                      }
                       //update the user's credit
                       if(req.param('typePayment') === 'IN_CREDIT'){
                         customer.credit -= Number(newSale.totalPrice);
                         customer.save(function(){
-                          sails.log.debug("Sale added");
+                          sails.log.debug("Sale added by credit with success : " + s.join(', '));
                           return res.send(200, newSale);
                         });
                       }
                       else{
-                        sails.log.debug("Sale added");
-                        return res.send(200, newSale);
+                        customer.save(function(){
+                          sails.log.debug("Sale added with success : " + s.join(', '));
+                          return res.send(200, newSale);
+                        });
                       }
                     });
                   }
@@ -147,7 +153,7 @@ module.exports = {
           else {
             cb();
           }
-        },
+        }
       },
       function(err, results) {
         Sale
@@ -160,7 +166,7 @@ module.exports = {
               return res.send(400,'Payment not deleted.');
             }
             else {
-              sails.log.debug("Sale deleted with success : "+deletedSale);
+              sails.log.debug("Sale deleted with success");
               return res.send(200,'Sale deleted with success');
             }
           });
@@ -383,7 +389,11 @@ module.exports = {
                           updatedSale.save(function(){
                             newPayment.save(function(){
                               customer.save(function(){
-                                sails.log.debug("Sale updated : "+updatedSale);
+                                var s = [];
+                                for(var i = 0; i < pairs.length; i++){
+                                  s.push(pairs[i].quantity + "x " + pairs[i].product + " (" + pairs[i].unitPrice + "€/u)");
+                                }
+                                sails.log.debug("Sale updated : "+ s.join(', '));
                                 return res.send(200, updatedSale);
                               });
                             });
