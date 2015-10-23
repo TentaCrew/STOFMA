@@ -41,9 +41,9 @@
     <div layout="row" layout-sm="column" layout-align="space-around center">
       <md-datepicker ng-model="beginDate" md-placeholder="Début" ng-change="changeDateMin(beginDate)"
                      md-max-date="maxDate"></md-datepicker>
-      <h4>Interval de temps</h4>
+      <h4>Intervalle de temps</h4>
       <md-datepicker ng-model="endDate" md-placeholder="Fin" ng-change="changeDateMax(endDate)"
-                     md-max-date="maxDate"></md-datepicker>
+                     md-min-date="minDate"></md-datepicker>
     </div>
     <md-autocomplete md-menu-class="autocomplete-select-user" required md-selected-item="product" md-selected-item-change="doStat(product)"
                      placeholder="Sélection du produit"
@@ -123,7 +123,7 @@
       </div>
     </section>
     <section ng-if="messageError !== null">
-      <h3 class="text-center">{{messageError.message}}</h3>
+      <h3 class="text-center">{{messageError}}</h3>
     </section>
   </md-content>
 </ng-switch>

@@ -100,6 +100,7 @@ angular.module('stofmaApp.controllers')
       $scope.searchProductText = '';
 
       $scope.maxDate = new Date();
+      $scope.maxDate = undefined;
       var beginDate, endDate;
 
       function getMatches(query) {
@@ -117,6 +118,7 @@ angular.module('stofmaApp.controllers')
           product = $scope.productSelected;
 
         if (angular.isDefined(product) && product !== null) {
+          $scope.messageError = null;
           $scope.productSelected = product;
           $scope.setLoading(true);
           computeStats(product.id).then(function (stats) {
@@ -126,6 +128,8 @@ angular.module('stofmaApp.controllers')
             });
           }).catch(function (msg) {
             $scope.messageError = msg;
+            $scope.productStats = null;
+            $scope.setLoading(false);
           }).finally(function () {
             setTimeout(function () {
               $scope.setLoading(false);
@@ -142,6 +146,7 @@ angular.module('stofmaApp.controllers')
 
       $scope.changeDateMin = function (date) {
         beginDate = date;
+        $scope.minDate = date ? date : undefined;
         $scope.doStat();
       };
 
@@ -156,7 +161,7 @@ angular.module('stofmaApp.controllers')
 
         SaleService.getSalesOfProduct(productId, beginDate, endDate).then(function (salesData) {
           if (salesData.length === 0) {
-            defer.reject("Pas de vente pour ce produit.");
+            defer.reject("Pas de vente pour ce produit" + (beginDate || endDate ? " pour cet intervalle de temps" : "") + ".");
             return;
           }
 
