@@ -35,8 +35,8 @@
   "scripts": {
     "start": "node app.js",
     "debug": "node debug app.js",
-    "test": "mocha test/bootstrap.test.js test/unit/**/*.test.js -t 5000",
-    "cover": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/bootstrap.test.js test/unit/**/*.test.js",
+    "test": "mocha test/bootstrap.test.js test/unit/**/*.test.js -t 7000",
+    "cover": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/bootstrap.test.js test/unit/**/*.test.js -- -t 7000",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
     "install": "bower install"
   },
