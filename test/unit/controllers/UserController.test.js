@@ -414,7 +414,7 @@ describe('UsersController', function() {
         password: data.user_admin_01.password
       })
       .end(done);
-    });;
+    });
     //log out after the test
     after(function(done) {
       agent

@@ -1,6 +1,7 @@
 .tmp
 node_modules
 bower_components
+coverage
 .sass-cache
 .idea
 views/layout.ejs

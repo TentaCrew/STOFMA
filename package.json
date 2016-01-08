@@ -37,6 +37,7 @@
     "debug": "node debug app.js",
     "test": "mocha test/bootstrap.test.js test/unit/**/*.test.js -t 7000",
     "cover": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/bootstrap.test.js test/unit/**/*.test.js -- -t 7000",
+    "cover-win": "./node_modules/.bin/istanbul cover --hook-run-in-context ./node_modules/mocha/bin/_mocha test/bootstrap.test.js test/unit/**/*.test.js -- -t 7000",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
     "install": "bower install"
   },
