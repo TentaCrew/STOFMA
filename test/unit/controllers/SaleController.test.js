@@ -433,11 +433,11 @@ describe('SaleController', function() {
     it('As a manager User, update a created Sale (CASH -> CASH)', function (done) {
       Sale.findOne({id: data.sale_05.id}).populate('customer').populate('payment').exec(function(err,sale05Before){
         agent
-        .patch('/sale/5')
+        .patch('/sale/'+data.sale_05.id)
         .send({
           typePayment: 'IN_CASH',
           products: [
-            {product: data.product_03.id, quantity: 90}
+            {product: data.product_03.id, quantity: 1}
           ]
         })
         .expect(200)
@@ -445,6 +445,50 @@ describe('SaleController', function() {
           Sale.findOne({id: data.sale_05.id}).populate('customer').populate('payment').exec(function(err,sale05After){
             assert.equal(sale05After.customer.credit,  sale05Before.customer.credit, 'Customer\'s credit shouldn\'t change.');
             assert.equal(sale05After.payment.type, 'IN_CASH', 'The new payment type is not good.');
+            done();
+          });
+        });
+      });
+    });
+
+    // Test
+    it('As a manager User, update a created Sale (CASH -> IN_TRANSFER)', function (done) {
+      Sale.findOne({id: data.sale_05.id}).populate('customer').populate('payment').exec(function(err,sale05Before){
+        agent
+        .patch('/sale/'+data.sale_05.id)
+        .send({
+          typePayment: 'IN_TRANSFER',
+          products: [
+            {product: data.product_03.id, quantity: 2}
+          ]
+        })
+        .expect(200)
+        .end(function(){
+          Sale.findOne({id: data.sale_05.id}).populate('customer').populate('payment').exec(function(err,sale05After){
+            assert.equal(sale05After.customer.credit,  sale05Before.customer.credit, 'Customer\'s credit shouldn\'t change.');
+            //assert.equal(sale05After.payment.type, 'IN_TRANSFER', 'The new payment type is not good.');
+            done();
+          });
+        });
+      });
+    });
+
+    // Test
+    it('As a manager User, update a created Sale (IN_TRANSFER -> OTHER)', function (done) {
+      Sale.findOne({id: data.sale_05.id}).populate('customer').populate('payment').exec(function(err,sale05Before){
+        agent
+        .patch('/sale/'+data.sale_05.id)
+        .send({
+          typePayment: 'OTHER',
+          products: [
+            {product: data.product_03.id, quantity: 1}
+          ]
+        })
+        .expect(200)
+        .end(function(){
+          Sale.findOne({id: data.sale_05.id}).populate('customer').populate('payment').exec(function(err,sale05After){
+            assert.equal(sale05After.customer.credit,  sale05Before.customer.credit, 'Customer\'s credit shouldn\'t change.');
+            //assert.equal(sale05After.payment.type, 'OTHER', 'The new payment type is not good.');
             done();
           });
         });

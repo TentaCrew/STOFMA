@@ -60,14 +60,15 @@ module.exports = {
       password:   'windows'
     },
     user_customer_04: {
-      id:         14,
-      firstname:  'Simple',
-      name:       'Girl',
-      email:      'simple@customer.fr',
-      sex:        false,
-      role:       'MANAGER',  //won't be considered during sign up
-      credit:     1000,       //won't be considered during sign up
-      password:   'simplegirl'
+      id:          14,
+      firstname:   'Simple',
+      name:        'Girl',
+      email:       'simple@customer.fr',
+      sex:         false,
+      role:        'MANAGER',  //won't be considered during sign up
+      credit:      1000,       //won't be considered during sign up
+      password:    'simplegirl',
+      phoneNumber: '9999999999'
     },
     user_customer_05: {
       id:         15,

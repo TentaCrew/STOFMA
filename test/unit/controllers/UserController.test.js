@@ -32,7 +32,8 @@ describe('UsersController', function() {
         sex:         data.user_customer_04.sex,
         password:    data.user_customer_04.password,
         credit:      data.user_customer_04.credit,  //won't be considered
-        role:        data.user_customer_04.role     //won't be considered
+        role:        data.user_customer_04.role,    //won't be considered
+        phoneNumber: data.user_customer_04.phoneNumber
       })
       .expect(200)
       .end(function(err, res){
@@ -293,7 +294,8 @@ describe('UsersController', function() {
       .send({
         name:     'mynewname',
         credit:   1000,     //will be ignored
-        password: 'passup'
+        password: 'passup',
+        phoneNumber: '8888888888'
       })
       .expect(200, done);
     });
