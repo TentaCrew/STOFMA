@@ -233,6 +233,94 @@ describe('ProductController', function() {
         done();
       });
     });
+
+    it('should NOT update an not existing product', function (done) {
+      agent
+      .patch('/product/meiko0912')
+      .send({
+        price: 1,
+        memberPrice: 3
+      })
+      .expect(404, done);
+    });
+  });
+
+  describe('#get() as manager', function() {
+
+    // Before: Log in as a manager User
+    before(function(done){
+      agent
+      .put('/user/login')
+      .send({
+        email: data.user_manager_01.email,
+        password: data.user_manager_01.password
+      })
+      .expect(200)
+      .end(done);
+    });
+
+    // After: Log out
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .expect(200)
+      .end(done);
+    });
+
+    it('should get a product', function (done) {
+      agent
+      .get('/product/'+data.product_09.id)
+      .expect(200, done);
+    });
+
+    it('should NOT get an not existing product', function (done) {
+      agent
+      .get('/product/meiko0912')
+      .expect(404, done);
+    });
+  });
+
+  describe('#delete() as manager', function() {
+
+    // Before: Log in as a manager User
+    before(function(done){
+      agent
+      .put('/user/login')
+      .send({
+        email: data.user_manager_01.email,
+        password: data.user_manager_01.password
+      })
+      .expect(200)
+      .end(done);
+    });
+
+    // After: Log out
+    after(function(done) {
+      agent
+      .put('/user/logout')
+      .expect(200)
+      .end(done);
+    });
+
+    it('should delete a product', function (done) {
+      agent
+      .delete('/product/'+data.product_09.id)
+      .send({
+        price: 1,
+        memberPrice: 3
+      })
+      .expect(200, done);
+    });
+
+    it('should NOT delete an not existing product', function (done) {
+      agent
+      .delete('/product/meiko0912')
+      .send({
+        price: 1,
+        memberPrice: 3
+      })
+      .expect(404, done);
+    });
   });
 
   describe('handling member prices', function() {

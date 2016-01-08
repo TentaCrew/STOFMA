@@ -36,9 +36,8 @@ module.exports = {
   update: function (req, res) {
     // Updating a Product
     Product.update({id: req.param('id')}, req.allParams(), function(err, product) {
-      if (err) {
-        sails.log.debug("Error during product update");
-        return res.negotiate(err);
+      if (product.length == 0){
+        return res.notFound();
       }
       else {
         sails.log.debug("Product " + product.name + " has been update by "
@@ -51,14 +50,13 @@ module.exports = {
   delete: function (req, res) {
     // Deleting a Product
     Product.destroy({id: req.param('id')}, function(err, product) {
-      if (err) {
-        sails.log.debug("Error during product deletion");
-        return res.negotiate(err);
+      if (product.length == 0) {
+        return res.notFound();
       }
       else {
         sails.log.debug("Product " + product.name + " has been removed by "
                         + req.session.user.firstname + " " + req.session.user.name);
-        return res.send(200);
+        return res.ok();
       }
     });
   },
@@ -68,8 +66,8 @@ module.exports = {
     Product.find(req.allParams())
     .sort('id asc')
     .exec(function(err, products) {
-      if (err) {
-        return res.negotiate(err);
+      if (products.length == 0) {
+        return res.notFound();
       }
       else {
         return res.send(products);
