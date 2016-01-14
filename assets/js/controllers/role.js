@@ -13,6 +13,10 @@ angular.module('stofmaApp.controllers')
         return u.isManager();
       });
 
+      $scope.admins = users.filter(function (u) {
+        return u.isAdmin();
+      });
+
       UserService.getCurrentSession().then(function (session) {
         UserService.get(session.id).then(function (user) {
           $scope.user = user;

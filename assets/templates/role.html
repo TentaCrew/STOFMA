@@ -47,4 +47,23 @@
     </md-list>
   </div>
   <h3 class="md-title" ng-if="managers.length == 0"><em>Aucun manager désigné.</em></h3>
+
+  <div ng-if="admins.length != 0">
+    <h3>Liste des administrateurs</h3>
+    <md-list layout-padding>
+      <section ng-repeat="admin in admins">
+        <md-list-item class="md-2-line">
+          <div class="md-list-item-text" layout="row" layout-sm="column">
+            {{admin.getName()}}
+          </div>
+          <div layout="row" layout-align="end center">
+            <md-button class="md-button md-accent md-icon-button" ng-click="removeManager(admin.id, $index)">
+              <md-icon>clear</md-icon>
+            </md-button>
+          </div>
+        </md-list-item>
+      </section>
+    </md-list>
+  </div>
+  <h3 class="md-title" ng-if="admins.length == 0"><em>Aucun administrateur désigné.</em></h3>
 </div>
