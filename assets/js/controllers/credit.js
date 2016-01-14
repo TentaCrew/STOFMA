@@ -62,7 +62,7 @@ angular.module('stofmaApp.controllers')
         } else if (isNaN(amount)) {
           $mdToast.show(
               $mdToast.simple()
-                  .content('Veuillez renseigner un moment corrent.')
+                  .content('Veuillez renseigner un montant correct.')
                   .position("bottom right")
                   .hideDelay(5000)
           );

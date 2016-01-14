@@ -63,7 +63,7 @@ angular.module('stofmaApp.controllers')
         if (timeout)
           return;
 
-        (ownSale ? SaleService.getOwnSales(false) : SaleService.getSales(false)).then(function (ss) {
+        (ownSale ? SaleService.getOwnSales(false, undefined, true) : SaleService.getSales(false, undefined, false, true)).then(function (ss) {
           subHeaderHandler(ss);
         }).catch(function () {
           $scope.stopInfinite = true;
@@ -74,5 +74,4 @@ angular.module('stofmaApp.controllers')
         }, 500);
       };
     }
-    ])
-;
+    ]);

@@ -24,6 +24,10 @@ angular.module('stofmaApp.controllers')
           }
         }
       };
+      
+      $rootScope.getLength = function(obj) {
+        return (typeof obj == "object") ? Object.keys(obj).length : obj.length;
+      }
 
       $rootScope.$on("$stateChangeStart", function (event, toState, data, fromState) {
         $scope.loadingPage = true;

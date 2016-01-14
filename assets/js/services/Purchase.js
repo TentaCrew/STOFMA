@@ -15,7 +15,10 @@ angular.module('stofmaApp.services')
       if ($mdMedia('gt-sm'))
         purchasesStep = 30;
 
-      function getPurchases(page, noFilter) {
+      function getPurchases(page, noFilter, withReject) {
+        if(angular.isUndefined(withReject))
+          withReject = false;
+        
         if (angular.isUndefined(page))
           currentPage = startPage;
         else if (page === false)
@@ -28,13 +31,19 @@ angular.module('stofmaApp.services')
         $http.get('/purchase' + filter).success(function (purchases) {
           if (!noFilter && purchases.length == 0) {
             currentPage -= 1;
-            defer.reject();
+            if(withReject)
+              defer.reject()
+            else
+              defer.resolve([]);
           }
 
           defer.resolve(purchases);
         }).error(function (err) {
           currentPage -= 1;
-          defer.reject(err);
+          if(withReject)
+            defer.reject()
+          else
+            defer.resolve([]);
         });
 
         return defer.promise;

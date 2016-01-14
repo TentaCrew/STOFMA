@@ -1,4 +1,4 @@
-<md-list ng-hide="purchases.length == 0">
+<md-list ng-hide="getLength(purchases) == 0">
   <div infinite-scroll="onScroll()" infinite-scroll-distance="3" infinite-scroll-immediate-check="false" infinite-scroll-container="'#mainContent'"
        infinite-scroll-disabled="stopInfinite">
 
@@ -36,4 +36,4 @@
     </section>
   </div>
 </md-list>
-<h2 class="text-center" ng-show="purchases.length == 0">Aucun achat n'a été enregistré pour le moment.</h2>
+<h2 class="text-center" ng-show="getLength(purchases) == 0">Aucun achat n'a été enregistré pour le moment.</h2>

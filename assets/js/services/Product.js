@@ -37,7 +37,7 @@ angular.module('stofmaApp.services')
             }
         ).
             error(function (err) {
-              defer.reject();
+              defer.resolve([]);
             });
 
         return defer.promise;

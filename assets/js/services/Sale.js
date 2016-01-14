@@ -17,7 +17,10 @@ angular.module('stofmaApp.services')
       if ($mdMedia('gt-sm'))
         salesStep = 30;
 
-      function getSales(page, noFilter, parameters) {
+      function getSales(page, noFilter, parameters, withReject) {
+        if(angular.isUndefined(withReject))
+          withReject = false;
+          
         if (angular.isUndefined(page))
           currentPage = startPage;
         else if (page === false)
@@ -38,13 +41,19 @@ angular.module('stofmaApp.services')
         $http.get('/sale' + filter).success(function (sales) {
           if (!noFilter && sales.length == 0) {
             currentPage -= 1;
-            defer.reject();
+            if(withReject)
+              defer.reject([]);
+            else
+              defer.resolve([]);
           }
-
+          
           defer.resolve(sales.map(SaleFactory.remap));
         }).error(function (err) {
           currentPage -= 1;
-          defer.reject([]);
+          if(withReject)
+            defer.reject([]);
+          else
+            defer.resolve([]);
         });
 
         return defer.promise;
@@ -58,7 +67,7 @@ angular.module('stofmaApp.services')
             defer.resolve(ss.filter(function (s) {
               return s.id == id;
             })[0]);
-          })
+          });
         } else {
           $http.get('/sale/' + id).success(function (sales) {
             defer.resolve(sales.map(SaleFactory.remap)[0]);
@@ -103,7 +112,10 @@ angular.module('stofmaApp.services')
         return defer.promise;
       }
 
-      function getOwnSales(page, noFilter) {
+      function getOwnSales(page, noFilter, withReject) {
+        if(angular.isUndefined(withReject))
+          withReject = false;
+          
         if (angular.isUndefined(page))
           currentPage = startPage;
         else if (page === false)
@@ -113,18 +125,24 @@ angular.module('stofmaApp.services')
 
         var defer = $q.defer(),
             filter = noFilter ? '' : '&page=' + currentPage + '&limit=' + salesStep;
-
+        
         UserService.getCurrentSession().then(function (session) {
           $http.get('/sale?customer=' + session.id + filter).success(function (sales) {
             if (!noFilter && sales.length == 0) {
               currentPage -= 1;
-              defer.reject();
+              if(withReject)
+                defer.reject([])
+              else
+                defer.resolve([]);
             }
-
+            
             defer.resolve(sales.map(SaleFactory.remap));
           }).error(function (err) {
             currentPage -= 1;
-            defer.reject([]);
+            if(withReject)
+              defer.reject([])
+            else
+              defer.resolve([]);
           });
         });
 

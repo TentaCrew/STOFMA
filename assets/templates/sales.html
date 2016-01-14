@@ -1,4 +1,4 @@
-<md-list ng-hide="sales.length == 0">
+<md-list ng-hide="getLength(sales) == 0">
   <div infinite-scroll="onScroll()" infinite-scroll-distance="3" infinite-scroll-immediate-check="false" infinite-scroll-container="'#mainContent'"
        infinite-scroll-disabled="stopInfinite">
 
@@ -37,5 +37,5 @@
     </section>
   </div>
 </md-list>
-<h2 class="text-center" ng-show="sales.length == 0 && isManager">Aucune vente n'a été enregistrée pour le moment.</h2>
-<h2 class="text-center" ng-show="sales.length == 0 && !isManager">Aucun achat n'a été effectué pour le moment.</h2>
+<h2 class="text-center" ng-show="getLength(sales) == 0 && isManager">Aucune vente n'a été enregistrée pour le moment.</h2>
+<h2 class="text-center" ng-show="getLength(sales) == 0 && !isManager">Aucun achat n'a été effectué pour le moment.</h2>

@@ -65,7 +65,7 @@ angular.module('stofmaApp.controllers')
         if (timeout)
           return;
 
-        PurchaseService.getPurchases(false).then(function (ss) {
+        PurchaseService.getPurchases(false, undefined, true).then(function (ss) {
           subHeaderHandler(ss);
         }).catch(function () {
           $scope.stopInfinite = true;
