@@ -59,8 +59,8 @@ angular.module('stofmaApp.auth')
 
           UserService.setRole(userId, formData).then(function(user){
             defer.resolve(user);
-          }).catch(function(err){
-            defer.reject(err);
+          }).catch(function(status){
+            defer.reject(status);
           });
 
           return defer.promise;

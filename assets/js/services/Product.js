@@ -69,16 +69,12 @@ angular.module('stofmaApp.services')
         var defer = $q.defer();
 
         $http.get('/product?shortName=' + shortName).success(function (data) {
-              var r = data;
+          var r = data.map(ProductFactory.remapProducts);
 
-              r = r.map(ProductFactory.remapProducts);
-
-              defer.resolve(r[0]);
-            }
-        ).
-            error(function (err) {
-              defer.reject();
-            });
+          defer.resolve(r[0]);
+        }).error(function (err) {
+          defer.resolve(null);
+        });
 
         return defer.promise;
       }

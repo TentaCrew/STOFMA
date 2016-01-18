@@ -44,7 +44,7 @@ angular.module('stofmaApp.services')
             return !u.isActive;
           });
           defer.resolve(users);
-        }).error(function (err) {
+        }).error(function (err, status) {
           defer.reject(err.status);
         });
 
@@ -175,8 +175,8 @@ angular.module('stofmaApp.services')
 
         $http.patch('/user/' + userId + '/role', formData).success(function (result) {
           defer.resolve(UserFactory.remap(result[0]));
-        }).error(function (err) {
-          defer.reject(err);
+        }).error(function (err, status) {
+          defer.reject(status);
         });
 
         return defer.promise;

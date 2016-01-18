@@ -82,6 +82,58 @@ angular.module('stofmaApp.controllers')
             });
       };
 
+      $scope.setAdmin = function (userId, index) {
+        Auth.setRole(userId, {
+          role: 'ADMINISTRATOR'
+        })
+            .then(function (newUser) {
+              SweetAlert.swal({
+                title: newUser.getName() + ' est désormais administrateur !',
+                type: 'success'
+              }, function (ok) {
+                if (ok) {
+                  $scope.managers.splice(index, 1);
+                  $scope.admins.unshift(newUser);
+                }
+              });
+            }).catch(function (err) {
+              SweetAlert.swal({
+                title: 'Échec du transfert du role Administrateur.',
+                type: 'error'
+              });
+            });
+      };
+
+      $scope.setManager = function (userId, index) {
+        Auth.setRole(userId, {
+          role: 'MANAGER'
+        })
+            .then(function (newUser) {
+              SweetAlert.swal({
+                title: newUser.getName() + ' est désormais manager !',
+                type: 'success'
+              }, function (ok) {
+                if (ok) {
+                  $scope.admins.splice(index, 1);
+                  $scope.managers.push(newUser);
+                }
+              });
+            }).catch(function (status) {
+              if(status == 403) {
+                SweetAlert.swal({
+                  title: 'L\'administrateur de l\'application ne peut pas devenir manager.',
+                  type: 'error'
+                });
+              } else {
+                SweetAlert.swal({
+                  title: 'Échec du transfert du role Manager.',
+                  type: 'error'
+                });
+              }
+            });
+      };
+
+
       // Auto-complete part
 
       $scope.getMatches = getMatches;

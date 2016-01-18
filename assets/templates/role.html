@@ -38,6 +38,9 @@
             {{manager.getName()}}
           </div>
           <div layout="row" layout-align="end center">
+            <md-button class="md-button md-primary md-icon-button" ng-click="setAdmin(manager.id, $index)">
+              <md-icon>whatshot</md-icon>
+            </md-button>
             <md-button class="md-button md-accent md-icon-button" ng-click="removeManager(manager.id, $index)">
               <md-icon>clear</md-icon>
             </md-button>
@@ -57,7 +60,7 @@
             {{admin.getName()}}
           </div>
           <div layout="row" layout-align="end center">
-            <md-button class="md-button md-accent md-icon-button" ng-click="removeManager(admin.id, $index)">
+            <md-button class="md-button md-accent md-icon-button" ng-click="setManager(admin.id, $index)">
               <md-icon>clear</md-icon>
             </md-button>
           </div>

@@ -122,6 +122,9 @@ module.exports = {
   setRole: function(req, res) {
 
     User.findOne({id: req.param('id')}, function(err, user) {
+      if(user.email == "admin@stofma.com")
+        return res.send(403);
+
       User.update(user, {role: req.param('role')}, function(err,userUpdated){
         if (err) {
           sails.log.debug("Error during role attribution");
