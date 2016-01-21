@@ -23,11 +23,11 @@ module.exports = {
       forSale:      req.param('forSale')
     }, function (err, newProduct) {
       if (err) {
-        sails.log.debug("Error during product addition");
+        sails.log.debug(getDateLog() + "Error during product addition");
         return res.negotiate(err);
       }
       else {
-        sails.log.debug("Product " + req.param('name') + " added in category " + req.param('category'));
+        sails.log.debug(getDateLog() + "Product " + req.param('name') + " added in category " + req.param('category'));
         return res.send(200, newProduct);
       }
     });
@@ -40,7 +40,7 @@ module.exports = {
         return res.notFound();
       }
       else {
-        sails.log.debug("Product " + product.name + " has been update by "
+        sails.log.debug(getDateLog() + "Product " + product[0].name + " has been update by "
                         + req.session.user.firstname + " " + req.session.user.name);
         return res.send(product);
       }
@@ -54,7 +54,7 @@ module.exports = {
         return res.notFound();
       }
       else {
-        sails.log.debug("Product " + product.name + " has been removed by "
+        sails.log.debug("Product " + product[0].name + " has been removed by "
                         + req.session.user.firstname + " " + req.session.user.name);
         return res.ok();
       }

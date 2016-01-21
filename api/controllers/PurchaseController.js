@@ -57,7 +57,7 @@ module.exports = {
             payment:      newPayment
           }, function (err, newPurchase) {
             if (err) {
-              sails.log.debug("Error during purchase addition");
+              sails.log.debug(getDateLog() + "Error during purchase addition");
               return res.negotiate(err);
             }
             else {
@@ -68,7 +68,7 @@ module.exports = {
                 for(var i = 0; i < pairs.length; i++){
                   s.push(pairs[i].quantity + "x " + pairs[i].product + " (" + pairs[i].unitPrice + "€/u)");
                 }
-                sails.log.debug("Purchase created with success : " + s.join(', '));
+                sails.log.debug(getDateLog() + "Purchase created with success : " + s.join(', '));
                 return res.send(200, newPurchase);
               });
             }
@@ -104,11 +104,11 @@ module.exports = {
         .exec(function(err, deletedPurchase) {
           Payment.destroy(purchase.payment.id, function(err,deletedPmt){
             if(err){
-              sails.log.debug("Error during Payment deletion");
+              sails.log.debug(getDateLog() + "Error during Payment deletion");
               return res.send(400,'Payment not deleted.');
             }
             else{
-              sails.log.debug("Purchase deleted with success : "+deletedPurchase);
+              sails.log.debug(getDateLog() + "Purchase deleted with success : "+deletedPurchase);
               return res.send(200,'Purchase deleted with success');
             }
           });
@@ -229,13 +229,13 @@ module.exports = {
                 type        : req.param('typePayment') || purchaseToUpdate.payment.type
               }, function (err, newPayment) {
                 if(err){
-                  sails.log.debug("Error during purchase update (payment)");
+                  sails.log.debug(getDateLog() + "Error during purchase update (payment)");
                   return res.send(400,'Payment not created.');
                 }
                 else {
                   Payment.destroy(purchaseToUpdate.payment, function(err,p){
                     if(err){
-                      sails.log.debug("Error during purchase update");
+                      sails.log.debug(getDateLog() + "Error during purchase update");
                       return res.send(400,'Payment not deleted.');
                     }
                     else{
@@ -247,7 +247,7 @@ module.exports = {
                           for(var i = 0; i < pairs.length; i++){
                             s.push(pairs[i].quantity + "x " + pairs[i].product + " (" + pairs[i].unitPrice + "€/u)");
                           }
-                          sails.log.debug("Purchase updated : " + s.join(', '));
+                          sails.log.debug(getDateLog() + "Purchase updated : " + s.join(', '));
                           return res.send(200, updatedPurchase);
                         });
                       });

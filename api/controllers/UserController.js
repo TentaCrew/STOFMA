@@ -22,7 +22,7 @@ module.exports = {
         return res.send(404);
       }
       else {
-        var s = "Found user " + foundUser.email + " and ";
+        var s = getDateLog() + "Found user " + foundUser.email + " and ";
         if(sha1(req.param('password')) == foundUser.password) {
           updateSession(req.session, foundUser);
           sails.log.debug(s + "credentials are valid.");
@@ -72,9 +72,9 @@ module.exports = {
       }
       else {
         if(req.session.user && (req.session.user.isAdmin || req.session.user.isManager)){
-          sails.log.debug("User " + req.param('email') + " has been register as " + newUser.role);
+          sails.log.debug(getDateLog() + "User " + req.param('email') + " has been register as " + newUser.role);
         } else {
-          sails.log.debug("User " + req.param('email') + " signed up and logged in as " + newUser.role);
+          sails.log.debug(getDateLog() + "User " + req.param('email') + " signed up and logged in as " + newUser.role);
         }
         return res.send(200, newUser);
       }
@@ -96,7 +96,7 @@ module.exports = {
     delete req.allParams().isMember;  // to update status, use the setMember function
     delete req.allParams().isActive;  // to set an user active, use the setActive function
 
-    if(updateHimSelf) {
+    if(updateHimSelf){
       delete req.allParams().name;
       delete req.allParams().firstname;
       delete req.allParams().birthdate;
@@ -106,14 +106,14 @@ module.exports = {
     // Updating an User
     User.update({id: req.param('id')}, req.allParams(), function(err, user) {
       if (err) {
-        sails.log.debug("Error during user update");
+        sails.log.debug(getDateLog() + "Error during user update");
         return res.negotiate(err);
       }
       else {
         if(updateHimSelf){
           updateSession(req.session, user[0]);
         }
-        sails.log.debug("User updated : " + user.firstname + " " + user.name);
+        sails.log.debug(getDateLog() + "User updated : " + user[0].firstname + " " + user[0].name);
         return res.send(user);
       }
     });
@@ -127,11 +127,11 @@ module.exports = {
 
       User.update(user, {role: req.param('role')}, function(err,userUpdated){
         if (err) {
-          sails.log.debug("Error during role attribution");
+          sails.log.debug(getDateLog() + "Error during role attribution");
           return res.negotiate(err);
         }
         else {
-          sails.log.debug("Role "+req.param('role')+" attributed to " + user.firstname + " " + user.name);
+          sails.log.debug(getDateLog() + "Role "+req.param('role')+" attributed to " + user.firstname + " " + user.name);
           return res.send(userUpdated);
         }
       });
@@ -143,11 +143,11 @@ module.exports = {
     User.findOne({id: req.param('id')}, function(err, user) {
       User.update(user, {isMember: req.param('isMember')}, function(err,userUpdated){
         if (err) {
-          sails.log.debug("Error during attribution of the member status");
+          sails.log.debug(getDateLog() + "Error during attribution of the member status");
           return res.negotiate(err);
         }
         else {
-          sails.log.debug(user.firstname + " " + user.name + " is now a " + (userUpdated[0].isMember ? '' : 'non-') + "member");
+          sails.log.debug(getDateLog() + user.firstname + " " + user.name + " is now a " + (userUpdated[0].isMember ? '' : 'non-') + "member");
           return res.send(userUpdated);
         }
       });
@@ -159,11 +159,11 @@ module.exports = {
     User.findOne({id: req.param('id')}, function(err, user) {
       User.update(user, {isActive: req.param('isActive')}, function(err,userUpdated){
         if (err) {
-          sails.log.debug("Error during activation of a member");
+          sails.log.debug(getDateLog() + "Error during activation of a member");
           return res.negotiate(err);
         }
         else {
-          sails.log.debug(user.firstname + " " + user.name + " is now " + (userUpdated[0].isActive ? 'active' : 'disabled'));
+          sails.log.debug(getDateLog() + user.firstname + " " + user.name + " is now " + (userUpdated[0].isActive ? 'active' : 'disabled'));
           return res.send(userUpdated);
         }
       });

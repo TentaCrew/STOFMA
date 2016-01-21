@@ -66,7 +66,7 @@ module.exports = {
               type        : req.param('typePayment')
             }, function (err, newPayment) {
               if (err) {
-                sails.log.debug("Payment not created");
+                sails.log.debug(getDateLog() + "Payment not created");
                 return res.send(400,'Payment not created.');
               }
               else {
@@ -98,13 +98,13 @@ module.exports = {
                       if(req.param('typePayment') === 'IN_CREDIT'){
                         customer.credit -= Number(newSale.totalPrice);
                         customer.save(function(){
-                          sails.log.debug("Sale added by credit with success : " + s.join(', '));
+                          sails.log.debug(getDateLog() + "Sale added by credit with success : " + s.join(', '));
                           return res.send(200, newSale);
                         });
                       }
                       else{
                         customer.save(function(){
-                          sails.log.debug("Sale added with success : " + s.join(', '));
+                          sails.log.debug(getDateLog() + "Sale added with success : " + s.join(', '));
                           return res.send(200, newSale);
                         });
                       }
@@ -162,11 +162,11 @@ module.exports = {
           //delete related payment
           Payment.destroy(sale.payment.id, function(err,deletedPmt){
             if(err){
-              sails.log.debug("Payment not deleted");
+              sails.log.debug(getDateLog() + "Payment not deleted");
               return res.send(400,'Payment not deleted.');
             }
             else {
-              sails.log.debug("Sale deleted with success");
+              sails.log.debug(getDateLog() + "Sale deleted with success");
               return res.send(200,'Sale deleted with success');
             }
           });
