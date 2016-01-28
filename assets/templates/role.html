@@ -40,9 +40,15 @@
           <div layout="row" layout-align="end center">
             <md-button class="md-button md-primary md-icon-button" ng-click="setAdmin(manager.id, $index)">
               <md-icon>whatshot</md-icon>
+              <md-tooltip md-direction="left">
+                Définir administrateur
+              </md-tooltip>
             </md-button>
             <md-button class="md-button md-accent md-icon-button" ng-click="removeManager(manager.id, $index)">
               <md-icon>clear</md-icon>
+              <md-tooltip md-direction="left">
+                Définir utilisateur normal
+              </md-tooltip>
             </md-button>
           </div>
         </md-list-item>
@@ -62,6 +68,9 @@
           <div layout="row" layout-align="end center">
             <md-button class="md-button md-accent md-icon-button" ng-click="setManager(admin.id, $index)">
               <md-icon>clear</md-icon>
+              <md-tooltip md-direction="left">
+                Définir manager
+              </md-tooltip>
             </md-button>
           </div>
         </md-list-item>
