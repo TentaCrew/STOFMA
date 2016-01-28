@@ -43,6 +43,22 @@ angular.module('stofmaApp')
               }
             }
           })
+          .state('anon.stall', {
+            url: '/cafet',
+            controller: 'CafetProductCtrl',
+            templateUrl: 'assets/templates/stallproducts.html',
+            data: {
+              name: 'La cafet\'',
+              icon: 'local_dining'
+            },
+            resolve: {
+              productsProvider: 'ProductService',
+
+              productsData: function (productsProvider) {
+                return productsProvider.getProducts(false);
+              }
+            }
+          })
           .state('anon.mentions', {
             url: '/mentions',
             templateUrl: 'assets/templates/mentions.html',

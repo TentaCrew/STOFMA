@@ -1,4 +1,4 @@
-<md-tabs flex md-no-pagination="false" md-dynamic-height="true" md-selected="tabSelected" md-swipe-content="true" md-center-tabs="true">
+<md-tabs flex md-no-pagination="false" md-dynamic-height="true" ng-if="products.length > 0" md-selected="tabSelected" md-swipe-content="true" md-center-tabs="true">
   <md-tab ng-repeat="cat in categories">
     <md-tab-label>{{cat.name}}</md-tab-label>
     <md-tab-body>

@@ -41,6 +41,9 @@
       <h2 ng-bind="pageTitle" class="page-title"></h2>
       <md-button class="md-icon-button" ng-repeat="btn in iconToolbarButtons" ng-click="btn.onclick()" aria-label="btn.name">
         <md-icon>{{btn.icon}}</md-icon>
+        <md-tooltip md-direction="bottom">
+          {{btn.name}}
+        </md-tooltip>
       </md-button>
       <md-button class="md-icon-button" ng-click="searchIcon()" ng-if="searchIcon" aria-label="Recherche">
         <md-icon>search</md-icon>
