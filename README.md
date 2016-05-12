@@ -1,7 +1,7 @@
 # STOFMA - Student Office Manager
 
 [![Build Status](https://travis-ci.org/TentaCrew/STOFMA.svg?branch=master)](https://travis-ci.org/TentaCrew/STOFMA)
-[![Coverage Status](https://coveralls.io/repos/TentaCrew/STOFMA/badge.svg?branch=master&service=github)](https://coveralls.io/github/TentaCrew/STOFMA?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/TentaCrew/STOFMA/badge.svg?branch=master)](https://coveralls.io/github/TentaCrew/STOFMA?branch=master)
 
 ## Let us show you what we did !
 ### Mobile version
